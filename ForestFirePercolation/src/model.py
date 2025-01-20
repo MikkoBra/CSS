@@ -1,31 +1,29 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+
 class ForestFireModel:
-    def __init__(self, size, ignition_prob, growth_prob):
+    def __init__(self, size, forest_density, ignition_num):
         self.size = size
-        self.ignition_prob = ignition_prob
-        self.growth_prob = growth_prob
-        self.forest = self.initialize_forest()
+        self.forest_density = forest_density
+        self.ignition_num = ignition_num
+        self.forest = np.zeros((size, size))
+
+
 
     def initialize_forest(self):
-        return [[0 for _ in range(self.size)] for _ in range(self.size)]
+        for i in range(self.size):
+            for j in range(self.size):
+                if np.random.random() < self.forest_density:
+                    self.forest[i][j] = 1
 
     def ignite_fire(self):
-        for i in range(self.size):
-            for j in range(self.size):
-                if random.random() < self.ignition_prob:
-                    self.forest[i][j] = 1  # Tree catches fire
+        for _ in range(self.ignition_num):
+            i, j = np.random.randint(0, self.size, size=2)
+            self.forest[i][j] = 2
 
     def spread_fire(self):
-        new_forest = [row[:] for row in self.forest]
-        for i in range(self.size):
-            for j in range(self.size):
-                if self.forest[i][j] == 1:  # If tree is burning
-                    new_forest[i][j] = 2  # Tree is burned
-                    for di, dj in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                        ni, nj = i + di, j + dj
-                        if 0 <= ni < self.size and 0 <= nj < self.size:
-                            if self.forest[ni][nj] == 0 and random.random() < self.growth_prob:
-                                new_forest[ni][nj] = 1  # New fire ignites
-        self.forest = new_forest
+        return self.forest
 
     def run_simulation(self, steps):
         for _ in range(steps):
@@ -33,3 +31,9 @@ class ForestFireModel:
 
     def get_forest(self):
         return self.forest
+    
+
+    def display_forest(self):
+        plt.imshow(self.forest, cmap='Greens', interpolation='nearest')
+        plt.axis('off')
+        plt.show()
