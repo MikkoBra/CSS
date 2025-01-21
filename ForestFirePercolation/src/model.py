@@ -4,6 +4,7 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.colors import ListedColormap
 from matplotlib.colors import BoundaryNorm
 from enum import IntEnum
+from collections import deque
 
 class TreeStatus(IntEnum):
     EMPTY = 0
@@ -11,12 +12,20 @@ class TreeStatus(IntEnum):
     BURNING = 2
     BURNT = 3
 
+
+"""
+To-do:
+- Add docstrings to all methods
+- XImplement queue for spreading fire to improve performance
+- Add iterative tracking values for trees, burning, and burnt
+"""
 class ForestFireModel:
-    def __init__(self, size, forest_density, ignition_num):
+    def __init__(self, size, forest_density, ignition_num=0):
         self.size = size
         self.forest_density = forest_density
         self.ignition_num = ignition_num
         self.forest = np.zeros((size, size), dtype=int)
+        self.burning_trees_queue = deque()
         self.initialize_forest()
 
     def initialize_forest(self):
@@ -25,25 +34,38 @@ class ForestFireModel:
                 if np.random.random() < self.forest_density:
                     self.forest[i][j] = TreeStatus.TREE
 
-    def ignite_fire(self):
+    def ignite_fire_random(self):
         for _ in range(self.ignition_num):
             i, j = np.random.randint(0, self.size, size=2)
             self.forest[i][j] = TreeStatus.BURNING
+            self.burning_trees_queue.append((i, j))
+
+    def ignite_fire_corner(self):
+        self.forest[1][1] = TreeStatus.BURNING
+        self.burning_trees_queue.append((1, 1))
+
+    def ignite_fire_center(self):
+        self.forest[self.size//2][self.size//2] = TreeStatus.BURNING
+        self.burning_trees_queue.append((self.size//2, self.size//2))
 
     def spread_fire(self):
-        fire_copy = self.forest.copy()
-        for i in range(self.size):
-            for j in range(self.size):
-                if fire_copy[i][j] == TreeStatus.BURNING:
-                    if i > 0 and fire_copy[i-1][j] == TreeStatus.TREE:
-                        self.forest[i-1][j] = TreeStatus.BURNING
-                    if j > 0 and fire_copy[i][j-1] == TreeStatus.TREE:
-                        self.forest[i][j-1] = TreeStatus.BURNING
-                    if i < self.size - 1 and fire_copy[i+1][j] == TreeStatus.TREE:
-                        self.forest[i+1][j] = TreeStatus.BURNING
-                    if j < self.size - 1 and fire_copy[i][j+1] == TreeStatus.TREE:
-                        self.forest[i][j+1] = TreeStatus.BURNING
-                    self.forest[i][j] = TreeStatus.BURNT
+        forest_copy = self.forest.copy()
+        burning_trees = self.burning_trees_queue.copy()
+        self.burning_trees_queue.clear()
+        for i, j in burning_trees:
+            if i > 0 and forest_copy[i-1][j] == TreeStatus.TREE:
+                self.forest[i-1][j] = TreeStatus.BURNING
+                self.burning_trees_queue.append((i-1, j))
+            if j > 0 and forest_copy[i][j-1] == TreeStatus.TREE:
+                self.forest[i][j-1] = TreeStatus.BURNING
+                self.burning_trees_queue.append((i, j-1))
+            if i < self.size - 1 and forest_copy[i+1][j] == TreeStatus.TREE:
+                self.forest[i+1][j] = TreeStatus.BURNING
+                self.burning_trees_queue.append((i+1, j))
+            if j < self.size - 1 and forest_copy[i][j+1] == TreeStatus.TREE:
+                self.forest[i][j+1] = TreeStatus.BURNING
+                self.burning_trees_queue.append((i, j+1))
+            self.forest[i][j] = TreeStatus.BURNT
 
     def run_simulation(self, steps):
         for _ in range(steps):
@@ -56,20 +78,23 @@ class ForestFireModel:
         plt.axis('off')
         plt.show()
 
-    def display_simulation(self, steps, interval=400):
+    def display_simulation(self, steps, interval=300):
         fig, ax = plt.subplots()
         ax.axis('off')
         cmap = ListedColormap(['white', 'green', 'red', 'black'])
         norm = BoundaryNorm([0, 1, 2, 3, 4], cmap.N)
         im = ax.imshow(self.forest, cmap=cmap, norm=norm, interpolation='nearest')
 
-        def update(frame):
+        for _ in range(steps):
+            if not plt.fignum_exists(fig.number):
+                break
             self.spread_fire()
             im.set_array(self.forest)
-            return im,
+            plt.draw()
+            plt.pause(interval / 1000.0)
 
-        anim = FuncAnimation(fig, update, frames=steps, interval=interval, blit=True)
-        plt.show()
+        if plt.fignum_exists(fig.number):
+            plt.show()
 
     def get_num_trees(self):
         return np.sum(self.forest == TreeStatus.TREE)
@@ -79,7 +104,7 @@ class ForestFireModel:
     
     def get_num_burnt(self):
         return np.sum(self.forest == TreeStatus.BURNT)
-    
+
     def get_forest_density(self):
         return self.forest_density
     
