@@ -8,14 +8,13 @@ def main():
     ignition_num = int(input("Enter the number of trees to ignite: "))
 
     model = ForestFireModel(size, p, ignition_num)
-    model.initialize_forest()
     model.ignite_fire()
 
+    steps = int(input("Enter the number of simulation steps: "))
+    model.display_simulation(steps)
 
-    #steps = int(input("Enter the number of simulation steps: "))
-    #model.run_simulation(steps)
-
-    model.display_forest()
+    print(model.get_num_burnt())
+    print(model.percentage_burnt())
 
 if __name__ == "__main__":
     main()
