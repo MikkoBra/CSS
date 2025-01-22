@@ -7,19 +7,19 @@ def main():
     size = int(input("Enter the size of the forest (e.g., 50 for a 50x50 grid): "))
     wind = (input("Is there wind in the forest? (False/True): "))
     env_index = float(input("How strong are the environmental influences? (0 worst for the fire, 1 optimal for fire): "))
-    sim_method = input("Enter simulation method (random, center, corner): ")
+    ignition_location = input("Enter ignition location (random, center, corner): ")
     simulation_type = input("Run a a single simulation, multiple for a single density, or a range of densities? (single, multiple, range): ")
 
     if simulation_type == "multiple":
         p = float(input("Enter forest density percentage (0 to 1): "))
         num_simulations = int(input("Enter the number of simulations: "))
 
-        if sim_method != "random":
+        if ignition_location != "random":
             ignition_num = 0
         else:
             ignition_num = int(input("Enter the number of trees to ignite: "))
 
-        simulation = ForestFireSimulations(size, p, num_simulations, sim_method,  env_index, wind, ignition_num)
+        simulation = ForestFireSimulations(size, p, num_simulations, ignition_location,  env_index, wind, ignition_num)
         simulation.run_simulations()
 
         simulation.plot_burnt_distribution()
@@ -28,14 +28,14 @@ def main():
 
     elif simulation_type == "single":
         p = float(input("Enter forest density percentage (0 to 1): "))
-        if sim_method == "random":
+        if ignition_location == "random":
             ignition_num = int(input("Enter the number of trees to ignite: "))
-            model = ForestFireModel(size, p, env_index, wind,ignition_num)
+            model = ForestFireModel(size, p, env_index, wind, ignition_num)
             model.ignite_fire_random()
-        elif sim_method == "corner":
+        elif ignition_location == "corner":
             model = ForestFireModel(size, p, env_index, wind)
             model.ignite_fire_corner()
-        elif sim_method == "center":
+        elif ignition_location == "center":
             model = ForestFireModel(size, p, env_index, wind)
             model.ignite_fire_center()
 
@@ -52,12 +52,12 @@ def main():
     elif simulation_type == "range":
         num_simulations = int(input("Enter the number of simulations per density value: "))
 
-        if sim_method != "random":
+        if ignition_location != "random":
             ignition_num = 0
         else:
             ignition_num = int(input("Enter the number of trees to ignite: "))
 
-        density_simulations = DensityForestFireSimulations(size, num_simulations, sim_method, ignition_num)
+        density_simulations = DensityForestFireSimulations(size, num_simulations, ignition_location, env_index, wind, ignition_num)
 
         density_values = np.linspace(0.01, 1, 100)
         

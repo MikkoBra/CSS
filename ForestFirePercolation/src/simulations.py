@@ -3,25 +3,25 @@ import matplotlib.pyplot as plt
 from model import ForestFireModel
 
 class ForestFireSimulations:
-    def __init__(self, size, forest_density, num_simulations, sim_type, env_index, wind ,ignition_num = 0):
+    def __init__(self, size, forest_density, num_simulations, ignition_location, env_index, wind ,ignition_num = 0):
         self.size = size
         self.forest_density = forest_density
         self.env_index = env_index
         self.wind = wind
         self.ignition_num = ignition_num
         self.num_simulations = num_simulations
-        self.sim_type = sim_type
+        self.ignition_location = ignition_location
         self.results = []
 
     def run_simulations(self):
         for _ in range(self.num_simulations):
             model = ForestFireModel(self.size, self.forest_density, self.env_index, self.wind, self.ignition_num)
 
-            if self.sim_type == 'random':
+            if self.ignition_location == 'random':
                 model.ignite_fire_random()
-            elif self.sim_type == 'corner':
+            elif self.ignition_location == 'corner':
                 model.ignite_fire_corner()
-            elif self.sim_type == 'center':
+            elif self.ignition_location == 'center':
                 model.ignite_fire_center()
 
             model.ignite_fire_random()
