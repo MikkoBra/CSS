@@ -3,48 +3,33 @@ import matplotlib.pyplot as plt
 from model import ForestFireModel
 
 class ForestFireSimulations:
-    def __init__(self, size, forest_density, num_simulations, ignition_num = 0):
+    def __init__(self, size, forest_density, num_simulations, sim_type, ignition_num = 0):
         self.size = size
         self.forest_density = forest_density
         self.ignition_num = ignition_num
         self.num_simulations = num_simulations
+        self.sim_type = sim_type
         self.results = []
 
-    def run_simulations_random(self):
+    def run_simulations(self):
         for _ in range(self.num_simulations):
             model = ForestFireModel(self.size, self.forest_density, self.ignition_num)
-            model.ignite_fire_random()
+
+            if self.sim_type == 'random':
+                model.ignite_fire_random()
+            elif self.sim_type == 'corner':
+                model.ignite_fire_corner()
+            elif self.sim_type == 'center':
+                model.ignite_fire_center()
+
             while model.get_num_burning() > 0:
                 model.spread_fire()
+
             self.results.append({
                 'percentage_burnt': model.percentage_burnt(),
                 'percentage_burning': model.percentage_burning(),
-                'percentage_trees': model.percentage_trees()
-            })
-
-
-    def run_simulations_corner(self):
-        for _ in range(self.num_simulations):
-            model = ForestFireModel(self.size, self.forest_density, self.ignition_num)
-            model.ignite_fire_corner()
-            while model.get_num_burning() > 0:
-                model.spread_fire()
-            self.results.append({
-                'percentage_burnt': model.percentage_burnt(),
-                'percentage_burning': model.percentage_burning(),
-                'percentage_trees': model.percentage_trees()
-            })
-
-    def run_simulations_center(self):
-        for _ in range(self.num_simulations):
-            model = ForestFireModel(self.size, self.forest_density, self.ignition_num)
-            model.ignite_fire_center()
-            while model.get_num_burning() > 0:
-                model.spread_fire()
-            self.results.append({
-                'percentage_burnt': model.percentage_burnt(),
-                'percentage_burning': model.percentage_burning(),
-                'percentage_trees': model.percentage_trees()
+                'percentage_trees': model.percentage_trees(),
+                'burns_left_to_right': model.burns_left_to_right()
             })
 
     def plot_burnt_distribution(self):
@@ -53,6 +38,16 @@ class ForestFireSimulations:
         plt.title('Distribution of Burnt Trees')
         plt.xlabel('Percentage of Burnt Trees')
         plt.ylabel('Frequency')
+        plt.show()
+
+    def plot_burnt_distribution_log_log(self):
+        burnt_percentages = [result['percentage_burnt'] for result in self.results]
+        plt.hist(burnt_percentages, bins=10, edgecolor='black', log=True)
+        plt.xscale('log')
+        plt.yscale('log')
+        plt.title('Log-Log Distribution of Burnt Trees')
+        plt.xlabel('Percentage of Burnt Trees (log scale)')
+        plt.ylabel('Frequency (log scale)')
         plt.show()
 
     def get_average_results(self):
@@ -65,6 +60,15 @@ class ForestFireSimulations:
             'average_percentage_trees': avg_trees
         }
     
+    
+    
+    def proportion_burns_left_to_right(self):
+        count = 0
+        for result in self.results:
+            if result['burns_left_to_right'] == True:
+                count += 1
+
+        return count / self.num_simulations
 
     def get_results(self):
         return self.results

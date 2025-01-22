@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
 from matplotlib.colors import ListedColormap
 from matplotlib.colors import BoundaryNorm
 from enum import IntEnum
@@ -21,6 +20,7 @@ To-do:
 """
 class ForestFireModel:
     def __init__(self, size, forest_density, ignition_num=0):
+        self.initial_forest = 0
         self.size = size
         self.forest_density = forest_density
         self.ignition_num = ignition_num
@@ -67,25 +67,25 @@ class ForestFireModel:
             self.forest[i][j] = TreeStatus.BURNT
         del burning_trees
 
-    def run_simulation(self, steps):
-        for _ in range(steps):
+    def no_display_single_simulation(self):
+        while self.get_num_burning() > 0:
             self.spread_fire()
     
-    def display_forest(self):
+    def display_current_forest_state(self):
         cmap = ListedColormap(['white', 'green', 'red', 'black'])
         norm = BoundaryNorm([0, 1, 2, 3, 4], cmap.N)
         plt.imshow(self.forest, cmap=cmap, norm=norm, interpolation='nearest')
         plt.axis('off')
         plt.show()
 
-    def display_simulation(self, steps, interval=300):
+    def display_single_simulation(self, interval=300):
         fig, ax = plt.subplots()
         ax.axis('off')
         cmap = ListedColormap(['white', 'green', 'red', 'black'])
         norm = BoundaryNorm([0, 1, 2, 3, 4], cmap.N)
         im = ax.imshow(self.forest, cmap=cmap, norm=norm, interpolation='nearest')
 
-        for _ in range(steps):
+        while self.get_num_burning() > 0:
             if not plt.fignum_exists(fig.number):
                 break
             self.spread_fire()
@@ -96,8 +96,17 @@ class ForestFireModel:
         if plt.fignum_exists(fig.number):
             plt.show()
 
-    #def is_burning_left_right(self):
-
+    def burns_left_to_right(self):
+        firstRow = False
+        lastRow = False
+        for i in range(self.size):
+            if self.forest[i][0] == TreeStatus.BURNING or self.forest[i][0] == TreeStatus.BURNT:
+                firstRow = True
+            if self.forest[i][self.size-1] == TreeStatus.BURNING or self.forest[i][self.size-1] == TreeStatus.BURNT:
+                lastRow = True
+            if firstRow and lastRow:
+                break
+        return firstRow and lastRow
 
     def get_num_trees(self):
         return np.sum(self.forest == TreeStatus.TREE)
