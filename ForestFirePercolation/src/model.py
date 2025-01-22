@@ -50,7 +50,6 @@ class ForestFireModel:
         self.forest[self.size//2][self.size//2] = TreeStatus.BURNING
         self.burning_trees_queue.append((self.size//2, self.size//2))
 
-    '''
     def spread_fire_old(self):
         burning_trees = self.burning_trees_queue.copy()
         self.burning_trees_queue.clear()
@@ -68,36 +67,7 @@ class ForestFireModel:
                 self.forest[i][j+1] = TreeStatus.BURNING
                 self.burning_trees_queue.append((i, j+1))
             self.forest[i][j] = TreeStatus.BURNT
-
-    def spread_fire_wind(self):
-        burning_trees = self.burning_trees_queue.copy()
-        self.burning_trees_queue.clear()
-        for i, j in burning_trees:
-            if i > 0 and self.forest[i-1][j] == TreeStatus.TREE:
-                self.forest[i-1][j] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i-1, j))
-            if j > 0 and self.forest[i][j-1] == TreeStatus.TREE:
-                self.forest[i][j-1] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i, j-1))
-            if i < self.size - 1 and self.forest[i+1][j] == TreeStatus.TREE:
-                self.forest[i+1][j] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i+1, j))
-            if j < self.size - 1 and self.forest[i][j+1] == TreeStatus.TREE:
-                self.forest[i][j+1] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i, j+1))
-            self.forest[i][j] = TreeStatus.BURNT
-            #wind
-            if j + 1 < self.size - 1 and self.forest[i][j+2] == TreeStatus.TREE:
-                self.forest[i][j+2] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i, j+2))
-            if i < self.size - 1 and j < self.size -1 and self.forest[i+1][j+1] == TreeStatus.TREE:
-                self.forest[i+1][j+1] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i+1, j+1))
-            if i >0 and j < self.size -1 and self.forest[i-1][j+1] == TreeStatus.TREE:
-                self.forest[i-1][j+1] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i-1, j+1))
-            #self.forest[i+1][j] = TreeStatus.BURNT
-            '''
+        del burning_trees
             
     def spread_fire(self, env_index, wind):
         burning_trees = self.burning_trees_queue.copy()
@@ -159,6 +129,9 @@ class ForestFireModel:
         if plt.fignum_exists(fig.number):
             plt.show()
 
+    #def is_burning_left_right(self):
+
+
     def get_num_trees(self):
         return np.sum(self.forest == TreeStatus.TREE)
     
@@ -179,6 +152,9 @@ class ForestFireModel:
     
     def get_forest(self):
         return self.forest
+    
+    def get_burning_trees_queue(self):
+        return self.burning_trees_queue
     
     def percentage_burnt(self):
         return self.get_num_burnt() / self.get_size()**2
