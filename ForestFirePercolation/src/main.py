@@ -5,6 +5,8 @@ from density_sims import DensityForestFireSimulations
 
 def main():
     size = int(input("Enter the size of the forest (e.g., 50 for a 50x50 grid): "))
+    wind = (input("Is there wind in the forest? (False/True): "))
+    env_index = float(input("How strong are the environmental influences? (0 worst for the fire, 1 optimal for fire): "))
     sim_method = input("Enter simulation method (random, center, corner): ")
     simulation_type = input("Run a a single simulation, multiple for a single density, or a range of densities? (single, multiple, range): ")
 
@@ -17,7 +19,7 @@ def main():
         else:
             ignition_num = int(input("Enter the number of trees to ignite: "))
 
-        simulation = ForestFireSimulations(size, p, num_simulations, sim_method, ignition_num)
+        simulation = ForestFireSimulations(size, p, num_simulations, sim_method,  env_index, wind, ignition_num)
         simulation.run_simulations()
 
         simulation.plot_burnt_distribution()
@@ -28,20 +30,20 @@ def main():
         p = float(input("Enter forest density percentage (0 to 1): "))
         if sim_method == "random":
             ignition_num = int(input("Enter the number of trees to ignite: "))
-            model = ForestFireModel(size, p, ignition_num)
+            model = ForestFireModel(size, p, env_index, wind,ignition_num)
             model.ignite_fire_random()
         elif sim_method == "corner":
-            model = ForestFireModel(size, p)
+            model = ForestFireModel(size, p, env_index, wind)
             model.ignite_fire_corner()
         elif sim_method == "center":
-            model = ForestFireModel(size, p)
+            model = ForestFireModel(size, p, env_index, wind)
             model.ignite_fire_center()
 
         display = input("Display simulation? (yes/no): ")
         if display == "yes":
-            model.display_single_simulation()
+            model.display_single_simulation(env_index, wind)
         else:
-            model.no_display_single_simulation()
+            model.no_display_single_simulation(env_index, wind)
 
         print("Number of trees: ", model.get_num_trees())
         print("Number of burning trees: ", model.get_num_burning())

@@ -3,9 +3,11 @@ import matplotlib.pyplot as plt
 from model import ForestFireModel
 
 class ForestFireSimulations:
-    def __init__(self, size, forest_density, num_simulations, sim_type, ignition_num = 0):
+    def __init__(self, size, forest_density, num_simulations, sim_type, env_index, wind ,ignition_num = 0):
         self.size = size
         self.forest_density = forest_density
+        self.env_index = env_index
+        self.wind = wind
         self.ignition_num = ignition_num
         self.num_simulations = num_simulations
         self.sim_type = sim_type
@@ -22,14 +24,13 @@ class ForestFireSimulations:
             elif self.sim_type == 'center':
                 model.ignite_fire_center()
 
+            model.ignite_fire_random()
             while model.get_num_burning() > 0:
-                model.spread_fire()
-
+                model.spread_fire(self.env_index, self.wind)
             self.results.append({
                 'percentage_burnt': model.percentage_burnt(),
                 'percentage_burning': model.percentage_burning(),
-                'percentage_trees': model.percentage_trees(),
-                'burns_left_to_right': model.burns_left_to_right()
+                'percentage_trees': model.percentage_trees()
             })
 
     def plot_burnt_distribution(self):
