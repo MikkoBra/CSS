@@ -8,7 +8,7 @@ from simulations import ForestFireSimulations
 def main():
     size = int(input("Enter the size of the forest (e.g., 50 for a 50x50 grid): "))
     p = float(input("Enter forest density percentage (0 to 1): "))
-    wind = bool(input("Is there wind in the forest? (False/True): "))
+    wind = (input("Is there wind in the forest? (False/True): "))
     env_index = float(input("How strong are the environmental influences? (0 worst for the fire, 1 optimal for fire): "))
     sim_method = input("Enter simulation method (random, center, corner): ")
     single_simulation = input("Run a single simulation? (yes/no): ")

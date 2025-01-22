@@ -116,7 +116,7 @@ class ForestFireModel:
                 self.forest[i][j+1] = TreeStatus.BURNING
                 self.burning_trees_queue.append((i, j+1))
             self.forest[i][j] = TreeStatus.BURNT
-            if wind:
+            if wind=="True":
                 if j + 1 < self.size - 1 and self.forest[i][j+2] == TreeStatus.TREE and np.random.uniform(0,1) < env_index:
                     self.forest[i][j+2] = TreeStatus.BURNING
                     self.burning_trees_queue.append((i, j+2))
