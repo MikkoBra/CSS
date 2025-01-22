@@ -41,9 +41,9 @@ def main():
 
         display = input("Display simulation? (yes/no): ")
         if display == "yes":
-            model.display_single_simulation(env_index, wind)
+            model.display_single_simulation()
         else:
-            model.no_display_single_simulation(env_index, wind)
+            model.no_display_single_simulation()
 
         print("Number of trees: ", model.get_num_trees())
         print("Number of burning trees: ", model.get_num_burning())

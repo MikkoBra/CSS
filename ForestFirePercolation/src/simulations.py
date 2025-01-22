@@ -15,7 +15,7 @@ class ForestFireSimulations:
 
     def run_simulations(self):
         for _ in range(self.num_simulations):
-            model = ForestFireModel(self.size, self.forest_density, self.ignition_num)
+            model = ForestFireModel(self.size, self.forest_density, self.env_index, self.wind, self.ignition_num)
 
             if self.sim_type == 'random':
                 model.ignite_fire_random()
@@ -26,11 +26,12 @@ class ForestFireSimulations:
 
             model.ignite_fire_random()
             while model.get_num_burning() > 0:
-                model.spread_fire(self.env_index, self.wind)
+                model.spread_fire()
             self.results.append({
                 'percentage_burnt': model.percentage_burnt(),
                 'percentage_burning': model.percentage_burning(),
-                'percentage_trees': model.percentage_trees()
+                'percentage_trees': model.percentage_trees(),
+                'burns_left_to_right': model.burns_left_to_right()
             })
 
     def plot_burnt_distribution(self):
