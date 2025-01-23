@@ -1,28 +1,26 @@
 import csv
+from ForestFirePercolation.src.results.result import Result
 
 
-def read_csv():
+def read_percolation_csv():
+    """
+        Returns the results per run as a Result object, sectioned into system sizes in a dictionary.
+        ex: {'50': [Result1, Result2], '100': [Result1, Result2]}
+
+    :return:
+    """
     with open('../Simulation_data_test_criticalp.csv', mode='r') as file:
-        csvFile = csv.reader(file)
-        print(csvFile)
-        header = True
-        data = {}
-        labels = []
-        for line in csvFile:
-            if header:
-                labels = line
-                for label in labels:
-                    data[label] = []
-                header = False
+        csv_reader = csv.DictReader(file)
+        data = [row for row in csv_reader]
+        result_dict = {}
+        for result in data:
+            size = result['size']
+            result_obj = Result()
+            result_obj.dict_to_result(result)
+            if size in result_dict:
+                result_dict[size].append(result_obj)
             else:
-                column = 0
-                while column < len(line):
-                    if column != 2 and column != 4:
-                        value = float(line[column])
-                        data[labels[column]].append(value)
-                    else:
-                        data[labels[column]].append(t)
+                result_dict[size] = [result_obj]
+        return result_dict
 
-
-
-read_csv()
+print(read_percolation_csv())
