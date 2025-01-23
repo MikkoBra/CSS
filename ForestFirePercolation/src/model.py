@@ -45,30 +45,30 @@ class ForestFireModel:
         
         for i in range(self.size):
             for j in range(self.size):
-                if self.noise_map[i][j] < (2 * self.plant_value - 1) and self.forest[i][j] == TreeStatus.TREE:
+                if self.noise_map[i][j] < (2 * self.plant_tree_proportion - 1) and self.forest[i][j] == TreeStatus.TREE:
                     self.forest[i][j] = TreeStatus.PLANT
         
     def ignite_fire_random(self):
         for _ in range(self.ignition_num):
             i, j = np.random.randint(0, self.size, size=2)
             if self.forest[i][j] == TreeStatus.TREE:
-                self.burning_trees_queue.append((i, j,  self.plant_1_index))
+                self.burning_trees_queue.append((i, j,  self.tree_burn_time))
             elif self.forest[i][j] == TreeStatus.PLANT:
-                self.burning_trees_queue.append((i, j, self.plant_2_index))
+                self.burning_trees_queue.append((i, j, self.plant_burn_time))
             self.forest[i][j] = TreeStatus.BURNING
 
     def ignite_fire_corner(self):
         if self.forest[1][1] == TreeStatus.TREE:
-                self.burning_trees_queue.append((1, 1, self.plant_1_index))
+                self.burning_trees_queue.append((1, 1, self.tree_burn_time))
         elif self.forest[1][1] == TreeStatus.PLANT:
-            self.burning_trees_queue.append((1, 1, self.plant_2_index))
+            self.burning_trees_queue.append((1, 1, self.plant_burn_time))
         self.forest[1][1] = TreeStatus.BURNING
 
     def ignite_fire_center(self):
         if self.forest[self.size//2][self.size//2] == TreeStatus.TREE:
-                self.burning_trees_queue.append((self.size//2, self.size//2, self.plant_1_index))
+                self.burning_trees_queue.append((self.size//2, self.size//2, self.tree_burn_time))
         elif self.forest[self.size//2][self.size//2] == TreeStatus.PLANT:
-            self.burning_trees_queue.append((self.size//2, self.size//2, self.plant_2_index))
+            self.burning_trees_queue.append((self.size//2, self.size//2, self.plant_burn_time))
         self.forest[self.size//2][self.size//2] = TreeStatus.BURNING
 
     def spread_fire_old(self):
@@ -95,10 +95,10 @@ class ForestFireModel:
             if np.random.uniform(0,1) < self.env_index:
                 if self.forest[i][j] == TreeStatus.TREE:
                     self.forest[i][j] = TreeStatus.BURNING
-                    self.burning_trees_queue.append((i, j, self.plant_1_index))
+                    self.burning_trees_queue.append((i, j, self.tree_burn_time))
                 if self.forest[i][j] == TreeStatus.PLANT:
                     self.forest[i][j] = TreeStatus.BURNING
-                    self.burning_trees_queue.append((i, j, self.plant_2_index))
+                    self.burning_trees_queue.append((i, j, self.plant_burn_time))
 
         burning_trees = self.burning_trees_queue.copy()
         self.burning_trees_queue.clear()
