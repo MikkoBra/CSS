@@ -14,7 +14,7 @@ from model import ForestFireModel
 
 
 # parameters, system size, perc percolation, perc burnt down.
-def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting=10):
+def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting=1):
     fields = ['size', 'density', 'wind', 'env_index', 'percolation', 'percentage burnt down']
     rows = []
     winds = ["False", "True"]
@@ -23,11 +23,12 @@ def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting
             for wind in winds:
                 for env_index in env_indixes:
                     for _ in range(num_simulations_per_setting):
-                        model = ForestFireModel(size, density, env_index, wind)
+                        model = ForestFireModel(size, density, env_index, wind, 0.5, 1, 1)
                         # Number of trees at the beginning
                         num_trees_total = model.get_num_trees()
                         # Run the model
                         model.ignite_fire_center()
+                        print('start sim')
                         model.no_display_single_simulation()#(env_index, wind)
                         # Extract the result
                         percolation = model.burns_left_to_right()
@@ -37,7 +38,7 @@ def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting
     filename = "Simulation_data_test_criticalp.csv"
 
     # writing to csv file
-    with open(filename, 'w') as csvfile:
+    with open(filename, 'w', newline='') as csvfile:
         # creating a csv writer object
         csvwriter = csv.writer(csvfile)
 
@@ -47,8 +48,8 @@ def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting
         # writing the data rows
         csvwriter.writerows(rows)
 
-sizes = [100]
-densities = [0.2,0.4,0.6,0.8,1]
+sizes = [50]
+densities = [0.8,1]
 env_indixes = [1]
 
 simulation_to_csv(sizes, densities, env_indixes)
