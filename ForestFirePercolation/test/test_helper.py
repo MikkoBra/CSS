@@ -9,7 +9,7 @@ def init_result():
 
 
 def init_results():
-    results = [init_result()]
+    results = init_result()
     density = np.array([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
     p_perc2 = np.array([0.0, 0.1, 0.2, 0.3, 0.2, 0.1])
     result2 = Results(density, p_perc2, 200)

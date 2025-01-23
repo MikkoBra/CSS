@@ -1,11 +1,11 @@
 import unittest
 from test_helper import init_result, init_results
-from ForestFirePercolation.src.plots.percolation_plot import PercolationPlot
+from ForestFirePercolation.src.plots.data_collapse_plot import DataCollapsePlot
 
 
-class TestPercolationPlot(unittest.TestCase):
+class TestDataCollapsePlot(unittest.TestCase):
     def test_init(self):
-        test_plot = PercolationPlot([])
+        test_plot = DataCollapsePlot([])
         self.assertEqual(0, len(test_plot.results))
 
     def test_init_with_results(self):

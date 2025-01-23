@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ..results import Results
+from ..results.result import Result
 
 
 class PercolationPlot:
@@ -8,7 +8,7 @@ class PercolationPlot:
     def __init__(self, results):
         self.results = results
 
-    def plot_percolation_vs_density(self, densities, probabilities, system_size, ax, label):
+    def plot_percolation_vs_density(self, densities, probabilities, ax, label):
         """
             Function that plots the probability of the system percolating over the forest density.
 
@@ -63,6 +63,10 @@ class PercolationPlot:
         """
         self.results.append(results)
         return
+
+    def add_multiple_results(self, results):
+        for result in results:
+            self.results.append(results)
 
     def get_result(self, index):
         return self.results[index]
