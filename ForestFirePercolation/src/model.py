@@ -4,12 +4,14 @@ from matplotlib.colors import ListedColormap
 from matplotlib.colors import BoundaryNorm
 from enum import IntEnum
 from collections import deque
+import noise 
 
 class TreeStatus(IntEnum):
     EMPTY = 0
     TREE = 1
-    BURNING = 2
-    BURNT = 3
+    PLANT = 2
+    BURNING = 3
+    BURNT = 4
 
 
 """
@@ -19,7 +21,10 @@ To-do:
 - Add iterative tracking values for trees, burning, and burnt
 """
 class ForestFireModel:
-    def __init__(self, size, forest_density, env_index, wind, ignition_num=0):
+    def __init__(self, size, forest_density, env_index, wind, plant_value, tree_ignition, plant_ignition, ignition_num=0):
+        self.tree_ignition = tree_ignition
+        self.plant_ignition = plant_ignition
+        self.plant_value = plant_value
         self.initial_forest = 0
         self.size = size
         self.forest_density = forest_density
@@ -27,6 +32,7 @@ class ForestFireModel:
         self.wind = wind
         self.ignition_num = ignition_num
         self.forest = np.zeros((size, size), dtype=int)
+        self.noise_map = np.zeros((size, size))
         self.burning_trees_queue = deque()
         self.initialize_forest()
 
@@ -35,7 +41,13 @@ class ForestFireModel:
             for j in range(self.size):
                 if np.random.random() < self.forest_density:
                     self.forest[i][j] = TreeStatus.TREE
-
+                self.noise_map[i][j] = noise.pnoise2(i / 10, j / 10)
+        
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.noise_map[i][j] < self.plant_value * 2 - 1 and self.forest[i][j] == TreeStatus.TREE:
+                    self.forest[i][j] = TreeStatus.PLANT
+        
     def ignite_fire_random(self):
         for _ in range(self.ignition_num):
             i, j = np.random.randint(0, self.size, size=2)
@@ -114,8 +126,8 @@ class ForestFireModel:
     def display_single_simulation(self, interval=300,):
         fig, ax = plt.subplots()
         ax.axis('off')
-        cmap = ListedColormap(['white', 'green', 'red', 'black'])
-        norm = BoundaryNorm([0, 1, 2, 3, 4], cmap.N)
+        cmap = ListedColormap(['white', 'green', 'orange', 'red', 'black'])
+        norm = BoundaryNorm([0, 1, 2, 3, 4, 5], cmap.N)
         im = ax.imshow(self.forest, cmap=cmap, norm=norm, interpolation='nearest')
 
         while self.get_num_burning() > 0:

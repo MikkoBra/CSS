@@ -2,9 +2,12 @@ import numpy as np
 from model import ForestFireModel
 from simulations import ForestFireSimulations
 from density_sims import DensityForestFireSimulations
+import noise
+
 
 def main():
     size = int(input("Enter the size of the forest (e.g., 50 for a 50x50 grid): "))
+    plant_value = float(input("Enter the plant value (0 to 1): "))
     wind = (input("Is there wind in the forest? (False/True): "))
     env_index = float(input("How strong are the environmental influences? (0 worst for the fire, 1 optimal for fire): "))
     ignition_location = input("Enter ignition location (random, center, corner): ")
@@ -27,16 +30,16 @@ def main():
         print(simulation.proportion_burns_left_to_right())
 
     elif simulation_type == "single":
-        p = float(input("Enter forest density percentage (0 to 1): "))
+        p = float(input("Enter forest density percentage (0 to 1):r "))
         if ignition_location == "random":
             ignition_num = int(input("Enter the number of trees to ignite: "))
-            model = ForestFireModel(size, p, env_index, wind, ignition_num)
+            model = ForestFireModel(size, p, env_index, wind, plant_value)
             model.ignite_fire_random()
         elif ignition_location == "corner":
-            model = ForestFireModel(size, p, env_index, wind)
+            model = ForestFireModel(size, p, env_index, wind, plant_value)
             model.ignite_fire_corner()
         elif ignition_location == "center":
-            model = ForestFireModel(size, p, env_index, wind)
+            model = ForestFireModel(size, p, env_index, wind, plant_value)
             model.ignite_fire_center()
 
         display = input("Display simulation? (yes/no): ")
