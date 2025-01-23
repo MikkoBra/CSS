@@ -15,12 +15,6 @@ class TreeStatus(IntEnum):
     BURNT = 4
 
 
-"""
-To-do:
-- Add docstrings to all methods
-- XImplement queue for spreading fire to improve performance
-- Add iterative tracking values for trees, burning, and burnt
-"""
 class ForestFireModel:
     def __init__(self, size: int, forest_density: float, env_index: float, 
                  wind: bool, plant_tree_proportion: float, tree_burn_time: int, 
