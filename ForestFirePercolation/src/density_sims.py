@@ -5,7 +5,10 @@ from simulations import ForestFireSimulations
 
 
 class DensityForestFireSimulations:
-    def __init__(self, size, num_sims_per_prob, ignition_location, env_index, wind, ignition_num = 0):
+    def __init__(self, size, num_sims_per_prob, ignition_location, env_index, wind, plant_tree_proportion, tree_burn_time, plant_burn_time, ignition_num = 0):
+        self.tree_burn_time = tree_burn_time
+        self.plant_burn_time = plant_burn_time
+        self.plant_tree_proportion = plant_tree_proportion
         self.size = size
         self.ignition_num = ignition_num
         self.num_simulations = num_sims_per_prob
@@ -29,7 +32,7 @@ class DensityForestFireSimulations:
     def run_simulations(self):
         sim_results = []
         for _ in range(self.num_simulations):
-            simulation = ForestFireSimulations(self.size, self.forest_density, self.num_simulations, self.ignition_location, self.env_index, self.wind, self.ignition_num)
+            simulation = ForestFireSimulations(self.size, self.forest_density, self.num_simulations, self.ignition_location, self.env_index, self.wind, self.plant_tree_proportion, self.tree_burn_time, self.plant_burn_time, self.ignition_num)
             simulation.run_simulations()
             sim_results.append(simulation.get_results())
         return sim_results

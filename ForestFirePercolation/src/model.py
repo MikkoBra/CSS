@@ -1,15 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import noise
 from matplotlib.colors import ListedColormap
 from matplotlib.colors import BoundaryNorm
 from enum import IntEnum
 from collections import deque
+import noise 
 
 class TreeStatus(IntEnum):
     EMPTY = 0
     TREE = 1
-    BURNING = 2
-    BURNT = 3
+    PLANT = 2
+    BURNING = 3
+    BURNT = 4
 
 
 """
@@ -19,14 +22,17 @@ To-do:
 - Add iterative tracking values for trees, burning, and burnt
 """
 class ForestFireModel:
-    def __init__(self, size, forest_density, env_index, wind, ignition_num=0):
-        self.initial_forest = 0
+    def __init__(self, size, forest_density, env_index, wind, plant_tree_proportion, tree_burn_time, plant_burn_time, ignition_num=0):
+        self.tree_burn_time = tree_burn_time
+        self.plant_burn_time = plant_burn_time
+        self.plant_tree_proportion = plant_tree_proportion
         self.size = size
         self.forest_density = forest_density
         self.env_index = env_index
         self.wind = wind
         self.ignition_num = ignition_num
         self.forest = np.zeros((size, size), dtype=int)
+        self.noise_map = np.zeros((size, size))
         self.burning_trees_queue = deque()
         self.initialize_forest()
 
@@ -35,20 +41,35 @@ class ForestFireModel:
             for j in range(self.size):
                 if np.random.random() < self.forest_density:
                     self.forest[i][j] = TreeStatus.TREE
-
+                self.noise_map[i][j] = noise.pnoise2(i / 10, j / 10)
+        
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.noise_map[i][j] < (2 * self.plant_tree_proportion - 1) and self.forest[i][j] == TreeStatus.TREE:
+                    self.forest[i][j] = TreeStatus.PLANT
+        
     def ignite_fire_random(self):
         for _ in range(self.ignition_num):
             i, j = np.random.randint(0, self.size, size=2)
+            if self.forest[i][j] == TreeStatus.TREE:
+                self.burning_trees_queue.append((i, j,  self.tree_burn_time))
+            elif self.forest[i][j] == TreeStatus.PLANT:
+                self.burning_trees_queue.append((i, j, self.plant_burn_time))
             self.forest[i][j] = TreeStatus.BURNING
-            self.burning_trees_queue.append((i, j))
 
     def ignite_fire_corner(self):
+        if self.forest[1][1] == TreeStatus.TREE:
+                self.burning_trees_queue.append((1, 1, self.tree_burn_time))
+        elif self.forest[1][1] == TreeStatus.PLANT:
+            self.burning_trees_queue.append((1, 1, self.plant_burn_time))
         self.forest[1][1] = TreeStatus.BURNING
-        self.burning_trees_queue.append((1, 1))
 
     def ignite_fire_center(self):
+        if self.forest[self.size//2][self.size//2] == TreeStatus.TREE:
+                self.burning_trees_queue.append((self.size//2, self.size//2, self.tree_burn_time))
+        elif self.forest[self.size//2][self.size//2] == TreeStatus.PLANT:
+            self.burning_trees_queue.append((self.size//2, self.size//2, self.plant_burn_time))
         self.forest[self.size//2][self.size//2] = TreeStatus.BURNING
-        self.burning_trees_queue.append((self.size//2, self.size//2))
 
     def spread_fire_old(self):
         burning_trees = self.burning_trees_queue.copy()
@@ -70,32 +91,39 @@ class ForestFireModel:
         del burning_trees
             
     def spread_fire(self):
+        def try_burn(i, j):
+            if np.random.uniform(0,1) < self.env_index:
+                if self.forest[i][j] == TreeStatus.TREE:
+                    self.forest[i][j] = TreeStatus.BURNING
+                    self.burning_trees_queue.append((i, j, self.tree_burn_time))
+                if self.forest[i][j] == TreeStatus.PLANT:
+                    self.forest[i][j] = TreeStatus.BURNING
+                    self.burning_trees_queue.append((i, j, self.plant_burn_time))
+
         burning_trees = self.burning_trees_queue.copy()
         self.burning_trees_queue.clear()
-        for i, j in burning_trees:
-            if i > 0 and self.forest[i-1][j] == TreeStatus.TREE and np.random.uniform(0,1) < self.env_index:
-                self.forest[i-1][j] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i-1, j))
-            if j > 0 and self.forest[i][j-1] == TreeStatus.TREE and np.random.uniform(0,1) < self.env_index:
-                self.forest[i][j-1] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i, j-1))
-            if i < self.size - 1 and self.forest[i+1][j] == TreeStatus.TREE and np.random.uniform(0,1) < self.env_index:
-                self.forest[i+1][j] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i+1, j))
-            if j < self.size - 1 and self.forest[i][j+1] == TreeStatus.TREE and np.random.uniform(0,1) < self.env_index:
-                self.forest[i][j+1] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i, j+1))
-            self.forest[i][j] = TreeStatus.BURNT
-            if self.wind=="True":
-                if j + 1 < self.size - 1 and self.forest[i][j+2] == TreeStatus.TREE and np.random.uniform(0,1) < self.env_index:
-                    self.forest[i][j+2] = TreeStatus.BURNING
-                    self.burning_trees_queue.append((i, j+2))
-                if i < self.size - 1 and j < self.size -1 and self.forest[i+1][j+1] == TreeStatus.TREE and np.random.uniform(0,1) < self.env_index:
-                    self.forest[i+1][j+1] = TreeStatus.BURNING
-                    self.burning_trees_queue.append((i+1, j+1))
-                if i >0 and j < self.size -1 and self.forest[i-1][j+1] == TreeStatus.TREE and np.random.uniform(0,1) < self.env_index:
-                    self.forest[i-1][j+1] = TreeStatus.BURNING
-                    self.burning_trees_queue.append((i-1, j+1))
+        for i, j, burn_time in burning_trees:
+            if i > 0:
+                try_burn(i-1, j)
+            if j > 0:
+                try_burn(i, j-1)
+            if i < self.size - 1:
+                try_burn(i+1, j)
+            if j < self.size - 1:
+                try_burn(i, j+1)
+
+            burn_time -= 1
+            if burn_time > 0:
+                self.burning_trees_queue.append((i, j, burn_time))
+            else:
+                self.forest[i][j] = TreeStatus.BURNT
+            if self.wind == "True":
+                if j + 1 < self.size - 1:
+                    try_burn(i, j+2)
+                if i < self.size - 1 and j < self.size - 1:
+                    try_burn(i+1, j+1)
+                if i > 0 and j < self.size - 1:
+                    try_burn(i-1, j+1)
         del burning_trees
 
 
@@ -105,17 +133,17 @@ class ForestFireModel:
 
     
     def display_current_forest_state(self):
-        cmap = ListedColormap(['white', 'green', 'red', 'black'])
-        norm = BoundaryNorm([0, 1, 2, 3, 4], cmap.N)
+        cmap = ListedColormap(['white', 'green', 'orange', 'red', 'black'])
+        norm = BoundaryNorm([0, 1, 2, 3, 4, 5], cmap.N)
         plt.imshow(self.forest, cmap=cmap, norm=norm, interpolation='nearest')
         plt.axis('off')
         plt.show()
 
-    def display_single_simulation(self, interval=300,):
+    def display_single_simulation(self, interval=300):
         fig, ax = plt.subplots()
         ax.axis('off')
-        cmap = ListedColormap(['white', 'green', 'red', 'black'])
-        norm = BoundaryNorm([0, 1, 2, 3, 4], cmap.N)
+        cmap = ListedColormap(['white', 'green', 'orange', 'red', 'black'])
+        norm = BoundaryNorm([0, 1, 2, 3, 4, 5], cmap.N)
         im = ax.imshow(self.forest, cmap=cmap, norm=norm, interpolation='nearest')
 
         while self.get_num_burning() > 0:
