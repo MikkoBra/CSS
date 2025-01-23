@@ -5,6 +5,7 @@ from matplotlib.colors import ListedColormap
 from matplotlib.colors import BoundaryNorm
 from enum import IntEnum
 from collections import deque
+import noise 
 
 class TreeStatus(IntEnum):
     EMPTY = 0
@@ -21,15 +22,14 @@ To-do:
 - Add iterative tracking values for trees, burning, and burnt
 """
 class ForestFireModel:
-    def __init__(self, size, forest_density, env_index, wind, plant_type_2_prob, plant_1_index, plant_2_index, ignition_num=0):
-        self.initial_forest = 0
+    def __init__(self, size, forest_density, env_index, wind, plant_tree_proportion, tree_burn_time, plant_burn_time, ignition_num=0):
+        self.tree_burn_time = tree_burn_time
+        self.plant_burn_time = plant_burn_time
+        self.plant_tree_proportion = plant_tree_proportion
         self.size = size
         self.forest_density = forest_density
         self.env_index = env_index
-        self.plant_1_index = plant_1_index
-        self.plant_2_index = plant_2_index
         self.wind = wind
-        self.plant_type_2_prob = plant_type_2_prob
         self.ignition_num = ignition_num
         self.forest = np.zeros((size, size), dtype=int)
         self.noise_map = np.zeros((size, size))
@@ -42,13 +42,12 @@ class ForestFireModel:
                 if np.random.random() < self.forest_density:
                     self.forest[i][j] = TreeStatus.TREE
                 self.noise_map[i][j] = noise.pnoise2(i / 10, j / 10)
+        
         for i in range(self.size):
             for j in range(self.size):
-                if self.forest[i][j] == TreeStatus.TREE:
-                    if self.noise_map[i][j] < (2 * self.plant_type_2_prob - 1):
-                        self.forest[i][j] = TreeStatus.PLANT
+                if self.noise_map[i][j] < (2 * self.plant_value - 1) and self.forest[i][j] == TreeStatus.TREE:
+                    self.forest[i][j] = TreeStatus.PLANT
         
-
     def ignite_fire_random(self):
         for _ in range(self.ignition_num):
             i, j = np.random.randint(0, self.size, size=2)
