@@ -7,14 +7,14 @@ import sys
 # # caution: path[0] is reserved for script path (or '' in REPL)
 # sys.path.append('/Users/rmosk/Dropbox/Rinske/Computational Science/Complex system simulations/Forest fire/CSS/ForestFirePercolation/src/model')
 # import ForestFireModel
-from ForestFirePercolation.src.model import ForestFireModel
+from model import ForestFireModel
 
 # from .model import ForestFireModel
 # from .simulations import ForestFireSimulations
 
 
 # parameters, system size, perc percolation, perc burnt down.
-def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting=2):
+def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting=10):
     fields = ['size', 'density', 'wind', 'env_index', 'percolation', 'percentage burnt down']
     rows = []
     winds = ["False", "True"]
@@ -34,7 +34,7 @@ def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting
                         burnt_perc = model.get_num_burnt()/num_trees_total
                         # Add the data
                         rows.append([size, density, wind, env_index, percolation, burnt_perc])
-    filename = "Simulation_data_tets.csv"
+    filename = "Simulation_data_test_criticalp.csv"
 
     # writing to csv file
     with open(filename, 'w') as csvfile:
@@ -47,9 +47,9 @@ def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting
         # writing the data rows
         csvwriter.writerows(rows)
 
-sizes = [50,100]
-densities = [0.6,0.8]
-env_indixes = [0.6,0.8]
+sizes = [100]
+densities = [0.2,0.4,0.6,0.8,1]
+env_indixes = [1]
 
 simulation_to_csv(sizes, densities, env_indixes)
 
