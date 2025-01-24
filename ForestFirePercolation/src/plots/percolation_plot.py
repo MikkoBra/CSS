@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from ..results.result import Result
 
@@ -87,16 +89,21 @@ class PercolationPlot:
         :return:
         """
         percolation_probability = {}
-        for result in self.results:
+        for result in results:
             density = result.density
             if density in percolation_probability:
-                percolation_probability[density][0] += 1
+                percolation_probability[density][0] += 1.0
             else:
                 percolation_probability[density] = [1, 0]
             if result.percolation:
-                percolation_probability[density][0] += 1
+                percolation_probability[density][0] += 1.0
+        for density in percolation_probability:
+            self.densities.append(density)
+            probability = percolation_probability[density][1]/percolation_probability[density][0]
+            self.probabilities.append(probability)
 
     def plot_percolation(self, results, system_size):
         self.save_amount_percolated_per_density(results)
         self.system_size = system_size
+        self.plot_single_percolation_vs_density()
 

@@ -1,6 +1,6 @@
 import csv
 from ForestFirePercolation.src.results.result import Result
-from ..plots.percolation_plot import PercolationPlot
+from ForestFirePercolation.src.plots.percolation_plot import PercolationPlot
 
 
 def read_percolation_csv():
@@ -24,7 +24,7 @@ def read_percolation_csv():
                 result_dict[size] = [result_obj]
         return result_dict
 
-dictionary = read_percolation_csv()
+results_per_system_size = read_percolation_csv()
 plot = PercolationPlot()
-for key in dictionary:
-    plot.plot_percolation(dictionary)
+for system_size in results_per_system_size:
+    plot.plot_percolation(results_per_system_size[system_size], system_size)
