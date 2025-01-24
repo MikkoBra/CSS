@@ -3,14 +3,14 @@ from ForestFirePercolation.src.results.result import Result
 from ForestFirePercolation.src.plots.percolation_plot import PercolationPlot
 
 
-def read_percolation_csv():
+def read_percolation_csv(file_name):
     """
         Returns the results per run as a Result object, sectioned into system sizes in a dictionary.
         ex: {'50': [Result1, Result2], '100': [Result1, Result2]}
 
     :return:
     """
-    with open('../Simulation_data_test_criticalp.csv', mode='r') as file:
+    with open(f'../Data/{file_name}', mode='r') as file:
         csv_reader = csv.DictReader(file)
         data = [row for row in csv_reader]
         result_dict = {}
