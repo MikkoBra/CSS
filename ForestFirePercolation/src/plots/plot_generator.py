@@ -43,7 +43,20 @@ class PlotGenerator:
         filtered_results = self.result_filter.no_wind_filter(self.results_per_system_size)
         self.generate_percolation_multi_plot(filtered_results)
 
+    def generate_wind_experiment_plot(self):
+        filtered_results = self.result_filter.wind_filter(self.results_per_system_size)
+        self.generate_percolation_multi_plot(filtered_results)
+
+    def generate_env_index_experiment_plot(self):
+        filtered_results = self.result_filter.env_index_filter(self.results_per_system_size)
+        self.generate_percolation_multi_plot(filtered_results)
+
+    def generate_vegetation_experiment_plot(self):
+        filtered_results = self.result_filter.vegetation_filter(self.results_per_system_size)
+        self.generate_percolation_multi_plot(filtered_results)
+
 
 generator = PlotGenerator()
 generator.generate_base_experiment_plot()
+generator.generate_wind_experiment_plot()
 generator.generate_percolation_multi_plot(generator.results_per_system_size)
