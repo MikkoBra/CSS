@@ -76,21 +76,6 @@ class OutputWindow:
             self.burnt_prop_label = Label(master, text=f"Proportion of burns left to right: {self.burnt_prop}")
             self.burnt_prop_label.grid(row=0, column=0)
 
-        elif sim_type == 'multiple density, multiple sim':
-            density_values = np.linspace(0.01, 1, 100)
-
-            simulation = DensityForestFireSimulations(size, num_simulations, ignition_location, 
-                                                    env_index, wind, plant_tree_proportion, 
-                                                    tree_burn_time, plant_burn_time, ignition_num=self.ignition_num, 
-                                                    random_seed=self.random_seed)
-
-            density_results = simulation.run_density_simulations(density_values)
-
-            simulation.plot_density_vs_burnt(density_results)
-
-            self.density_range_label = Label(master, text="Density range: 0.01 to 1")
-            self.density_range_label.grid(row=0, column=0)
-
         self.close_button = Button(master, text="Close", command=master.quit)
         self.close_button.grid(row=4, column=0)
         
