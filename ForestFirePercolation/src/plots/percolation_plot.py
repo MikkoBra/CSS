@@ -30,13 +30,11 @@ class PercolationPlot:
 
             index: Index of the results in the PercolationPlot object's results array
         """
-        label = r'$P_N(d)$, $N =$ ' + str(self.system_size)
+        label = r'$N =$ ' + str(self.system_size)
         self.plot_percolation_vs_density(self.densities, self.probabilities, ax, label)
         ax.set_xlabel(r'Density $d$')
         ax.set_ylabel(r'$P_N$')
         ax.legend()
-        ax.set_title('Percolation probability vs forest density for system size ' + str(self.system_size) + 'x'
-                     + str(self.system_size))
         return ax
 
     def save_amount_percolated_per_density(self, results):
@@ -70,11 +68,36 @@ class PercolationPlot:
         self.plot_single_percolation_vs_density(ax)
         plt.show()
 
+    # def plot_multiple_percolation(self, results_per_system_size):
+    #     fig, ax = plt.subplots()
+    #     for system_size in results_per_system_size:
+    #         self.save_amount_percolated_per_density(results_per_system_size[system_size])
+    #         self.system_size = system_size
+    #         self.plot_single_percolation_vs_density(ax)
+    #     plt.show()
+
     def plot_multiple_percolation(self, results_per_system_size):
         fig, ax = plt.subplots()
         for system_size in results_per_system_size:
             self.save_amount_percolated_per_density(results_per_system_size[system_size])
             self.system_size = system_size
             self.plot_single_percolation_vs_density(ax)
+        ax.set_xlabel(r'Density $d$')
+        ax.set_ylabel(r'$P_N$')
+        ax.legend()
+        ax.set_title('Percolation probability vs forest density for varying system sizes ')
+        plt.show()
+
+    def plot_around_critical(self, results_per_system_size):
+        fig, ax = plt.subplots()
+        for system_size in results_per_system_size:
+            self.save_amount_percolated_per_density(results_per_system_size[system_size])
+            self.system_size = system_size
+            self.plot_single_percolation_vs_density(ax)
+            ax.set_xlim(0.45, 0.7)
+            ax.set_xlabel(r'Density $d$')
+            ax.set_ylabel(r'$P_N$')
+            ax.legend()
+            ax.set_title('Percolation probability vs forest density for varying system sizes around the critical value')
         plt.show()
 

@@ -39,9 +39,20 @@ class PlotGenerator:
         """
         self.percolation_plot.plot_multiple_percolation(results_per_system_size)
 
+    def generate_critical_point_multi_plot(self, results_per_system_size):
+        """
+            Generates a single figure containing percolation probability vs density plots for all system sizes in the
+            csv data.
+
+            :param results_per_system_size: Dictionary containing arrays of Result objects as values and system sizes as
+             keys.
+        """
+        self.percolation_plot.plot_around_critical(results_per_system_size)
+
     def generate_base_experiment_plot(self):
         filtered_results = self.result_filter.no_wind_filter(self.results_per_system_size)
         self.generate_percolation_multi_plot(filtered_results)
+        self.generate_critical_point_multi_plot(filtered_results)
 
     def generate_wind_experiment_plot(self):
         filtered_results = self.result_filter.wind_filter(self.results_per_system_size)
