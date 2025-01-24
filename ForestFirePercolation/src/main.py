@@ -3,6 +3,11 @@ from model import ForestFireModel
 from simulations import ForestFireSimulations
 from density_sims import DensityForestFireSimulations
 
+
+"""
+Being DEPRECATED, this function may not work in the current version of the project.
+"""
+
 def main():
     size = int(input("Enter the size of the forest (e.g., 50 for a 50x50 grid): "))
     plant_tree_proportion = float(input("Enter the proportion of plants to trees (0 to 1): "))
