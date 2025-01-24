@@ -42,16 +42,3 @@ def simulation_to_csv(sizes, densities, test_wind, env_indixes, plant_tree_propo
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(fields)
         csvwriter.writerows(rows)
-
-"""
-sizes = [50, 100]
-densities = [0.5, 0.8]
-env_indixes = [0.5, 1]
-test_wind = True
-plant_tree_proportions = [0.0]#[0.0, 0.5]
-tree_burn_times = [1]#[1, 3, 5, 10]
-file_name = 'Simulation_data_test_criticalp.csv'
-
-simulation_to_csv(sizes, densities, test_wind, env_indixes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting=1)
-
-"""
