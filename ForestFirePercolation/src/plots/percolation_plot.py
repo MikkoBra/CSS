@@ -24,13 +24,12 @@ class PercolationPlot:
         ax.plot(densities, probabilities, label=label)
         return ax
 
-    def plot_single_percolation_vs_density(self):
+    def plot_single_percolation_vs_density(self, ax):
         """
             Function that creates a plot of percolation probability vs forest density for one set of results.
 
             index: Index of the results in the PercolationPlot object's results array
         """
-        fig, ax = plt.subplots()
         print(self.probabilities)
         label = r'$P_N(d)$, $N =$ ' + str(self.system_size)
         self.plot_percolation_vs_density(self.densities, self.probabilities, ax, label)
@@ -39,9 +38,9 @@ class PercolationPlot:
         ax.legend()
         ax.set_title('Percolation probability vs forest density for system size ' + str(self.system_size) + 'x'
                      + str(self.system_size))
-        plt.show()
+        return ax
 
-    def plot_multiple_percolation_vs_density(self):
+    def plot_(self):
         """
             Function that creates a plot of percolation probability vs forest density for all sets of saved results in
             the same figure.
@@ -58,28 +57,6 @@ class PercolationPlot:
         ax.legend()
         ax.set_title('Percolation probability vs forest density for varying system size.')
         plt.show()
-
-    def add_results(self, results):
-        """
-            Function that adds a set of results to the PercolationPlot's results array.
-
-            results: Results object to add to the results array.
-        """
-        self.results.append(results)
-        return
-
-    def add_multiple_results(self, results):
-        for result in results:
-            self.results.append(results)
-
-    def get_result(self, index):
-        return self.results[index]
-
-    def get_results(self):
-        return self.results
-
-    def clear_results(self):
-        self.results = []
 
     def save_amount_percolated_per_density(self, results):
         """
@@ -103,12 +80,20 @@ class PercolationPlot:
         for density in percolation_probability:
             self.densities.append(density)
             probability = percolation_probability[density][1]/percolation_probability[density][0]
-            print(percolation_probability[density][1])
-            print(percolation_probability[density][0])
             self.probabilities.append(probability)
 
     def plot_percolation(self, results, system_size):
+        fig, ax = plt.subplots()
         self.save_amount_percolated_per_density(results)
         self.system_size = system_size
-        self.plot_single_percolation_vs_density()
+        self.plot_single_percolation_vs_density(ax)
+        plt.show()
+
+    def plot_multiple_percolation(self, results_per_system_size):
+        fig, ax = plt.subplots()
+        for system_size in results_per_system_size:
+            self.save_amount_percolated_per_density(results_per_system_size[system_size])
+            self.system_size = system_size
+            self.plot_single_percolation_vs_density(ax)
+        plt.show()
 
