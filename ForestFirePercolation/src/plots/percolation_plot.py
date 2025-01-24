@@ -68,20 +68,29 @@ class PercolationPlot:
         self.plot_single_percolation_vs_density(ax)
         plt.show()
 
-    # def plot_multiple_percolation(self, results_per_system_size):
-    #     fig, ax = plt.subplots()
-    #     for system_size in results_per_system_size:
-    #         self.save_amount_percolated_per_density(results_per_system_size[system_size])
-    #         self.system_size = system_size
-    #         self.plot_single_percolation_vs_density(ax)
-    #     plt.show()
+    def plot_critical_point(self, probabilities, densities, system_size, ax):
+        slopes = [probabilities[i + 1] - probabilities[i] for i in range(len(probabilities) - 1)]
+        max_slope_idx = slopes.index(max(slopes))
+        x = densities[max_slope_idx]
+        label = r'$p_c, N = $' + str(system_size)
+        ax.axvline(x=x, color='black', linestyle='--', label=label)
+        return ax
 
     def plot_multiple_percolation(self, results_per_system_size):
         fig, ax = plt.subplots()
+        max_sys_size_probabilities = []
+        max_sys_size_densities = []
+        max_sys_size = 0
         for system_size in results_per_system_size:
             self.save_amount_percolated_per_density(results_per_system_size[system_size])
             self.system_size = system_size
+            # save biggest system size probabilities for critical point
+            if float(system_size) > max_sys_size:
+                max_sys_size = system_size
+                max_sys_size_probabilities = self.probabilities
+                max_sys_size_densities = self.densities
             self.plot_single_percolation_vs_density(ax)
+        self.plot_critical_point(max_sys_size_probabilities, max_sys_size_densities, max_sys_size, ax)
         ax.set_xlabel(r'Density $d$')
         ax.set_ylabel(r'$P_N$')
         ax.legend()
