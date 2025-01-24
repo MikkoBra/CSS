@@ -89,6 +89,8 @@ class PercolationPlot:
 
         :return:
         """
+        self.densities = []
+        self.probabilities = []
         percolation_probability = {}
         for result in results:
             density = result.density

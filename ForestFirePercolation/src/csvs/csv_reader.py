@@ -24,7 +24,3 @@ def read_percolation_csv():
                 result_dict[size] = [result_obj]
         return result_dict
 
-results_per_system_size = read_percolation_csv()
-plot = PercolationPlot()
-for system_size in results_per_system_size:
-    plot.plot_percolation(results_per_system_size[system_size], system_size)
