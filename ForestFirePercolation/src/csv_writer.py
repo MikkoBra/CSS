@@ -15,26 +15,26 @@ from model import ForestFireModel
 
 # parameters, system size, perc percolation, perc burnt down.
 def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting=1):
-    fields = ['size', 'density', 'wind', 'env_index', 'percolation', 'percentage burnt down']
+    fields = ['size', 'density', 'wind', 'env_index', 'percolation', 'percentage burnt down', 'plant-tree proportion']
     rows = []
-    winds = ["False", "True"]
+    winds = [False, True]
     for size in sizes:
         for density in densities:
             for wind in winds:
                 for env_index in env_indixes:
                     for _ in range(num_simulations_per_setting):
-                        model = ForestFireModel(size, density, env_index, wind, 0.5, 1, 1)
+                        model = ForestFireModel(size, density, env_index, wind, 0.0, 1, 1)
                         # Number of trees at the beginning
                         num_trees_total = model.get_num_trees()
                         # Run the model
                         model.ignite_fire_center()
-                        print('start sim')
                         model.no_display_single_simulation()#(env_index, wind)
                         # Extract the result
                         percolation = model.burns_left_to_right()
                         burnt_perc = model.get_num_burnt()/num_trees_total
+                        plant_tree_proportion = model.plant_tree_proportion
                         # Add the data
-                        rows.append([size, density, wind, env_index, percolation, burnt_perc])
+                        rows.append([size, density, wind, env_index, percolation, burnt_perc, plant_tree_proportion])
     filename = "Simulation_data_test_criticalp.csv"
 
     # writing to csv file
@@ -49,8 +49,8 @@ def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting
         csvwriter.writerows(rows)
 
 sizes = [50, 100]
-densities = [0.5, 0.8]
-env_indixes = [1]
+densities = [0.55, 0.8]
+env_indices = [1]
 
-simulation_to_csv(sizes, densities, env_indixes)
+simulation_to_csv(sizes, densities, env_indices)
 

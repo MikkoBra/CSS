@@ -30,7 +30,6 @@ class PercolationPlot:
 
             index: Index of the results in the PercolationPlot object's results array
         """
-        print(self.probabilities)
         label = r'$P_N(d)$, $N =$ ' + str(self.system_size)
         self.plot_percolation_vs_density(self.densities, self.probabilities, ax, label)
         ax.set_xlabel(r'Density $d$')
@@ -39,24 +38,6 @@ class PercolationPlot:
         ax.set_title('Percolation probability vs forest density for system size ' + str(self.system_size) + 'x'
                      + str(self.system_size))
         return ax
-
-    def plot_(self):
-        """
-            Function that creates a plot of percolation probability vs forest density for all sets of saved results in
-            the same figure.
-        """
-        fig, ax = plt.subplots()
-        result_idx = 0
-        while result_idx < len(self.results):
-            results = self.get_result(result_idx)
-            label = r'$P_N(d)$, $N =$ ' + str(results.system_size)
-            self.plot_percolation_vs_density(results.densities, results.probabilities, results.system_size, ax, label)
-            result_idx += 1
-        ax.set_xlabel(r'Density $d$')
-        ax.set_ylabel(r'$P_N$')
-        ax.legend()
-        ax.set_title('Percolation probability vs forest density for varying system size.')
-        plt.show()
 
     def save_amount_percolated_per_density(self, results):
         """
