@@ -25,11 +25,11 @@ def simulation_to_csv(sizes, densities, test_wind, env_indixes, plant_tree_propo
                                 num_trees_total = model.get_num_trees()
                                 # Run the model
                                 model.ignite_fire_center()
-                                print('start sim')
                                 model.no_display_single_simulation()#(env_index, wind)
                                 # Extract the result
                                 percolation = model.burns_left_to_right()
-                                burnt_perc = model.get_num_burnt()/num_trees_total
+                                num_burnt = model.get_num_burnt()
+                                burnt_perc = num_burnt / num_trees_total if num_trees_total > 0 else 0
                                 # Add the data
                                 rows.append([size, density, wind, env_index, plant_tree_proportion, tree_burn_time,plant_burn_time, percolation, burnt_perc])
 
