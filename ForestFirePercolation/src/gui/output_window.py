@@ -73,7 +73,7 @@ class OutputWindow:
             simulation.plot_burnt_distribution_log_log()
 
             self.burnt_prop = simulation.proportion_burns_left_to_right()
-            self.burnt_prop_label = Label(master, text=f"Proportion of burns left to right: ")
+            self.burnt_prop_label = Label(master, text=f"Proportion of burns left to right: {self.burnt_prop}")
             self.burnt_prop_label.grid(row=0, column=0)
 
         elif sim_type == 'multiple density, multiple sim':

@@ -125,8 +125,8 @@ class ConditionalWindow:
             self.wind,
             self.use_seed,
             int(self.ignition_num_entry.get()) if self.ignition_num_entry else None,
-            int(self.num_simulations_var) if self.num_simulations_var else None,
+            int(self.num_simulations_var.get()) if self.num_simulations_var else None,
             float(self.density_var.get()) if self.density_var else None,
             int(self.seed_entry.get()) if self.seed_entry else None,
-            self.display_var.get()
+            self.display_var.get() if self.display_var else None
         )

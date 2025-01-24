@@ -33,7 +33,6 @@ class ForestFireSimulations:
             elif self.ignition_location == 'center':
                 model.ignite_fire_center()
 
-            model.ignite_fire_random()
             while model.get_num_burning() > 0:
                 model.spread_fire()
             self.results.append({
