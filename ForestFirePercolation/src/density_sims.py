@@ -2,10 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from model import ForestFireModel
 from simulations import ForestFireSimulations
-
+from typing import Optional, Dict, Any
 
 class DensityForestFireSimulations:
-    def __init__(self, size, num_sims_per_prob, ignition_location, env_index, wind, plant_tree_proportion, tree_burn_time, plant_burn_time, ignition_num = 0):
+    def __init__(self, size: int, num_sims_per_prob: int, ignition_location: str, 
+                 env_index: float, wind: bool, plant_tree_proportion: float, 
+                 tree_burn_time: int, plant_burn_time: int, ignition_num: int = 0, random_seed: Optional[int] = None):
         self.tree_burn_time = tree_burn_time
         self.plant_burn_time = plant_burn_time
         self.plant_tree_proportion = plant_tree_proportion
@@ -15,6 +17,7 @@ class DensityForestFireSimulations:
         self.env_index = env_index
         self.wind = wind
         self.ignition_location = ignition_location
+        self.random_seed = random_seed
         self.results = []
 
     def run_density_simulations(self, density_values):
@@ -32,7 +35,10 @@ class DensityForestFireSimulations:
     def run_simulations(self):
         sim_results = []
         for _ in range(self.num_simulations):
-            simulation = ForestFireSimulations(self.size, self.forest_density, self.num_simulations, self.ignition_location, self.env_index, self.wind, self.plant_tree_proportion, self.tree_burn_time, self.plant_burn_time, self.ignition_num)
+            simulation = ForestFireSimulations(self.size, self.forest_density, self.num_simulations, 
+                                               self.ignition_location, self.env_index, self.wind, 
+                                               self.plant_tree_proportion, self.tree_burn_time, self.plant_burn_time, 
+                                               self.ignition_num, random_seed=self.random_seed)
             simulation.run_simulations()
             sim_results.append(simulation.get_results())
         return sim_results

@@ -48,8 +48,8 @@ def simulation_to_csv(sizes, densities, env_indixes, num_simulations_per_setting
         # writing the data rows
         csvwriter.writerows(rows)
 
-sizes = [50]
-densities = [0.8,1]
+sizes = [50, 100]
+densities = [0.5, 0.8]
 env_indixes = [1]
 
 simulation_to_csv(sizes, densities, env_indixes)

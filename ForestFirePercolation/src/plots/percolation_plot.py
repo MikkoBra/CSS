@@ -31,6 +31,7 @@ class PercolationPlot:
             index: Index of the results in the PercolationPlot object's results array
         """
         fig, ax = plt.subplots()
+        print(self.probabilities)
         label = r'$P_N(d)$, $N =$ ' + str(self.system_size)
         self.plot_percolation_vs_density(self.densities, self.probabilities, ax, label)
         ax.set_xlabel(r'Density $d$')
@@ -88,6 +89,8 @@ class PercolationPlot:
 
         :return:
         """
+        self.densities = []
+        self.probabilities = []
         percolation_probability = {}
         for result in results:
             density = result.density
@@ -96,10 +99,12 @@ class PercolationPlot:
             else:
                 percolation_probability[density] = [1, 0]
             if result.percolation:
-                percolation_probability[density][0] += 1.0
+                percolation_probability[density][1] += 1.0
         for density in percolation_probability:
             self.densities.append(density)
             probability = percolation_probability[density][1]/percolation_probability[density][0]
+            print(percolation_probability[density][1])
+            print(percolation_probability[density][0])
             self.probabilities.append(probability)
 
     def plot_percolation(self, results, system_size):
