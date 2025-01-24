@@ -4,10 +4,12 @@ from ForestFirePercolation.src.results.result_filter import ResultFilter
 
 
 class PlotGenerator:
-    def __init__(self):
+    def __init__(self, file_name='Simulation_data.csv'):
+        self.file_name = file_name
+
         self.percolation_plot = PercolationPlot()
         self.result_filter = ResultFilter()
-        self.results_per_system_size = csv_reader.read_percolation_csv()
+        self.results_per_system_size = csv_reader.read_percolation_csv(self.file_name)
 
     def generate_percolation_plots(self, results_per_system_size):
         """
@@ -67,7 +69,7 @@ class PlotGenerator:
         self.generate_percolation_multi_plot(filtered_results)
 
 
-generator = PlotGenerator()
+generator = PlotGenerator("Simulation_data.csv")
 generator.generate_base_experiment_plot()
 generator.generate_wind_experiment_plot()
 generator.generate_percolation_multi_plot(generator.results_per_system_size)
