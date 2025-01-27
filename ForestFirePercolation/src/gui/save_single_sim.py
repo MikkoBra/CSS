@@ -26,6 +26,9 @@ class SaveSingleSim:
         self.random_seed = random_seed
         self.display_single = display_single
 
+        self.must_wait_label = Label(master, text="The Simulation must finish before saving occurs")
+        self.must_wait_label.pack()
+
         if display_single == "yes":
             self.save_single_option_label = Label(master, text="Save single simulation?")
             self.save_single_option_label.pack()
