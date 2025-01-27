@@ -98,11 +98,11 @@ class ForestFireModel:
     def ignite_fire_random(self):
         for _ in range(self.ignition_num):
             i, j = np.random.randint(0, self.size, size=2)
-        if self.noise_map[i][j] < (2 * self.plant_tree_proportion - 1):
-            self.burning_trees_queue.append((i, j, self.plant_burn_time))
-        else:
-            self.burning_trees_queue.append((i, j, self.tree_burn_time))
-        self.forest[i][j] = TreeStatus.BURNING
+            if self.noise_map[i][j] < (2 * self.plant_tree_proportion - 1):
+                self.burning_trees_queue.append((i, j, self.plant_burn_time))
+            else:
+                self.burning_trees_queue.append((i, j, self.tree_burn_time))
+            self.forest[i][j] = TreeStatus.BURNING
 
     """
     Ignites fire at the corner of the forest.
