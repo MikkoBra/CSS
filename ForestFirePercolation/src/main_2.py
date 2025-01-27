@@ -1,10 +1,10 @@
 import tkinter as tk
-from gui.input_window import InputWindow
+from gui.sim_selection import SimSelection
 
 def main():
     root = tk.Tk()
     
-    input_window = InputWindow(root)
+    SimSelection(root)
 
     root.mainloop()
 
