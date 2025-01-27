@@ -71,44 +71,26 @@ class ForestFireModel:
         else:
             self.burning_trees_queue.append((self.size//2, self.size//2, self.tree_burn_time))
         self.forest[self.size//2][self.size//2] = TreeStatus.BURNING
-
-    def spread_fire_old(self):
-        burning_trees = self.burning_trees_queue.copy()
-        self.burning_trees_queue.clear()
-        for i, j in burning_trees:
-            if i > 0 and self.forest[i-1][j] == TreeStatus.TREE:
-                self.forest[i-1][j] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i-1, j))
-            if j > 0 and self.forest[i][j-1] == TreeStatus.TREE:
-                self.forest[i][j-1] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i, j-1))
-            if i < self.size - 1 and self.forest[i+1][j] == TreeStatus.TREE:
-                self.forest[i+1][j] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i+1, j))
-            if j < self.size - 1 and self.forest[i][j+1] == TreeStatus.TREE:
-                self.forest[i][j+1] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i, j+1))
-            self.forest[i][j] = TreeStatus.BURNT
-        del burning_trees
             
     def spread_fire(self):
         def try_burn(i, j):
-            if np.random.uniform(0,1) < self.env_index and self.forest[i][j] in (TreeStatus.TREE, TreeStatus.PLANT):
-                self.forest[i][j] = TreeStatus.BURNING
-                burn_time = self.tree_burn_time if self.forest[i][j] == TreeStatus.TREE else self.plant_burn_time
+            if np.random.uniform(0, 1) < self.env_index and self.forest[i, j] in (TreeStatus.TREE, TreeStatus.PLANT):
+                self.forest[i, j] = TreeStatus.BURNING
+                burn_time = self.tree_burn_time if self.forest[i, j] == TreeStatus.TREE else self.plant_burn_time
                 self.burning_trees_queue.append((i, j, burn_time))
 
-        burning_trees = self.burning_trees_queue.copy()
+        burning_trees = deque(self.burning_trees_queue)
         self.burning_trees_queue.clear()
-        for i, j, burn_time in burning_trees:
+        while burning_trees:
+            i, j, burn_time = burning_trees.popleft()
             if i > 0:
-                try_burn(i-1, j)
+                try_burn(i - 1, j)
             if j > 0:
-                try_burn(i, j-1)
+                try_burn(i - 1, j)
             if i < self.size - 1:
-                try_burn(i+1, j)
+                try_burn(i + 1, j)
             if j < self.size - 1:
-                try_burn(i, j+1)
+                try_burn(i, j + 1)
 
             burn_time -= 1
             if burn_time > 0:

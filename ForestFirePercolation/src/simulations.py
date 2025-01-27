@@ -52,7 +52,9 @@ class ForestFireSimulations:
 
     def plot_burnt_distribution_log_log(self):
         burnt_percentages = [result['percentage_burnt'] for result in self.results]
-        plt.hist(burnt_percentages, bins=10, edgecolor='black', log=True)
+        bins = np.logspace(np.log10(min(burnt_percentages)), np.log10(max(burnt_percentages)), 10)
+        plt.hist(burnt_percentages, bins=bins, edgecolor='black')
+        plt.yscale('log')
         plt.xscale('log')
         plt.yscale('log')
         plt.title('Log-Log Distribution of Burnt Trees')
