@@ -3,7 +3,26 @@ from tkinter import *
 from csv_writer import simulation_to_csv
 from csv_writer_parallel import simulation_to_csv_parallel
 
-class OutputFullSim:
+"""
+Class to run many simulations with a range of parameters 
+and save the results to a CSV file.
+
+Attributes:
+    master (Tk): The root Tk object.
+    sizes (List[int]): The range of sizes to simulate.
+    densities (List[float]): The range of densities to simulate.
+    test_wind (str): The wind condition to simulate.
+    env_indexes (List[float]): The range of environmental indexes to simulate.
+    plant_tree_proportions (List[float]): The range of plant tree proportions to simulate.
+    tree_burn_times (List[int]): The range of tree burn times to simulate.
+    run_parallel (bool): Whether to run the simulations in parallel.
+    file_name (str): The name of the output CSV file.
+    num_simulations_per_setting (int): The number of simulations to run for each parameter setting.
+
+Methods:
+    finish: Close the window and exit the program.
+"""
+class RunRangeOfSimsGUI:
     def __init__(self, 
                  master,
                  sizes,
