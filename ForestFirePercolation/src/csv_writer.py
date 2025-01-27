@@ -13,10 +13,12 @@ def simulation_to_csv(sizes, densities, test_wind, env_indixes,
 
     plant_burn_time = 1
 
-    if test_wind:
-        winds = [False, True]
-    else:
+    if test_wind == "Wind":
+        winds = [True]
+    if test_wind == "No Wind":
         winds = [False]
+    elif test_wind == "Both":
+        winds = [False, True]
 
     simulation_count = 0
 
