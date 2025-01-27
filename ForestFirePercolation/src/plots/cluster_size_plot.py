@@ -22,14 +22,42 @@ class ClusterSizePlot:
             ax: matplotlib.pyplot ax object to plot the probabilities with.
             label: String label to assign to the plot.
         """
-        counts, bins = np.histogram(cluster_sizes, bins=10)
-        proportions = counts / counts.sum()
-        bin_centers = (bins[:-1] + bins[1:]) / 2
+        bin_edges = np.logspace(np.log10(1e-4), np.log10(1), 21)
+        counts, bin_edges = np.histogram(cluster_sizes, bins=bin_edges, density=True)
 
-        # Plot the proportions as a line
-        plt.plot(bin_centers, proportions, marker='o', linestyle='-', color='black', label=label, linewidth=1)
-        tick_positions = np.linspace(0, 1, 11)  # 15 evenly spaced ticks
-        plt.xticks(tick_positions)
+        # Calculate the bin centers
+        bin_centers = 0.5 * (bin_edges[:-1] + bin_edges[1:])
+
+        # Normalize the histogram to obtain a probability density
+        normalized_hist = counts / np.sum(counts)
+
+        # conf_intervals = []
+        # for count in counts:
+        #     if count > 0:
+        #         # Use Poisson approximation for confidence intervals
+        #         lower = count - 1.96 * np.sqrt(count)
+        #         upper = count + 1.96 * np.sqrt(count)
+        #         lower = max(lower, 0)  # Ensure non-negative bounds
+        #     else:
+        #         lower, upper = 0, 0  # No data, no confidence interval
+        #     conf_intervals.append((lower / counts.sum(), upper / counts.sum()))
+
+        # Extract lower and upper bounds
+        # lower_bounds, upper_bounds = zip(*conf_intervals)
+
+        ax.plot(bin_centers, normalized_hist, lw=1.25, label='Cluster Density Distribution')
+
+        # plt.errorbar(bin_centers, normalized_hist,
+        #              yerr=[normalized_hist - np.array(lower_bounds), np.array(upper_bounds) - normalized_hist],
+        #              fmt='o', color='red', label="95% CI")
+
+        # Set the x and y axis to log-log scale
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+
+        # Set axis labels
+        ax.set_xlabel('Cluster Density (Fraction)')
+        ax.set_ylabel('Probability Density')
         return ax
 
     def plot_single_cluster_size_probability_vs_cluster_size(self, ax):

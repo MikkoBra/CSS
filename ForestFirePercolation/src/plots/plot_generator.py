@@ -84,7 +84,7 @@ class PlotGenerator:
         self.generate_cluster_size_multi_plot(filtered_results, title)
 
 
-generator = PlotGenerator("Simulation_data_all_1.csv")
+generator = PlotGenerator("SOC_base_200_2.csv")
 # generator.generate_base_experiment_plot()
 # generator.generate_wind_experiment_plot()
 # generator.generate_env_index_experiment_plot()
