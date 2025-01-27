@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
@@ -8,6 +9,7 @@ from matplotlib.colors import BoundaryNorm
 from enum import IntEnum
 from collections import deque
 from typing import Optional, Dict, Any
+from matplotlib.animation import PillowWriter
 
 class TreeStatus(IntEnum):
     EMPTY = 0
@@ -135,12 +137,15 @@ class ForestFireModel:
         plt.axis('off')
         plt.show()
 
-    def display_single_simulation(self, interval=300):
+    def display_single_simulation(self, interval=300, save=True, filename="forest_fire_simulation.gif"):
         fig, ax = plt.subplots()
         ax.axis('off')
         cmap = ListedColormap(['white', 'green', 'orange', 'red', 'black'])
         norm = BoundaryNorm([0, 1, 2, 3, 4, 5], cmap.N)
         im = ax.imshow(self.forest, cmap=cmap, norm=norm, interpolation='nearest')
+
+        if save:
+            frames = []
 
         while self.get_num_burning() > 0:
             if not plt.fignum_exists(fig.number):
@@ -149,6 +154,17 @@ class ForestFireModel:
             im.set_array(self.forest)
             plt.draw()
             plt.pause(interval / 1000.0)
+
+            if save:
+                frames.append([plt.imshow(self.forest, cmap=cmap, norm=norm, interpolation='nearest')])
+
+        if save:
+            ani = matplotlib.animation.ArtistAnimation(fig, frames, interval=interval, blit=True)
+            data_dir = os.path.join(os.path.dirname(__file__), '../Data')
+            os.makedirs(data_dir, exist_ok=True)
+            
+            file_path = os.path.join(data_dir, filename)
+            ani.save(file_path, writer=PillowWriter(fps=1000 // interval))
 
         if plt.fignum_exists(fig.number):
             plt.show()

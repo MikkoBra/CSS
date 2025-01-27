@@ -1,6 +1,7 @@
 from tkinter import *
 
 from csv_writer import simulation_to_csv
+from csv_writer_GPU import simulation_to_csv_GPU
 
 class OutputFullSim:
     def __init__(self, 
@@ -61,7 +62,8 @@ class OutputFullSim:
         self.file_name_label.grid(row=row, column=0)
         row += 1
 
-        simulation_to_csv(sizes, densities, test_wind, env_indexes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting)
+        #simulation_to_csv(sizes, densities, test_wind, env_indexes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting)
+        simulation_to_csv_GPU(sizes, densities, test_wind, env_indexes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting)
 
         self.finish_button = Button(master, text="Finish", command=self.finish)
         self.finish_button.grid(row=row, column=0)
