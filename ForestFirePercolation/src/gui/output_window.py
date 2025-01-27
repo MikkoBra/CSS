@@ -1,7 +1,6 @@
 import numpy as np
 from tkinter import *
 from model import ForestFireModel
-from density_sims import DensityForestFireSimulations
 from simulations import ForestFireSimulations
 
 
