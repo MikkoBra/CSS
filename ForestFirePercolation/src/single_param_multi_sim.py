@@ -1,9 +1,35 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from model import ForestFireModel
-from typing import Optional, Dict, Any
+from typing import Optional
 
-class ForestFireSimulations:
+"""
+Class to run multiple simulations of the forest fire model with a specified set of parameters.
+
+Attributes:
+    size (int): The size of the forest.
+    forest_density (float): The density of the forest.
+    num_simulations (int): The number of simulations to run.
+    ignition_location (str): The location of the ignition point ('random', 'corner', 'center').
+    env_index (float): The environmental index.
+    wind (bool): Whether wind is present.
+    plant_tree_proportion (float): The proportion of trees to plants.
+    tree_burn_time (int): The time taken for a tree to burn.
+    plant_burn_time (int): The time taken for a plant to burn.
+    ignition_num (int): The number of ignition points.
+    random_seed (Optional[int]): The random seed to use for the simulations.
+
+    results (List[Dict[str, Any]]): A list of dictionaries containing the results of each simulation.
+
+Methods:
+    run_simulations: Run the specified number of simulations with the specified parameters.
+    plot_burnt_distribution: Plot a histogram of the distribution of burnt trees.
+    plot_burnt_distribution_log_log: Plot a log-log histogram of the distribution of burnt trees.
+    get_average_results: Get the average percentage of burnt trees, burning trees, and trees remaining.
+    proportion_burns_left_to_right: Get the proportion of simulations that burn from left to right.
+    get_results: Get the results of the simulations.
+"""
+class SingleParamMultiSim:
     def __init__(self, size: int, forest_density: float, num_simulations: int, ignition_location: str, 
                  env_index: float, wind: bool, plant_tree_proportion: float, tree_burn_time: int, 
                  plant_burn_time: int, ignition_num: int = 0, random_seed: Optional[int] = None):

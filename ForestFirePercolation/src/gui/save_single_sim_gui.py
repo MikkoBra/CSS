@@ -1,8 +1,35 @@
 from tkinter import Tk, Label, BooleanVar, Radiobutton, Entry, Button, Toplevel
 
-from gui.output_window import OutputWindow
+from gui.run_single_sim_gui import RunSingleSimGUI
 
-class SaveSingleSim:
+"""
+Class to save a single simulation.
+Conditional on the previous input selections.
+
+Attributes:
+    master (Tk): The main window of the application.
+    size (int): The size of the forest.
+    env_index (float): The environmental index.
+    plant_tree_proportion (float): The proportion of trees to plants.
+    tree_burn_time (int): The time taken for a tree to burn.
+    plant_burn_time (int): The time taken for a plant to burn.
+    ignition_location (str): The location of the ignition point ('random', 'corner', 'center').
+    sim_type (str): The type of simulation ('single', 'full').
+    wind (bool): Whether wind is present.
+    use_seed (bool): Whether to use a random seed.
+    ignition_num (int): The number of ignition points.
+    num_simulations (int): The number of simulations to run.
+    density (float): The density of the forest.
+    random_seed (int): The random seed to use for the simulations.
+    display_single (str): Whether to display the single simulation ('yes', 'no').
+
+Methods:
+    start_simulation: Start the simulation with the specified parameters.
+
+Connects to:
+    RunSingleSim
+"""
+class SaveSingleSimGUI:
     def __init__(self, master, size, env_index, plant_tree_proportion, 
                  tree_burn_time, plant_burn_time, ignition_location, sim_type, 
                  wind, use_seed, ignition_num=None, num_simulations=None, 
@@ -52,9 +79,9 @@ class SaveSingleSim:
     def start_simulation(self):
         self.master.withdraw()
 
-        output_window = Toplevel(self.master)
-        OutputWindow(
-            output_window,
+        run_single_sim = Toplevel(self.master)
+        RunSingleSimGUI(
+            run_single_sim,
             self.size,
             self.env_index,
             self.plant_tree_proportion,
