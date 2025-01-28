@@ -3,7 +3,7 @@ import csv
 import gc
 from model import ForestFireModel
 from tqdm import tqdm
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 """
 Helper function to run a single simulation.
@@ -27,7 +27,7 @@ def run_simulation(size, density, wind, env_index,
     model = ForestFireModel(size, density, env_index, wind, plant_tree_proportion, tree_burn_time, plant_burn_time)
     
     # Get the initial total number of trees
-    num_trees_total = model.get_num_trees()
+    num_trees_total = model.get_num_vegetation()
 
     # Ignite the fire
     model.ignite_fire_center()
