@@ -24,7 +24,7 @@ class ResultFilter:
                                  results_per_system_size.items()}
 
     def vegetation_conditions(self, result):
-        value = not result.wind  and result.env_index == 1.0 and result.plant_tree_proportion == 0.5
+        value = not result.wind  and result.env_index == 0.5 and result.plant_tree_proportion == 0.5
         return value
 
     def vegetation_filter(self, results_per_system_size):
