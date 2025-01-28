@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from percolation_plot import PercolationPlot
+from ForestFirePercolation.src.plots.percolation_plot import PercolationPlot
 
 
 class MultiSettingPlot(PercolationPlot):

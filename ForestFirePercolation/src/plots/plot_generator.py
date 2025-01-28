@@ -181,10 +181,10 @@ class PlotGenerator:
         self.generate_cluster_size_multi_plot(filtered_results, title)
 
 
-generator = PlotGenerator("Snellius/totaldensity_extended_extra.csv")
-generator.generate_base_experiment_plots()
-generator.generate_wind_experiment_plots()
-generator.generate_env_index_experiment_plots()
-generator.generate_env_index_050_and_wind_experiment_plots()
-generator.generate_plant_experiment_plots()
+# generator = PlotGenerator("Snellius/totaldensity_extended_extra.csv")
+# generator.generate_base_experiment_plots()
+# generator.generate_wind_experiment_plots()
+# generator.generate_env_index_experiment_plots()
+# generator.generate_env_index_050_and_wind_experiment_plots()
+# generator.generate_plant_experiment_plots()
 # generator.generate_SOC_plot()
