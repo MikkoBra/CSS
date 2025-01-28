@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
@@ -8,6 +9,7 @@ from matplotlib.colors import BoundaryNorm
 from enum import IntEnum
 from collections import deque
 from typing import Optional, Dict, Any
+from matplotlib.animation import PillowWriter
 
 class TreeStatus(IntEnum):
     EMPTY = 0
@@ -69,44 +71,26 @@ class ForestFireModel:
         else:
             self.burning_trees_queue.append((self.size//2, self.size//2, self.tree_burn_time))
         self.forest[self.size//2][self.size//2] = TreeStatus.BURNING
-
-    def spread_fire_old(self):
-        burning_trees = self.burning_trees_queue.copy()
-        self.burning_trees_queue.clear()
-        for i, j in burning_trees:
-            if i > 0 and self.forest[i-1][j] == TreeStatus.TREE:
-                self.forest[i-1][j] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i-1, j))
-            if j > 0 and self.forest[i][j-1] == TreeStatus.TREE:
-                self.forest[i][j-1] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i, j-1))
-            if i < self.size - 1 and self.forest[i+1][j] == TreeStatus.TREE:
-                self.forest[i+1][j] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i+1, j))
-            if j < self.size - 1 and self.forest[i][j+1] == TreeStatus.TREE:
-                self.forest[i][j+1] = TreeStatus.BURNING
-                self.burning_trees_queue.append((i, j+1))
-            self.forest[i][j] = TreeStatus.BURNT
-        del burning_trees
             
     def spread_fire(self):
         def try_burn(i, j):
-            if np.random.uniform(0,1) < self.env_index and self.forest[i][j] in (TreeStatus.TREE, TreeStatus.PLANT):
-                self.forest[i][j] = TreeStatus.BURNING
-                burn_time = self.tree_burn_time if self.forest[i][j] == TreeStatus.TREE else self.plant_burn_time
+            if np.random.uniform(0, 1) < self.env_index and self.forest[i, j] in (TreeStatus.TREE, TreeStatus.PLANT):
+                self.forest[i, j] = TreeStatus.BURNING
+                burn_time = self.tree_burn_time if self.forest[i, j] == TreeStatus.TREE else self.plant_burn_time
                 self.burning_trees_queue.append((i, j, burn_time))
 
-        burning_trees = self.burning_trees_queue.copy()
+        burning_trees = deque(self.burning_trees_queue)
         self.burning_trees_queue.clear()
-        for i, j, burn_time in burning_trees:
+        while burning_trees:
+            i, j, burn_time = burning_trees.popleft()
             if i > 0:
-                try_burn(i-1, j)
+                try_burn(i - 1, j)
             if j > 0:
-                try_burn(i, j-1)
+                try_burn(i - 1, j)
             if i < self.size - 1:
-                try_burn(i+1, j)
+                try_burn(i + 1, j)
             if j < self.size - 1:
-                try_burn(i, j+1)
+                try_burn(i, j + 1)
 
             burn_time -= 1
             if burn_time > 0:
@@ -135,12 +119,15 @@ class ForestFireModel:
         plt.axis('off')
         plt.show()
 
-    def display_single_simulation(self, interval=300):
+    def display_single_simulation(self, interval=300, save=True, filename="forest_fire_simulation.gif"):
         fig, ax = plt.subplots()
         ax.axis('off')
         cmap = ListedColormap(['white', 'green', 'orange', 'red', 'black'])
         norm = BoundaryNorm([0, 1, 2, 3, 4, 5], cmap.N)
         im = ax.imshow(self.forest, cmap=cmap, norm=norm, interpolation='nearest')
+
+        if save:
+            frames = []
 
         while self.get_num_burning() > 0:
             if not plt.fignum_exists(fig.number):
@@ -149,6 +136,17 @@ class ForestFireModel:
             im.set_array(self.forest)
             plt.draw()
             plt.pause(interval / 1000.0)
+
+            if save:
+                frames.append([plt.imshow(self.forest, cmap=cmap, norm=norm, interpolation='nearest')])
+
+        if save:
+            ani = matplotlib.animation.ArtistAnimation(fig, frames, interval=interval, blit=True)
+            data_dir = os.path.join(os.path.dirname(__file__), '../Data')
+            os.makedirs(data_dir, exist_ok=True)
+            
+            file_path = os.path.join(data_dir, filename)
+            ani.save(file_path, writer=PillowWriter(fps=1000 // interval))
 
         if plt.fignum_exists(fig.number):
             plt.show()

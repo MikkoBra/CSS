@@ -10,7 +10,7 @@ def read_percolation_csv(file_name):
 
     :return:
     """
-    with open(f'../Data/{file_name}', mode='r') as file:
+    with open(f'../../Data/{file_name}', mode='r') as file:
         csv_reader = csv.DictReader(file)
         data = [row for row in csv_reader]
         result_dict = {}

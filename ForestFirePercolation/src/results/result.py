@@ -16,5 +16,5 @@ class Result:
         self.env_index = float(result_dict['env_index'])
         self.percolation = result_dict['percolation'] == 'True'
         self.percentage_burnt_down = float(result_dict['percentage burnt down'])
-        if 'plant-tree proportion' in result_dict:
-            self.plant_tree_proportion = float(result_dict['plant-tree proportion'])
+        if 'plant_tree_proportion' in result_dict:
+            self.plant_tree_proportion = float(result_dict['plant_tree_proportion'])

@@ -1,5 +1,6 @@
 from tkinter import Tk, Label, Entry, IntVar, StringVar, OptionMenu, Button, Toplevel
 from gui.output_window import OutputWindow
+from gui.save_single_sim import SaveSingleSim
 
 class ConditionalWindow:
     def __init__(self, master, size, density, env_index, plant_tree_proportion, 
@@ -97,11 +98,14 @@ class ConditionalWindow:
             self.display_menu = OptionMenu(master, self.display_var, "yes", "no")
             self.display_menu.grid(row=current_row, column=1)
             current_row += 1
+
+            self.next_button = Button(master, text="Next", command=self.specify_sim_save)
+            self.next_button.grid(row=current_row, column=0, columnspan=2, pady=10)
         else:
             self.display_var = None
-
-        self.start_button = Button(master, text="Start Simulation", command=self.start_simulation)
-        self.start_button.grid(row=current_row, column=0, columnspan=2, pady=10)
+        
+            self.start_button = Button(master, text="Start Simulation", command=self.start_simulation)
+            self.start_button.grid(row=current_row, column=0, columnspan=2, pady=10)
 
     def start_simulation(self):
         self.master.withdraw()
@@ -114,6 +118,33 @@ class ConditionalWindow:
         output_window = Toplevel(self.master)
         OutputWindow(
             output_window,
+            self.size,
+            self.env_index,
+            self.plant_tree_proportion,
+            self.tree_burn_time,
+            self.plant_burn_time,
+            self.ignition_location,
+            self.sim_type,
+            self.wind,
+            self.use_seed,
+            ignition_num,
+            num_simulations,
+            self.density,
+            seed,
+            display
+        )
+
+    def specify_sim_save(self):
+        self.master.withdraw()
+
+        ignition_num = int(self.ignition_num_entry.get()) if self.ignition_num_entry else None
+        num_simulations = int(self.num_simulations_var.get()) if self.num_simulations_var else None
+        seed = int(self.seed_entry.get()) if self.seed_entry else None
+        display = self.display_var.get() if self.display_var else None
+
+        next_window = Toplevel(self.master)
+        SaveSingleSim(
+            next_window,
             self.size,
             self.env_index,
             self.plant_tree_proportion,

@@ -1,7 +1,6 @@
 import numpy as np
 from tkinter import *
 from model import ForestFireModel
-from density_sims import DensityForestFireSimulations
 from simulations import ForestFireSimulations
 
 
@@ -9,7 +8,8 @@ class OutputWindow:
     def __init__(self, master, size, env_index, plant_tree_proportion, 
                  tree_burn_time, plant_burn_time, ignition_location, sim_type, 
                  wind, use_seed, ignition_num=None, num_simulations=None, 
-                 density=None, random_seed=None, display_single=None):
+                 density=None, random_seed=None, display_single=None, 
+                 save_single=None, save_name=None):
         self.master = master
         master.title("Output")
 
@@ -28,7 +28,6 @@ class OutputWindow:
         self.random_seed = random_seed
         self.display_single = display_single
 
-
         if sim_type == "single density, single sim":
             simulation = ForestFireModel(size, density, env_index, wind, 
                                  plant_tree_proportion, tree_burn_time, 
@@ -42,7 +41,10 @@ class OutputWindow:
                 simulation.ignite_fire_center()
 
             if display_single == "yes":
-                simulation.display_single_simulation()
+                if save_single:
+                    simulation.display_single_simulation(interval=100, save=True, filename=save_name)
+                else:
+                    simulation.display_single_simulation()
             else:
                 simulation.no_display_single_simulation()
             
