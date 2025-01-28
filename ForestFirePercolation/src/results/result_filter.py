@@ -7,16 +7,22 @@ class ResultFilter:
         return value
 
     def no_wind_filter(self, results_per_system_size):
-        return {key: [result for result in value if self.no_wind_conditions(result)] for key, value in
-                results_per_system_size.items()}
+        return {
+            key: [result for result in value if self.no_wind_conditions(result)]
+            for key, value in results_per_system_size.items()
+            if any(self.no_wind_conditions(result) for result in value)
+        }
 
     def wind_conditions(self, result):
         value = result.wind and result.env_index == 1.0 and result.plant_tree_proportion == 0.0
         return value
 
     def wind_filter(self, results_per_system_size):
-        return {key: [result for result in value if self.wind_conditions(result)] for key, value in
-                results_per_system_size.items()}
+        return {
+            key: [result for result in value if self.wind_conditions(result)]
+            for key, value in results_per_system_size.items()
+            if any(self.wind_conditions(result) for result in value)
+        }
 
     def env_025_conditions(self, result):
         value = not result.wind and result.plant_tree_proportion == 0.0 and result.env_index == 0.25
@@ -31,32 +37,47 @@ class ResultFilter:
         return value
 
     def env_025_filter(self, results_per_system_size):
-        return {key: [result for result in value if self.env_025_conditions(result)] for key, value in
-                results_per_system_size.items()}
+        return {
+            key: [result for result in value if self.env_025_conditions(result)]
+            for key, value in results_per_system_size.items()
+            if any(self.env_025_conditions(result) for result in value)
+        }
 
     def env_050_filter(self, results_per_system_size):
-        return {key: [result for result in value if self.env_050_conditions(result)] for key, value in
-                results_per_system_size.items()}
+        return {
+            key: [result for result in value if self.env_050_conditions(result)]
+            for key, value in results_per_system_size.items()
+            if any(self.env_050_conditions(result) for result in value)
+        }
 
     def env_075_filter(self, results_per_system_size):
-        return {key: [result for result in value if self.env_075_conditions(result)] for key, value in
-                results_per_system_size.items()}
+        return {
+            key: [result for result in value if self.env_075_conditions(result)]
+            for key, value in results_per_system_size.items()
+            if any(self.env_075_conditions(result) for result in value)
+        }
 
     def env_wind_conditions(self, result):
         value = result.wind and result.plant_tree_proportion == 0.0 and result.env_index == 0.50
         return value
 
     def env_wind_filter(self, results_per_system_size):
-        return {key: [result for result in value if self.env_wind_conditions(result)] for key, value in
-                results_per_system_size.items()}
+        return {
+            key: [result for result in value if self.env_wind_conditions(result)]
+            for key, value in results_per_system_size.items()
+            if any(self.env_wind_conditions(result) for result in value)
+        }
 
     def plant_conditions(self, result):
         value = not result.wind and result.env_index == 0.75 and result.plant_tree_proportion == 0.5
         return value
 
     def plant_filter(self, results_per_system_size):
-        return {key: [result for result in value if self.plant_conditions(result)] for key, value in
-                results_per_system_size.items()}
+        return {
+            key: [result for result in value if self.plant_conditions(result)]
+            for key, value in results_per_system_size.items()
+            if any(self.plant_conditions(result) for result in value)
+        }
 
     def init_wind_vs_no_wind_dict(self, results_per_system_size, critical_point_dict):
         no_wind_results = self.no_wind_filter(results_per_system_size)

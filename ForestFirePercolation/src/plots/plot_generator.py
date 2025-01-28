@@ -166,19 +166,14 @@ class PlotGenerator:
         self.generate_percolation_multi_plot(env_wind_results, title2, self.critical_points['env_wind'])
         self.generate_critical_point_multi_plot(env_wind_results, title2, self.critical_points['env_wind'])
 
-    def generate_plant_plots(self):
+    def generate_plant_experiment_plots(self):
         plant_dict = self.result_filter.init_plant_075_dict(self.results_per_system_size, self.critical_points)
         plant_results = self.result_filter.plant_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density"
         title2 = "Percolation probability vs forest density (env_index 0.75 + 50% plant)"
         self.generate_single_size_multiple_settings_plot(plant_dict, title, '300')
-        self.generate_percolation_multi_plot(plant_dict, title2, self.critical_points['plant'])
-        self.generate_critical_point_multi_plot(plant_dict, title2, self.critical_points['plant'])
-
-    def generate_plant_experiment_plots(self):
-        filtered_results = self.result_filter.plant_filter(self.results_per_system_size)
-        title = "Percolation probability vs forest density with different types of vegetation"
-        self.generate_percolation_multi_plot(filtered_results, title, self.critical_points['plant'])
+        self.generate_percolation_multi_plot(plant_results, title2, self.critical_points['plant'])
+        self.generate_critical_point_multi_plot(plant_results, title2, self.critical_points['plant'])
 
     def generate_SOC_plot(self):
         filtered_results = self.result_filter.no_wind_filter(self.results_per_system_size)
@@ -187,9 +182,9 @@ class PlotGenerator:
 
 
 generator = PlotGenerator("Snellius/totaldensity_extended_extra.csv")
-# generator.generate_base_experiment_plots()
-# generator.generate_wind_experiment_plots()
-# generator.generate_env_index_experiment_plots()
-# generator.generate_env_index_050_and_wind_experiment_plots()
-# generator.generate_plant_experiment_plots()
+generator.generate_base_experiment_plots()
+generator.generate_wind_experiment_plots()
+generator.generate_env_index_experiment_plots()
+generator.generate_env_index_050_and_wind_experiment_plots()
+generator.generate_plant_experiment_plots()
 # generator.generate_SOC_plot()
