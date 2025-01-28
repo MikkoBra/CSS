@@ -179,23 +179,28 @@ class PlotGenerator:
         self.cluster_size_plot.plot_multiple_power_law(filtered_results, title)
 
     def generate_base_SOC_plots(self):
-        filtered_results = self.result_filter.no_wind_filter(self.results_per_system_size)
+        filtered_results = self.result_filter.no_wind_at_critical_filter(self.results_per_system_size,
+                                                                         self.critical_points['base'])
         self.generate_SOC_plots(filtered_results)
 
     def generate_wind_SOC_plots(self):
-        filtered_results = self.result_filter.wind_filter(self.results_per_system_size)
+        filtered_results = self.result_filter.wind_at_critical_filter(self.results_per_system_size,
+                                                                      self.critical_points['wind'])
         self.generate_SOC_plots(filtered_results)
 
     def generate_env_index_SOC_plots(self):
-        filtered_results = self.result_filter.env_075_filter(self.results_per_system_size)
+        filtered_results = self.result_filter.env_075_at_critical_filter(self.results_per_system_size,
+                                                                         self.critical_points['env_index'])
         self.generate_SOC_plots(filtered_results)
 
     def generate_plant_SOC_plots(self):
-        filtered_results = self.result_filter.plant_filter(self.results_per_system_size)
+        filtered_results = self.result_filter.plant_at_critical_filter(self.results_per_system_size,
+                                                                       self.critical_points['plant'])
         self.generate_SOC_plots(filtered_results)
 
     def generate_env_wind_SOC_plots(self):
-        filtered_results = self.result_filter.env_wind_filter(self.results_per_system_size)
+        filtered_results = self.result_filter.env_wind_at_critical_filter(self.results_per_system_size,
+                                                                          self.critical_points['env_wind'])
         self.generate_SOC_plots(filtered_results)
 
 

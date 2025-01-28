@@ -14,7 +14,7 @@ class ClusterSizePlot:
         self.system_size = 0
 
     def calculate_bin_centers_and_histogram(self, cluster_sizes):
-        bin_edges = np.logspace(np.log10(1e-4), np.log10(1), 21)
+        bin_edges = np.logspace(np.log10(1e-4), np.log10(1), 16)
         counts, bin_edges = np.histogram(cluster_sizes, bins=bin_edges, density=True)
 
         # Calculate the bin centers
