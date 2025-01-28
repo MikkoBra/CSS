@@ -22,6 +22,6 @@ def read_percolation_csv(file_name):
                 result_dict[size].append(result_obj)
             else:
                 result_dict[size] = [result_obj]
-        # sorted_result_dict = {k: result_dict[k] for k in sorted(result_dict, key=lambda x: int(x))}
-        return result_dict
+        sorted_result_dict = {k: result_dict[k] for k in sorted(result_dict, key=lambda x: int(x))}
+        return sorted_result_dict
 

@@ -127,9 +127,6 @@ class PlotGenerator:
         """
         self.multi_setting_plot.plot_multiple_settings(results_dict, title)
 
-    def generate_cluster_size_multi_plot(self, results_per_system_size, title):
-        self.cluster_size_plot.plot_multiple_cluster_size(results_per_system_size, title)
-
     def generate_base_experiment_plots(self):
         filtered_results = self.result_filter.no_wind_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density"
@@ -175,10 +172,31 @@ class PlotGenerator:
         self.generate_percolation_multi_plot(plant_results, title2, self.critical_points['plant'])
         self.generate_critical_point_multi_plot(plant_results, title2, self.critical_points['plant'])
 
-    def generate_SOC_plot(self):
-        filtered_results = self.result_filter.no_wind_filter(self.results_per_system_size)
+    def generate_SOC_plots(self, filtered_results):
         title = "Cluster size probability vs cluster size"
-        self.generate_cluster_size_multi_plot(filtered_results, title)
+        self.cluster_size_plot.plot_multiple_cluster_size(filtered_results, title)
+        self.cluster_size_plot.plot_multiple_cluster_size_with_power_law(filtered_results, title)
+        self.cluster_size_plot.plot_multiple_power_law(filtered_results, title)
+
+    def generate_base_SOC_plots(self):
+        filtered_results = self.result_filter.no_wind_filter(self.results_per_system_size)
+        self.generate_SOC_plots(filtered_results)
+
+    def generate_wind_SOC_plots(self):
+        filtered_results = self.result_filter.wind_filter(self.results_per_system_size)
+        self.generate_SOC_plots(filtered_results)
+
+    def generate_env_index_SOC_plots(self):
+        filtered_results = self.result_filter.env_075_filter(self.results_per_system_size)
+        self.generate_SOC_plots(filtered_results)
+
+    def generate_plant_SOC_plots(self):
+        filtered_results = self.result_filter.plant_filter(self.results_per_system_size)
+        self.generate_SOC_plots(filtered_results)
+
+    def generate_env_wind_SOC_plots(self):
+        filtered_results = self.result_filter.env_wind_filter(self.results_per_system_size)
+        self.generate_SOC_plots(filtered_results)
 
 
 # generator = PlotGenerator("Snellius/totaldensity_extended_extra.csv")
