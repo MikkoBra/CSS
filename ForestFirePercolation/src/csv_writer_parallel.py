@@ -3,7 +3,7 @@ import csv
 import gc
 from model import ForestFireModel
 from tqdm import tqdm
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor, as_completed
 
 """
 Helper function to run a single simulation.
@@ -92,7 +92,7 @@ def simulation_to_csv_parallel(sizes, densities, test_wind, env_indixes,
                          len(tree_burn_times) * 
                          num_simulations_per_setting)
 
-    with ThreadPoolExecutor() as executor: # Uses ThreadPoolExecutor to run simulations in parallel
+    with ProcessPoolExecutor(max_workers=os.cpu_count()) as executor: # Uses ThreadPoolExecutor to run simulations in parallel
         # List to store futures
         futures = []
         with tqdm(total=total_simulations, desc="Simulations") as pbar: # Uses tqdm to display a progress bar
