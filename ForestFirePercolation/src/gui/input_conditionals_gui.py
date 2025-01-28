@@ -1,7 +1,35 @@
 from tkinter import Tk, Label, Entry, IntVar, StringVar, OptionMenu, Button, Toplevel
-from gui.output_window import OutputWindow
+from gui.run_single_sim_gui import RunSingleSimGUI
+from gui.save_single_sim_gui import SaveSingleSimGUI
 
-class ConditionalWindow:
+"""
+Class to input additional conditional parameters for the simulation.
+Includes specifying the number of random ignition points, the number of simulations, and the seed.
+Also includes the option to display the simulation.
+Inputs are conditionally based on previous window inputs
+
+Attributes:
+    master (Tk): The main window of the application.
+    size (int): The size of the forest.
+    density (float): The density of the forest.
+    env_index (float): The environmental index.
+    plant_tree_proportion (float): The proportion of trees to plants.
+    tree_burn_time (int): The time taken for a tree to burn.
+    plant_burn_time (int): The time taken for a plant to burn.
+    ignition_location (str): The location of the ignition point ('random', 'corner', 'center').
+    sim_type (str): The type of simulation to run.
+    wind (bool): Whether wind is present.
+    use_seed (bool): Whether to use a seed for the simulation.
+
+Methods:
+    start_simulation: Start the simulation with the specified parameters.
+    specify_sim_save: Specify the simulation and save the results.
+
+Connects to:
+    RunSingleSim
+    SaveSingleSim
+"""
+class InputConditionalsGUI:
     def __init__(self, master, size, density, env_index, plant_tree_proportion, 
                  tree_burn_time, plant_burn_time, ignition_location, sim_type, 
                  wind, use_seed):
@@ -97,11 +125,14 @@ class ConditionalWindow:
             self.display_menu = OptionMenu(master, self.display_var, "yes", "no")
             self.display_menu.grid(row=current_row, column=1)
             current_row += 1
+
+            self.next_button = Button(master, text="Next", command=self.specify_sim_save)
+            self.next_button.grid(row=current_row, column=0, columnspan=2, pady=10)
         else:
             self.display_var = None
-
-        self.start_button = Button(master, text="Start Simulation", command=self.start_simulation)
-        self.start_button.grid(row=current_row, column=0, columnspan=2, pady=10)
+        
+            self.start_button = Button(master, text="Start Simulation", command=self.start_simulation)
+            self.start_button.grid(row=current_row, column=0, columnspan=2, pady=10)
 
     def start_simulation(self):
         self.master.withdraw()
@@ -111,9 +142,36 @@ class ConditionalWindow:
         seed = int(self.seed_entry.get()) if self.seed_entry else None
         display = self.display_var.get() if self.display_var else None
 
-        output_window = Toplevel(self.master)
-        OutputWindow(
-            output_window,
+        run_single_sim = Toplevel(self.master)
+        RunSingleSimGUI(
+            run_single_sim,
+            self.size,
+            self.env_index,
+            self.plant_tree_proportion,
+            self.tree_burn_time,
+            self.plant_burn_time,
+            self.ignition_location,
+            self.sim_type,
+            self.wind,
+            self.use_seed,
+            ignition_num,
+            num_simulations,
+            self.density,
+            seed,
+            display
+        )
+
+    def specify_sim_save(self):
+        self.master.withdraw()
+
+        ignition_num = int(self.ignition_num_entry.get()) if self.ignition_num_entry else None
+        num_simulations = int(self.num_simulations_var.get()) if self.num_simulations_var else None
+        seed = int(self.seed_entry.get()) if self.seed_entry else None
+        display = self.display_var.get() if self.display_var else None
+
+        next_window = Toplevel(self.master)
+        SaveSingleSimGUI(
+            next_window,
             self.size,
             self.env_index,
             self.plant_tree_proportion,

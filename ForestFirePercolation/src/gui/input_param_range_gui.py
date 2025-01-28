@@ -1,10 +1,22 @@
 import tkinter as tk
-from tkinter import BooleanVar, Toplevel, Label, messagebox
+from tkinter import BooleanVar, Toplevel, Label
 
-from gui.output_full_sim import OutputFullSim
+from gui.run_range_sims_gui import RunRangeOfSimsGUI
 
+"""
+Class to input a range of parameters.
+Includes running multiple simulations with the specified ranges of parameters.
 
-class FullSimSpecification:
+Attributes:
+    master (Tk): The main window of the application.
+
+Methods:
+    start_simulation: Start the simulation with the specified parameters.
+
+Connects to:
+    OutputFullSim
+"""
+class InputParameterRangeGUI:
     def __init__(self, master):
         self.master = master
         master.title("Simulation Specification")
@@ -39,17 +51,25 @@ class FullSimSpecification:
         self.tree_burn_times_entry.insert(0, "1,3,5,10")
         self.tree_burn_times_entry.pack()
 
-        self.test_wind_label = tk.Label(master, text="Test eastward wind:")
-        self.test_wind_label.pack()
-        self.test_wind = BooleanVar()
-        self.test_wind_checkbutton = tk.Checkbutton(master, text="Wind", variable=self.test_wind)
-        self.test_wind_checkbutton.pack()
+        self.wind_options_label = tk.Label(master, text="Eastward wind options:")
+        self.wind_options_label.pack()
+        self.wind_options = ["Wind", "No Wind", "Both"]
+        self.wind_var = tk.StringVar(master)
+        self.wind_var.set(self.wind_options[0])
+        self.wind_menu = tk.OptionMenu(master, self.wind_var, *self.wind_options)
+        self.wind_menu.pack()
 
         self.num_simulations_label = tk.Label(master, text="Enter the number of simulations per setting:")
         self.num_simulations_label.pack()
         self.num_simulations_entry = tk.Entry(master)
         self.num_simulations_entry.insert(0, "1")
         self.num_simulations_entry.pack()
+
+        self.run_parallel_label = tk.Label(master, text="Run simulations in parallel using logical processors:")
+        self.run_parallel_label.pack()
+        self.run_parallel = BooleanVar()
+        self.run_parallel_checkbutton = tk.Checkbutton(master, text="Parallel", variable=self.run_parallel)
+        self.run_parallel_checkbutton.pack()
 
         self.file_name_label = tk.Label(master, text="Enter the name of the output file:")
         self.file_name_label.pack()
@@ -69,8 +89,9 @@ class FullSimSpecification:
             plant_tree_proportions = [float(plant_tree_proportion) for plant_tree_proportion in self.plant_tree_proportions_entry.get().split(",")]
             tree_burn_times = [int(tree_burn_time) for tree_burn_time in self.tree_burn_times_entry.get().split(",")]
             file_name = self.file_name_entry.get()
-            test_wind = self.test_wind.get()
+            test_wind = self.wind_var.get()
             num_simulations_per_setting = int(self.num_simulations_entry.get())
+            run_parallel = self.run_parallel.get()
 
             error = False
 
@@ -99,15 +120,16 @@ class FullSimSpecification:
             if not error:
                 self.master.withdraw()
 
-                output_full_sim = Toplevel(self.master)
-                OutputFullSim(
-                    output_full_sim,
+                run_range_of_sims = Toplevel(self.master)
+                RunRangeOfSimsGUI(
+                    run_range_of_sims,
                     sizes,
                     densities,
                     test_wind,
                     env_indexes,
                     plant_tree_proportions,
                     tree_burn_times,
+                    run_parallel,
                     file_name,
                     num_simulations_per_setting
             )

@@ -1,7 +1,23 @@
 from tkinter import Tk, Label, Entry, DoubleVar, Scale, StringVar, OptionMenu, BooleanVar, Checkbutton, Button, Toplevel, HORIZONTAL
-from gui.conditional_window import ConditionalWindow
+from gui.input_conditionals_gui import InputConditionalsGUI
 
-class InputWindow:
+"""
+Class to input a single set of parameters.
+Includes running a single simulation with the specified parameters
+as well as the option to run multiple simulations with the same parameters.
+
+Attributes:
+    master (Tk): The main window of the application.
+    simulation_type (str): The type of simulation to run.
+
+Methods:
+    open_next_window: Open the next window to input conditional parameters.
+    show_error: Display an error message in a new window.
+
+Connects to:
+    InputConditionals
+"""
+class InputParameterSingleGUI:
     def __init__(self, master, sim_type):
         self.master = master
         master.title("Forest Fire Simulation - Input")
@@ -29,21 +45,21 @@ class InputWindow:
         self.density_label = Label(master, text="Select overall forest density percentage:")
         self.density_label.pack()
         self.density_var = DoubleVar()
-        self.density_scale = Scale(master, from_=0, to=1, orient=HORIZONTAL, resolution=0.01, variable=self.density_var)
+        self.density_scale = Scale(master, from_=0, to=1, orient=HORIZONTAL, resolution=0.01, variable=self.density_var, length=200)
         self.density_scale.pack()
 
     def create_env_index_input(self, master):
         self.env_index_label = Label(master, text="Enter the overall probability for fire ignition:")
         self.env_index_label.pack()
         self.env_index = DoubleVar()
-        self.env_index_scale = Scale(master, from_=0, to=1, orient=HORIZONTAL, resolution=0.01, variable=self.env_index)
+        self.env_index_scale = Scale(master, from_=0, to=1, orient=HORIZONTAL, resolution=0.01, variable=self.env_index, length=200)
         self.env_index_scale.pack()
 
     def create_plant_tree_proportion_input(self, master):
         self.plant_tree_proportion_label = Label(master, text="Enter the proportion of plants to trees (0 to 1):")
         self.plant_tree_proportion_label.pack()
         self.plant_tree_proportion = DoubleVar()
-        self.plant_tree_proportion_scale = Scale(master, from_=0, to=1, orient=HORIZONTAL, resolution=0.01, variable=self.plant_tree_proportion)
+        self.plant_tree_proportion_scale = Scale(master, from_=0, to=1, orient=HORIZONTAL, resolution=0.01, variable=self.plant_tree_proportion, length=200)
         self.plant_tree_proportion_scale.pack()
 
     def create_burn_time_inputs(self, master):
@@ -128,9 +144,9 @@ class InputWindow:
     
             self.master.withdraw()
     
-            conditional_window = Toplevel(self.master)
-            ConditionalWindow(
-                conditional_window,
+            input_conditionals = Toplevel(self.master)
+            InputConditionalsGUI(
+                input_conditionals,
                 size,
                 density,
                 env_index,

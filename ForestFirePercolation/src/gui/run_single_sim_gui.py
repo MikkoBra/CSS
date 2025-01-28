@@ -1,14 +1,37 @@
-import numpy as np
 from tkinter import *
 from model import ForestFireModel
-from simulations import ForestFireSimulations
+from single_param_multi_sim import SingleParamMultiSim
 
+"""
+Class to run a single simulation with the specified parameters.
+Can run a single simulation and display the simulation
+or run multiple simulations and display the burnt forest distribution.
 
-class OutputWindow:
+Attributes:
+    master (Tk): The main window of the application.
+    size (int): The size of the forest.
+    env_index (float): The environmental index.
+    plant_tree_proportion (float): The proportion of trees to plants.
+    tree_burn_time (int): The time taken for a tree to burn.
+    plant_burn_time (int): The time taken for a plant to burn.
+    ignition_location (str): The location of the ignition point ('random', 'corner', 'center').
+    sim_type (str): The type of simulation to run ('single density, single sim', 'single density, multiple sim').
+    wind (bool): Whether wind is present.
+    use_seed (bool): Whether to use a random seed.
+    ignition_num (int): The number of ignition points.
+    num_simulations (int): The number of simulations to run.
+    density (float): The density of the forest.
+    random_seed (int): The random seed to use for the simulations.
+    display_single (str): Whether to display the single simulation ('yes', 'no').
+    save_single (bool): Whether to save the single simulation.
+    save_name (str): The name to save the single simulation as.
+"""
+class RunSingleSimGUI:
     def __init__(self, master, size, env_index, plant_tree_proportion, 
                  tree_burn_time, plant_burn_time, ignition_location, sim_type, 
                  wind, use_seed, ignition_num=None, num_simulations=None, 
-                 density=None, random_seed=None, display_single=None):
+                 density=None, random_seed=None, display_single=None, 
+                 save_single=None, save_name=None):
         self.master = master
         master.title("Output")
 
@@ -27,7 +50,6 @@ class OutputWindow:
         self.random_seed = random_seed
         self.display_single = display_single
 
-
         if sim_type == "single density, single sim":
             simulation = ForestFireModel(size, density, env_index, wind, 
                                  plant_tree_proportion, tree_burn_time, 
@@ -41,7 +63,10 @@ class OutputWindow:
                 simulation.ignite_fire_center()
 
             if display_single == "yes":
-                simulation.display_single_simulation()
+                if save_single:
+                    simulation.display_single_simulation(interval=100, save=True, filename=save_name)
+                else:
+                    simulation.display_single_simulation()
             else:
                 simulation.no_display_single_simulation()
             
@@ -62,7 +87,7 @@ class OutputWindow:
             self.burnt_prop_label.grid(row=3, column=0)
 
         elif sim_type == 'single density, multiple sim':
-            simulation = ForestFireSimulations(size, density, num_simulations, ignition_location, 
+            simulation = SingleParamMultiSim(size, density, num_simulations, ignition_location, 
                                               env_index, wind, plant_tree_proportion, 
                                               tree_burn_time, plant_burn_time, ignition_num=self.ignition_num, 
                                               random_seed=self.random_seed)
