@@ -1,0 +1,56 @@
+#!/bin/bash
+#SBATCH --job-name="newt"
+#SBATCH --partition=genoa
+#SBATCH --nodes=1
+#SBATCH --exclusive
+#SBATCH --time=1:00:00  # Runtime
+
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=192
+set -x
+
+# Set up paths
+LOG_DIR=$HOME/Logfile
+DATA_DIR=$HOME/CSS_new/ForestFirePercolation/Data
+SCRIPT_DIR=/home/yvpraag/CSS_new/ForestFirePercolation/src
+SCRIPT_NAME=main_3.py
+OUTPUT_FILE="Simulation_data_ptproportion_4-6.csv"
+
+# Ensure directories exist
+mkdir -p $LOG_DIR
+mkdir -p $DATA_DIR
+
+# Copy log files (if needed)
+cp -r $LOG_DIR .
+
+# Navigate to the directory containing the Python script
+cd $SCRIPT_DIR || exit 1
+
+# Load required modules
+module load 2022
+module load Python/3.10.4-GCCcore-11.3.0
+
+# Upgrade pip (optional, but resolves the pip warning)
+python3 -m pip install --upgrade --user pip
+
+pip install --user tqdm
+
+# Install necessary Python packages
+pip install --user noise pandas numpy matplotlib tk
+
+# Set the full path for the output file
+OUTPUT_PATH="$DATA_DIR/$OUTPUT_FILE"
+
+# Ensure the output file exists or create an empty one if it doesn't
+touch "$OUTPUT_PATH"
+
+# Run the Python script with the output path as an argument
+python3 "$SCRIPT_NAME" "$OUTPUT_PATH"
+
+# Verify and confirm the output file
+if [ -f "$OUTPUT_PATH" ]; then
+  echo "Output saved to $OUTPUT_PATH"
+else
+  echo "Error: Output file $OUTPUT_PATH not found or not created!"
+  exit 1
+fi
