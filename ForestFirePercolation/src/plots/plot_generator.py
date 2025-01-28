@@ -11,7 +11,7 @@ class PlotGenerator:
         self.cluster_size_plot = ClusterSizePlot()
         self.result_filter = ResultFilter()
         self.results_per_system_size = csv_reader.read_percolation_csv(self.file_name)
-        self.critical_points = {'base': 0.596, 'wind': 0.0, 'env_index': 0.0, 'plant': 0.0}
+        self.critical_points = {'base': 0.596, 'wind': 0.549, 'env_index': 0.0, 'plant': 0.0}
 
     def generate_single_percolation_plot_per_size(self, results_per_system_size, title):
         """
@@ -67,6 +67,7 @@ class PlotGenerator:
     def generate_base_experiment_plot(self):
         filtered_results = self.result_filter.no_wind_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density"
+        self.generate_single_percolation_plot(filtered_results, '100', title, self.critical_points['base'])
         self.generate_percolation_multi_plot(filtered_results, title, self.critical_points['base'])
         title2 = "Percolation probability vs forest density around the critical point"
         self.generate_critical_point_multi_plot(filtered_results, title2, self.critical_points['base'])
@@ -92,7 +93,7 @@ class PlotGenerator:
         self.generate_cluster_size_multi_plot(filtered_results, title)
 
 
-generator = PlotGenerator("Simulation_data_all_1.csv")
+generator = PlotGenerator("Snellius/Simulation_data_totaldensity-2.csv")
 generator.generate_base_experiment_plot()
 # generator.generate_wind_experiment_plot()
 # generator.generate_env_index_experiment_plot()
