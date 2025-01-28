@@ -1,78 +1,86 @@
-import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from ..results.result import Result
 
 
 class PercolationPlot:
 
-    def __init__(self, results):
-        self.results = results
+    def __init__(self):
+        self.densities = []
+        self.probabilities = []
+        self.system_size = 0
 
     def plot_percolation_vs_density(self, densities, probabilities, ax, label):
         """
-            Function that plots the probability of the system percolating over the forest density.
+            Function that plots the probability of the system percolating over forest densities.
 
-            densities: Array of values representing the forest density.
-            probabilities: Array of values representing the probability of the system percolating for the corresponding
+            :param densities: Array of values representing the forest density.
+            :param probabilities: Array of values representing the probability of the system percolating for the corresponding
              density.
-            system_size: System size N for an NxN square grid.
+            :param ax: pyplot ax object to generate the plot in.
+            :param label: Label to attach to the plot, to be used in the legend of the figure.
         """
         ax.plot(densities, probabilities, label=label)
         return ax
 
-    def plot_single_percolation_vs_density(self, index=0):
+    def plot_single_percolation_vs_density(self, ax):
         """
-            Function that creates a plot of percolation probability vs forest density for one set of results.
+            Function that creates a plot of percolation probability vs forest density for one system size.
 
-            index: Index of the results in the PercolationPlot object's results array
+            :param ax: pyplot ax object to generate the plot in.
         """
-        fig, ax = plt.subplots()
-        results = self.get_result(index)
-        label = r'$P_N(d)$, $N =$ ' + str(results.system_size)
-        self.plot_percolation_vs_density(results.densities, results.probabilities, results.system_size, ax, label)
-        ax.set_xlabel(r'Density $d$')
-        ax.set_ylabel(r'$P_N$')
-        ax.legend()
-        ax.set_title('Percolation probability vs forest density for system size ' + str(results.system_size) + 'x'
-                     + str(results.system_size))
-        plt.show()
+        label = r'$N =$ ' + str(self.system_size)
+        self.plot_percolation_vs_density(self.densities, self.probabilities, ax, label)
+        return ax
 
-    def plot_multiple_percolation_vs_density(self):
+    def save_amount_percolated_per_density(self, results):
         """
-            Function that creates a plot of percolation probability vs forest density for all sets of saved results in
-            the same figure.
+            Computes the percolation probability per density, and saves the results in the PercolationPlot object's
+             "densities" and "probabilities" arrays.
         """
-        fig, ax = plt.subplots()
-        result_idx = 0
-        while result_idx < len(self.results):
-            results = self.get_result(result_idx)
-            label = r'$P_N(d)$, $N =$ ' + str(results.system_size)
-            self.plot_percolation_vs_density(results.densities, results.probabilities, results.system_size, ax, label)
-            result_idx += 1
-        ax.set_xlabel(r'Density $d$')
-        ax.set_ylabel(r'$P_N$')
-        ax.legend()
-        ax.set_title('Percolation probability vs forest density for varying system size.')
-        plt.show()
-
-    def add_results(self, results):
-        """
-            Function that adds a set of results to the PercolationPlot's results array.
-
-            results: Results object to add to the results array.
-        """
-        self.results.append(results)
-        return
-
-    def add_multiple_results(self, results):
+        self.densities = []
+        self.probabilities = []
+        percolation_probability = {}
+        # Fill dictionary with total number of results and number of results with percolation = True per density
         for result in results:
-            self.results.append(results)
+            density = result.density
+            if density in percolation_probability:
+                percolation_probability[density][0] += 1.0
+            else:
+                percolation_probability[density] = [1, 0]
+            if result.percolation:
+                percolation_probability[density][1] += 1.0
+        # Save (number percolated/total number) per density
+        for density in percolation_probability:
+            self.densities.append(density)
+            probability = percolation_probability[density][1]/percolation_probability[density][0]
+            self.probabilities.append(probability)
 
-    def get_result(self, index):
-        return self.results[index]
+    def plot_percolation(self, results_per_system_size, title, critical_point=0.0, plot_critical=False):
+        """
+            Generates percolation plots for every passed system size. If the critical point is given and non-zero, it
+            generates a vertical line for the critical point. If plot_critical is given and True, the combined plot will
+            range from [critical point - 0.15, critical point + 0.15] on the x-axis.
 
-    def get_results(self):
-        return self.results
+            :param results_per_system_size: Dictionary with Result objects per system size.
+            :param title: Title of the plot.
+            :param critical_point: Critical point for which, if given, a vertical line will be plotted.
+            :param plot_critical: Boolean which, if True and critical point != 0.0, causes the x-axis to zoom in on the
+             critical point.
+        """
+        fig, ax = plt.subplots()
+        for system_size in results_per_system_size:
+            self.save_amount_percolated_per_density(results_per_system_size[system_size])
+            self.system_size = system_size
+            self.plot_single_percolation_vs_density(ax)
+        # Add critical point and/or zoom in on critical point
+        if critical_point != 0.0:
+            ax.axvline(x=critical_point, ls='--', label='d_c = ' + str(critical_point))
+            if plot_critical:
+                ax.set_xlim(critical_point - 0.15, critical_point + 0.15)
+        ax.set_xlabel(r'Density $d$')
+        ax.set_ylabel(r'$P_N$')
+        ax.legend()
+        ax.set_title(title)
+        plt.show()
 
-    def clear_results(self):
-        self.results = []
