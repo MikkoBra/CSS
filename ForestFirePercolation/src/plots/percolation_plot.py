@@ -51,9 +51,10 @@ class PercolationPlot:
             if result.percolation:
                 percolation_probability[density][1] += 1.0
         # Save (number percolated/total number) per density
-        for density in percolation_probability:
+        sorted_probabilities = dict(sorted(percolation_probability.items()))
+        for density in sorted_probabilities:
             self.densities.append(density)
-            probability = percolation_probability[density][1]/percolation_probability[density][0]
+            probability = sorted_probabilities[density][1]/sorted_probabilities[density][0]
             self.probabilities.append(probability)
 
     def plot_percolation(self, results_per_system_size, title, critical_point=0.0, plot_critical=False):
@@ -75,9 +76,9 @@ class PercolationPlot:
             self.plot_single_percolation_vs_density(ax)
         # Add critical point and/or zoom in on critical point
         if critical_point != 0.0:
-            ax.axvline(x=critical_point, ls='--', label='d_c = ' + str(critical_point))
+            ax.axvline(x=critical_point, ls='--', label=r'$d_c$ = ' + str(critical_point))
             if plot_critical:
-                ax.set_xlim(critical_point - 0.15, critical_point + 0.15)
+                ax.set_xlim(critical_point - 0.1, critical_point + 0.15)
         ax.set_xlabel(r'Density $d$')
         ax.set_ylabel(r'$P_N$')
         ax.legend()

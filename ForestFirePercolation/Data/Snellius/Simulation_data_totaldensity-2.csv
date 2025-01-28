@@ -4499,7 +4499,6 @@ size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time
 1000,1.0,True,1.0,0.0,1,1,True,1.0
 1000,1.0,True,1.0,0.0,1,1,True,1.0
 1000,1.0,True,1.0,0.0,1,1,True,1.0
-size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time,percolation,percentage burnt down
 100,0.15,False,1.0,0.0,1,1,False,0.0006459948320413437
 100,0.05,False,1.0,0.0,1,1,False,0.004219409282700422
 100,0.2,False,1.0,0.0,1,1,False,0.0030534351145038168
@@ -8500,7 +8499,6 @@ size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time
 1000,1.0,False,1.0,0.0,1,1,True,1.0
 1000,0.9,False,1.0,0.0,1,1,True,0.9998888760478989
 1000,1.0,False,1.0,0.0,1,1,True,1.0
-size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time,percolation,percentage burnt down
 100,0.1,True,0.75,0.0,1,1,False,0.0020304568527918783
 100,0.1,True,0.75,0.0,1,1,False,0.0009727626459143969
 100,0.125,True,0.75,0.0,1,1,False,0.008849557522123894
@@ -13501,7 +13499,6 @@ size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time
 1000,1.0,True,0.75,0.0,1,1,True,0.999916
 1000,1.0,True,0.75,0.0,1,1,True,0.999908
 1000,1.0,True,0.75,0.0,1,1,True,0.999919
-size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time,percolation,percentage burnt down
 100,0.25,False,0.75,0.0,1,1,False,0.000390625
 100,0.05,False,0.75,0.0,1,1,False,0.002061855670103093
 100,0.3,False,0.75,0.0,1,1,False,0.00033715441672285906
@@ -17002,7 +16999,6 @@ size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time
 1000,0.95,False,0.75,0.0,1,1,True,0.9902860499339982
 1000,0.95,False,0.75,0.0,1,1,True,0.9901618670767819
 1000,0.95,False,0.75,0.0,1,1,True,0.9902906492260296
-size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time,percolation,percentage burnt down
 100,0.15,True,0.5,0.0,1,1,False,0.0006684491978609625
 100,0.3,True,0.5,0.0,1,1,False,0.000974342318934719
 100,0.25,True,0.5,0.0,1,1,False,0.00040567951318458417
@@ -21003,7 +20999,6 @@ size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time
 1000,0.98,True,0.5,0.0,1,1,True,0.9888899775064398
 1000,0.99,True,0.5,0.0,1,1,True,0.9898702773248966
 1000,1.0,True,0.5,0.0,1,1,True,0.990583
-size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time,percolation,percentage burnt down
 100,0.15,False,0.5,0.0,1,1,False,0.000671591672263264
 100,0.15,False,0.5,0.0,1,1,False,0.000664451827242525
 100,0.2,False,0.5,0.0,1,1,False,0.0004897159647404506
@@ -24504,7 +24499,6 @@ size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time
 1000,1.0,False,0.5,0.0,1,1,True,0.456822
 1000,1.0,False,0.5,0.0,1,1,True,0.388265
 1000,1.0,False,0.5,0.0,1,1,True,0.510825
-size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time,percolation,percentage burnt down
 100,0.05,True,0.25,0.0,1,1,False,0.00205761316872428
 100,0.05,True,0.25,0.0,1,1,False,0.0018248175182481751
 100,0.15,True,0.25,0.0,1,1,False,0.0012853470437017994
@@ -27505,7 +27499,6 @@ size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time
 1000,1.0,True,0.25,0.0,1,1,False,0.024856
 1000,1.0,True,0.25,0.0,1,1,False,0.045913
 1000,1.0,True,0.25,0.0,1,1,False,0.040496
-size,density,wind,env_index,plant_tree_proportion,tree_burn_time,plant_burn_time,percolation,percentage burnt down
 100,0.05,False,0.25,0.0,1,1,False,0.002257336343115124
 100,0.3,False,0.25,0.0,1,1,False,0.00033840947546531303
 100,0.2,False,0.25,0.0,1,1,False,0.0004914004914004914
