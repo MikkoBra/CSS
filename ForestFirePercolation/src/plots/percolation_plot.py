@@ -1,6 +1,8 @@
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+import numpy as np
+from scipy.interpolate import interp1d
 
 
 class PercolationPlot:
@@ -10,7 +12,7 @@ class PercolationPlot:
         self.probabilities = []
         self.system_size = 0
 
-    def plot_percolation_vs_density(self, densities, probabilities, ax, label):
+    def plot_percolation_vs_density(self, densities, probabilities, ax, label, critical_point):
         """
         Function that plots the probability of the system percolating over forest densities.
 
@@ -20,17 +22,25 @@ class PercolationPlot:
         :param ax: pyplot ax object to generate the plot in.
         :param label: Label to attach to the plot, to be used in the legend of the figure.
         """
-        ax.plot(densities, probabilities, label=label)
+        line, = ax.plot(densities, probabilities, label=label)
+        if critical_point != 0.0:
+            densities = np.array(densities)
+            probabilities = np.array(probabilities)
+            interpolator = interp1d(densities, probabilities, kind='linear', bounds_error=False,
+                                    fill_value="extrapolate")
+            interpolated_probability = interpolator(critical_point)
+            ax.scatter(critical_point, interpolated_probability, color=line.get_color(), s=50, zorder=5)
         return ax
 
-    def plot_single_percolation_vs_density(self, ax):
+
+    def plot_single_percolation_vs_density(self, ax, critical_point):
         """
         Function that creates a plot of percolation probability vs forest density for one system size.
 
         :param ax: pyplot ax object to generate the plot in.
         """
         label = r'$N =$ ' + str(self.system_size)
-        self.plot_percolation_vs_density(self.densities, self.probabilities, ax, label)
+        self.plot_percolation_vs_density(self.densities, self.probabilities, ax, label, critical_point)
         return ax
 
     def save_amount_percolated_per_density(self, results):
@@ -73,12 +83,13 @@ class PercolationPlot:
         for system_size in results_per_system_size:
             self.save_amount_percolated_per_density(results_per_system_size[system_size])
             self.system_size = system_size
-            self.plot_single_percolation_vs_density(ax)
+            self.plot_single_percolation_vs_density(ax, critical_point)
         # Add critical point and/or zoom in on critical point
         if critical_point != 0.0:
             ax.axvline(x=critical_point, ls='--', label=r'$d_c$ = ' + str(critical_point))
             if plot_critical:
                 ax.set_xlim(critical_point - 0.05, critical_point + 0.05)
+        ax.grid()
         ax.set_xlabel(r'Density $d$')
         ax.set_ylabel(r'$P_N$')
         ax.legend()

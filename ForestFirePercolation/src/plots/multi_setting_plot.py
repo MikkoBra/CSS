@@ -33,12 +33,12 @@ class MultiSettingPlot(PercolationPlot):
             if single_size:
                 self.save_amount_percolated_per_density(results_per_system_size[single_size])
                 self.system_size = single_size + label_suffixes[results_index]
-                self.plot_single_percolation_vs_density(ax)
+                self.plot_single_percolation_vs_density(ax, critical_points[results_index])
             else:
                 for system_size in results_per_system_size:
                     self.save_amount_percolated_per_density(results_per_system_size[system_size])
                     self.system_size = system_size + label_suffixes[results_index]
-                    self.plot_single_percolation_vs_density(ax)
+                    self.plot_single_percolation_vs_density(ax, critical_points[results_index])
             # Add critical point and/or zoom in on critical point
             critical_point = critical_points[results_index]
             if critical_point != 0.0:
@@ -47,6 +47,7 @@ class MultiSettingPlot(PercolationPlot):
             results_index += 1
         if plot_critical:
             ax.set_xlim(critical_points[0] - 0.05, critical_points[-1] + 0.05)
+        ax.grid()
         ax.set_xlabel(r'Density $d$')
         ax.set_ylabel(r'$P_N$')
         ax.legend()

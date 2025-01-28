@@ -42,12 +42,20 @@ class ResultFilter:
         return {key: [result for result in value if self.env_075_conditions(result)] for key, value in
                 results_per_system_size.items()}
 
-    def vegetation_conditions(self, result):
-        value = not result.wind and result.env_index == 0.5 and result.plant_tree_proportion == 0.5
+    def env_wind_conditions(self, result):
+        value = result.wind and result.plant_tree_proportion == 0.0 and result.env_index == 0.50
         return value
 
-    def vegetation_filter(self, results_per_system_size):
-        return {key: [result for result in value if self.vegetation_conditions(result)] for key, value in
+    def env_wind_filter(self, results_per_system_size):
+        return {key: [result for result in value if self.env_wind_conditions(result)] for key, value in
+                results_per_system_size.items()}
+
+    def plant_conditions(self, result):
+        value = not result.wind and result.env_index == 0.75 and result.plant_tree_proportion == 0.5
+        return value
+
+    def plant_filter(self, results_per_system_size):
+        return {key: [result for result in value if self.plant_conditions(result)] for key, value in
                 results_per_system_size.items()}
 
     def init_wind_vs_no_wind_dict(self, results_per_system_size, critical_point_dict):
@@ -56,12 +64,11 @@ class ResultFilter:
         results = [wind_results, no_wind_results]
         critical_points = [critical_point_dict['wind'], critical_point_dict['base']]
         label_suffixes = [' (wind)', ' (no wind)']
-        colors = ['blue', 'green']
         results_dict = {
             'results': results,
             'critical_points': critical_points,
             'label_suffixes': label_suffixes,
-            'colors': colors
+            'colors': self.colors
         }
         return results_dict
 
@@ -80,3 +87,33 @@ class ResultFilter:
             'colors': self.colors
         }
         return results_dict
+
+    def init_env_wind_dict(self, results_per_system_size, critical_point_dict):
+        env_050_results = self.env_050_filter(results_per_system_size)
+        env_wind_results = self.env_wind_filter(results_per_system_size)
+        no_index_results = self.no_wind_filter(results_per_system_size)
+        results = [env_050_results, env_wind_results, no_index_results]
+        critical_points = [0.0, critical_point_dict['env_wind'], critical_point_dict['base']]
+        label_suffixes = [' (env_index 0.50)', ' (with wind)', ' (base)']
+        results_dict = {
+            'results': results,
+            'critical_points': critical_points,
+            'label_suffixes': label_suffixes,
+            'colors': self.colors
+        }
+        return results_dict
+
+    def init_plant_075_dict(self, results_per_system_size, critical_point_dict):
+        plant_env_results = self.plant_filter(results_per_system_size)
+        full_tree_results = self.env_075_filter(results_per_system_size)
+        results = [plant_env_results, full_tree_results]
+        critical_points = [critical_point_dict['plant'], critical_point_dict['env_index']]
+        label_suffixes = [' (50% plants)', ' (no plants)']
+        results_dict = {
+            'results': results,
+            'critical_points': critical_points,
+            'label_suffixes': label_suffixes,
+            'colors': self.colors
+        }
+        return results_dict
+
