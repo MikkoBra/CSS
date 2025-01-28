@@ -78,7 +78,7 @@ class PercolationPlot:
         if critical_point != 0.0:
             ax.axvline(x=critical_point, ls='--', label=r'$d_c$ = ' + str(critical_point))
             if plot_critical:
-                ax.set_xlim(critical_point - 0.1, critical_point + 0.15)
+                ax.set_xlim(critical_point - 0.05, critical_point + 0.05)
         ax.set_xlabel(r'Density $d$')
         ax.set_ylabel(r'$P_N$')
         ax.legend()
