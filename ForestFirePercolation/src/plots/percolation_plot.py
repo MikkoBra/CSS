@@ -12,22 +12,22 @@ class PercolationPlot:
 
     def plot_percolation_vs_density(self, densities, probabilities, ax, label):
         """
-            Function that plots the probability of the system percolating over forest densities.
+        Function that plots the probability of the system percolating over forest densities.
 
-            :param densities: Array of values representing the forest density.
-            :param probabilities: Array of values representing the probability of the system percolating for the corresponding
-             density.
-            :param ax: pyplot ax object to generate the plot in.
-            :param label: Label to attach to the plot, to be used in the legend of the figure.
+        :param densities: Array of values representing the forest density.
+        :param probabilities: Array of values representing the probability of the system percolating for the corresponding
+         density.
+        :param ax: pyplot ax object to generate the plot in.
+        :param label: Label to attach to the plot, to be used in the legend of the figure.
         """
         ax.plot(densities, probabilities, label=label)
         return ax
 
     def plot_single_percolation_vs_density(self, ax):
         """
-            Function that creates a plot of percolation probability vs forest density for one system size.
+        Function that creates a plot of percolation probability vs forest density for one system size.
 
-            :param ax: pyplot ax object to generate the plot in.
+        :param ax: pyplot ax object to generate the plot in.
         """
         label = r'$N =$ ' + str(self.system_size)
         self.plot_percolation_vs_density(self.densities, self.probabilities, ax, label)
@@ -35,8 +35,8 @@ class PercolationPlot:
 
     def save_amount_percolated_per_density(self, results):
         """
-            Computes the percolation probability per density, and saves the results in the PercolationPlot object's
-             "densities" and "probabilities" arrays.
+        Computes the percolation probability per density, and saves the results in the PercolationPlot object's
+         "densities" and "probabilities" arrays.
         """
         self.densities = []
         self.probabilities = []
@@ -59,15 +59,15 @@ class PercolationPlot:
 
     def plot_percolation(self, results_per_system_size, title, critical_point=0.0, plot_critical=False):
         """
-            Generates percolation plots for every passed system size. If the critical point is given and non-zero, it
-            generates a vertical line for the critical point. If plot_critical is given and True, the combined plot will
-            range from [critical point - 0.15, critical point + 0.15] on the x-axis.
+        Generates percolation plots for every passed system size. If the critical point is given and non-zero, it
+        generates a vertical line for the critical point. If plot_critical is given and True, the combined plot will
+        range from [critical point - 0.15, critical point + 0.15] on the x-axis.
 
-            :param results_per_system_size: Dictionary with Result objects per system size.
-            :param title: Title of the plot.
-            :param critical_point: Critical point for which, if given, a vertical line will be plotted.
-            :param plot_critical: Boolean which, if True and critical point != 0.0, causes the x-axis to zoom in on the
-             critical point.
+        :param results_per_system_size: Dictionary with Result objects per system size.
+        :param title: Title of the plot.
+        :param critical_point: Critical point for which, if given, a vertical line will be plotted.
+        :param plot_critical: Boolean which, if True and critical point != 0.0, causes the x-axis to zoom in on the
+         critical point.
         """
         fig, ax = plt.subplots()
         for system_size in results_per_system_size:
@@ -78,7 +78,7 @@ class PercolationPlot:
         if critical_point != 0.0:
             ax.axvline(x=critical_point, ls='--', label=r'$d_c$ = ' + str(critical_point))
             if plot_critical:
-                ax.set_xlim(critical_point - 0.1, critical_point + 0.15)
+                ax.set_xlim(critical_point - 0.05, critical_point + 0.05)
         ax.set_xlabel(r'Density $d$')
         ax.set_ylabel(r'$P_N$')
         ax.legend()
