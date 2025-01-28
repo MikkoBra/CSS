@@ -1,4 +1,9 @@
+os
+csv
+gc
 numpy
 matplotlib
 noise
 tkinter
+pandas
+tqdm
