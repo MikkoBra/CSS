@@ -1,10 +1,22 @@
 import tkinter as tk
-from tkinter import BooleanVar, Toplevel, Label, messagebox
+from tkinter import BooleanVar, Toplevel, Label
 
-from gui.output_full_sim import OutputFullSim
+from gui.run_range_sims_gui import RunRangeOfSimsGUI
 
+"""
+Class to input a range of parameters.
+Includes running multiple simulations with the specified ranges of parameters.
 
-class FullSimSpecification:
+Attributes:
+    master (Tk): The main window of the application.
+
+Methods:
+    start_simulation: Start the simulation with the specified parameters.
+
+Connects to:
+    OutputFullSim
+"""
+class InputParameterRangeGUI:
     def __init__(self, master):
         self.master = master
         master.title("Simulation Specification")
@@ -108,9 +120,9 @@ class FullSimSpecification:
             if not error:
                 self.master.withdraw()
 
-                output_full_sim = Toplevel(self.master)
-                OutputFullSim(
-                    output_full_sim,
+                run_range_of_sims = Toplevel(self.master)
+                RunRangeOfSimsGUI(
+                    run_range_of_sims,
                     sizes,
                     densities,
                     test_wind,
