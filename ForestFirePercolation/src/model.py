@@ -47,6 +47,8 @@ Methods:
     display_current_forest_state: displays the current state of the forest
     display_single_simulation: displays a single simulation
     burns_left_to_right: checks if the fire burns from left to right
+
+Get Methods:
     get_num_trees: returns the number of trees in the forest
     get_num_burning: returns the number of burning trees in the forest
     get_num_burnt: returns the number of burnt trees in the forest
@@ -275,6 +277,18 @@ class ForestFireModel:
     """
     def get_num_trees(self):
         return np.sum(self.forest == TreeStatus.TREE)
+    
+    """
+    Returns the number of plants in the forest.
+    """
+    def get_num_plants(self):
+        return np.sum(self.forest == TreeStatus.PLANT)
+    
+    """
+    Returns the number of plants and trees in the forest.
+    """
+    def get_num_vegetation(self):
+        return np.sum(self.forest == TreeStatus.PLANT) + np.sum(self.forest == TreeStatus.TREE)
     
     """
     Returns the number of burning trees in the forest.
