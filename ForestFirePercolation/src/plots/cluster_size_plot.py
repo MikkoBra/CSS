@@ -1,8 +1,10 @@
 import matplotlib
 import numpy as np
+from scipy.optimize import curve_fit
 
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+
 
 
 class ClusterSizePlot:
@@ -30,6 +32,31 @@ class ClusterSizePlot:
 
         # Normalize the histogram to obtain a probability density
         normalized_hist = counts / np.sum(counts)
+
+
+        try:
+            # Log-transform the data for fitting
+            log_bin_centers = np.log10(bin_centers)
+            log_normalized_hist = np.log10(normalized_hist)
+        
+            # Define a linear function for log-log fitting (y = m * x + c corresponds to log(P) = b*log(x) + log(a))
+            def log_power_law(log_x, log_a, b):
+                return log_a + b * log_x
+
+            # Perform curve fitting in log space
+            popt, pcov = curve_fit(log_power_law, log_bin_centers, log_normalized_hist, maxfev=10000)
+            log_a, b = popt
+
+            # Convert log-space parameters back to linear space for plotting
+            a = 10 ** log_a
+
+            # Generate fitted curve data
+            fitted_curve = a * bin_centers ** b
+
+            # Plot the fitted curve
+            ax.plot(bin_centers, fitted_curve, 'r--', alpha = 0.6, lw=1, label=f'Fit: $P(x) = {a:.2e}x^{{{b:.2f}}}$')
+        except RuntimeError:
+            print("Curve fitting failed.")
 
         # conf_intervals = []
         # for count in counts:
