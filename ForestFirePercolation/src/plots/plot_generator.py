@@ -13,7 +13,7 @@ class PlotGenerator:
         self.cluster_size_plot = ClusterSizePlot()
         self.result_filter = ResultFilter()
         self.results_per_system_size = csv_reader.read_percolation_csv(self.file_name)
-        self.critical_points = {'base': 0.596, 'wind': 0.549, 'env_index': 0.0, 'plant': 0.0}
+        self.critical_points = {'base': 0.596, 'wind': 0.549, 'env_index':  0.736, 'plant': 0.0}
 
     def generate_single_percolation_plot_per_size(self, results_per_system_size, title):
         """
