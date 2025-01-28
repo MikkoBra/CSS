@@ -1,8 +1,6 @@
-import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from ..results.result import Result
 
 
 class PercolationPlot:
@@ -14,40 +12,36 @@ class PercolationPlot:
 
     def plot_percolation_vs_density(self, densities, probabilities, ax, label):
         """
-            Function that plots the probability of the system percolating over the forest density.
+            Function that plots the probability of the system percolating over forest densities.
 
-            densities: Array of values representing the forest density.
-            probabilities: Array of values representing the probability of the system percolating for the corresponding
+            :param densities: Array of values representing the forest density.
+            :param probabilities: Array of values representing the probability of the system percolating for the corresponding
              density.
-            system_size: System size N for an NxN square grid.
+            :param ax: pyplot ax object to generate the plot in.
+            :param label: Label to attach to the plot, to be used in the legend of the figure.
         """
         ax.plot(densities, probabilities, label=label)
         return ax
 
     def plot_single_percolation_vs_density(self, ax):
         """
-            Function that creates a plot of percolation probability vs forest density for one set of results.
+            Function that creates a plot of percolation probability vs forest density for one system size.
 
-            index: Index of the results in the PercolationPlot object's results array
+            :param ax: pyplot ax object to generate the plot in.
         """
         label = r'$N =$ ' + str(self.system_size)
         self.plot_percolation_vs_density(self.densities, self.probabilities, ax, label)
-        ax.set_xlabel(r'Density $d$')
-        ax.set_ylabel(r'$P_N$')
-        ax.legend()
         return ax
 
     def save_amount_percolated_per_density(self, results):
         """
-        Creates a dictionary that contains as keys the densities found in the results, and as values arrays where the
-        first element is the total number of results for that density, and the second element is the number of results
-        for that density where percolation = True.
-
-        :return:
+            Computes the percolation probability per density, and saves the results in the PercolationPlot object's
+             "densities" and "probabilities" arrays.
         """
         self.densities = []
         self.probabilities = []
         percolation_probability = {}
+        # Fill dictionary with total number of results and number of results with percolation = True per density
         for result in results:
             density = result.density
             if density in percolation_probability:
@@ -56,48 +50,37 @@ class PercolationPlot:
                 percolation_probability[density] = [1, 0]
             if result.percolation:
                 percolation_probability[density][1] += 1.0
+        # Save (number percolated/total number) per density
         for density in percolation_probability:
             self.densities.append(density)
             probability = percolation_probability[density][1]/percolation_probability[density][0]
             self.probabilities.append(probability)
 
-    def plot_percolation(self, results, system_size):
-        fig, ax = plt.subplots()
-        self.save_amount_percolated_per_density(results)
-        self.system_size = system_size
-        self.plot_single_percolation_vs_density(ax)
-        plt.show()
+    def plot_percolation(self, results_per_system_size, title, critical_point=0.0, plot_critical=False):
+        """
+            Generates percolation plots for every passed system size. If the critical point is given and non-zero, it
+            generates a vertical line for the critical point. If plot_critical is given and True, the combined plot will
+            range from [critical point - 0.15, critical point + 0.15] on the x-axis.
 
-    # def plot_multiple_percolation(self, results_per_system_size):
-    #     fig, ax = plt.subplots()
-    #     for system_size in results_per_system_size:
-    #         self.save_amount_percolated_per_density(results_per_system_size[system_size])
-    #         self.system_size = system_size
-    #         self.plot_single_percolation_vs_density(ax)
-    #     plt.show()
-
-    def plot_multiple_percolation(self, results_per_system_size, title):
+            :param results_per_system_size: Dictionary with Result objects per system size.
+            :param title: Title of the plot.
+            :param critical_point: Critical point for which, if given, a vertical line will be plotted.
+            :param plot_critical: Boolean which, if True and critical point != 0.0, causes the x-axis to zoom in on the
+             critical point.
+        """
         fig, ax = plt.subplots()
         for system_size in results_per_system_size:
             self.save_amount_percolated_per_density(results_per_system_size[system_size])
             self.system_size = system_size
             self.plot_single_percolation_vs_density(ax)
+        # Add critical point and/or zoom in on critical point
+        if critical_point != 0.0:
+            ax.axvline(x=critical_point, ls='--', label='d_c = ' + str(critical_point))
+            if plot_critical:
+                ax.set_xlim(critical_point - 0.15, critical_point + 0.15)
         ax.set_xlabel(r'Density $d$')
         ax.set_ylabel(r'$P_N$')
         ax.legend()
         ax.set_title(title)
-        plt.show()
-
-    def plot_around_critical(self, results_per_system_size, title):
-        fig, ax = plt.subplots()
-        for system_size in results_per_system_size:
-            self.save_amount_percolated_per_density(results_per_system_size[system_size])
-            self.system_size = system_size
-            self.plot_single_percolation_vs_density(ax)
-            ax.set_xlim(0.45, 0.7)
-            ax.set_xlabel(r'Density $d$')
-            ax.set_ylabel(r'$P_N$')
-            ax.legend()
-            ax.set_title(title)
         plt.show()
 
