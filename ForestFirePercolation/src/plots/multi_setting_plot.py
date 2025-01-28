@@ -9,19 +9,19 @@ class MultiSettingPlot(PercolationPlot):
 
     def plot_multiple_settings(self, results_dict, title, single_size=None, plot_critical=False):
         """
-            Function that creates a plot of percolation probability vs forest density for all sets of saved results in
-            the same figure.
+        Function that creates a plot of percolation probability vs forest density for all sets of saved results in
+        the same figure.
 
-            :param results_dict: Dictionary of the following structure:
-             {
-                results: [dicts]
-                critical_points: [floats]
-                label_suffixes: [strings]
-                colors: [strings]
-             }
-            :param title: Title of the figure.
-            :param single_size: String representing a single system size to plot.
-            :param plot_critical: Boolean that, if True, causes the x-axs to zoom in on the critical value.
+        :param results_dict: Dictionary of the following structure:
+         {
+            results: [dicts]
+            critical_points: [floats]
+            label_suffixes: [strings]
+            colors: [strings]
+         }
+        :param title: Title of the figure.
+        :param single_size: String representing a single system size to plot.
+        :param plot_critical: Boolean that, if True, causes the x-axs to zoom in on the critical value.
         """
         fig, ax = plt.subplots()
         results_per_setting = results_dict['results']
