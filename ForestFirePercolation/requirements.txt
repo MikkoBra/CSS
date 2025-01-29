@@ -8,3 +8,4 @@ tkinter
 pandas
 tqdm
 scipy
+powerlaw
