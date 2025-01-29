@@ -62,7 +62,7 @@ def simulation_to_csv(sizes, densities, test_wind, env_indixes,
                                     model = ForestFireModel(size, density, env_index, wind, plant_tree_proportion, tree_burn_time, plant_burn_time)
 
                                     # Get the initial total number of trees
-                                    num_trees_total = model.get_num_trees()
+                                    num_trees_total = model.get_num_vegetation()
 
                                     # Ignite the fire
                                     model.ignite_fire_center()
