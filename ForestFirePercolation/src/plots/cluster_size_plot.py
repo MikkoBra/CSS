@@ -1,9 +1,11 @@
 import matplotlib
 import numpy as np
+import powerlaw
 from scipy.optimize import curve_fit
 
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+
 
 
 
@@ -48,7 +50,7 @@ class ClusterSizePlot:
         ax.set_ylabel('Probability Density')
         return bin_centers, normalized_hist, ax
 
-    def plot_power_law(self, bin_centers, normalized_hist, ax, power_law_plotted):
+    def old_plot_power_law(self, bin_centers, normalized_hist, ax, power_law_plotted):
         try:
             # Log-transform the data for fitting
             log_bin_centers = np.log10(bin_centers)
@@ -68,6 +70,32 @@ class ClusterSizePlot:
             # Generate fitted curve data
             fitted_curve = a * bin_centers ** b
 
+            # Plot the fitted curve
+            if power_law_plotted:
+                label = ''
+            else:
+                label = 'Power law'
+            ax.plot(bin_centers, fitted_curve, 'r--', alpha = 0.6, lw=1, label=label)
+        except RuntimeError:
+            print("Curve fitting failed.")
+
+    def plot_power_law(self, bin_centers, normalized_hist, ax, power_law_plotted):
+        try:
+            # Log-transform the data for fitting
+            log_bin_centers = np.log10(bin_centers)
+            log_normalized_hist = np.log10(normalized_hist)
+
+            # Fit the power law using the powerlaw package
+            fit = powerlaw.Fit(log_bin_centers, discrete=False)
+            alpha = fit.power_law.alpha
+            xmin = fit.power_law.xmin
+
+            # Generate the power-law fit curve
+            fitted_curve = (bin_centers / xmin) ** (-alpha + 1)
+            
+            # Normalize to match histogram scale
+            fitted_curve *= normalized_hist[bin_centers >= xmin][0] / fitted_curve[bin_centers >= xmin][0]
+        
             # Plot the fitted curve
             if power_law_plotted:
                 label = ''
