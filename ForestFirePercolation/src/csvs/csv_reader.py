@@ -10,7 +10,7 @@ def read_percolation_csv(file_name):
 
     :return:
     """
-    with open(f'../../Data/{file_name}', mode='r') as file:
+    with open(f'../Data/{file_name}', mode='r') as file:
         csv_reader = csv.DictReader(file)
         data = [row for row in csv_reader]
         result_dict = {}
@@ -22,5 +22,6 @@ def read_percolation_csv(file_name):
                 result_dict[size].append(result_obj)
             else:
                 result_dict[size] = [result_obj]
-        return result_dict
+        sorted_result_dict = {k: result_dict[k] for k in sorted(result_dict, key=lambda x: int(x))}
+        return sorted_result_dict
 

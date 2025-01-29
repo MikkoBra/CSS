@@ -7,3 +7,4 @@ noise
 tkinter
 pandas
 tqdm
+scipy
