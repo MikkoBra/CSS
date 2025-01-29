@@ -6,7 +6,6 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 
-
 class ClusterSizePlot:
 
     def __init__(self):
@@ -86,8 +85,8 @@ class ClusterSizePlot:
         """
         label = r'$N =$ ' + str(self.system_size)
         self.plot_cluster_size_probability_vs_cluster_size(self.cluster_sizes, ax, label)
-        ax.set_xlabel(r'Cluster Size $s$')
-        ax.set_ylabel(r'Cluster Size Probability $P_N(s)$')
+        ax.set_xlabel('Cluster Density (Proportion Burned)')
+        ax.set_ylabel('Probability Density')
         ax.legend()
         return ax
 
@@ -100,8 +99,8 @@ class ClusterSizePlot:
         label = r'$N =$ ' + str(self.system_size)
         bin_centers, normalized_hist, ax = self.plot_cluster_size_probability_vs_cluster_size(self.cluster_sizes, ax, label)
         self.plot_power_law(bin_centers, normalized_hist, ax, label_power_law)
-        ax.set_xlabel(r'Cluster Size $s$')
-        ax.set_ylabel(r'Cluster Size Probability $P_N(s)$')
+        ax.set_xlabel('Cluster Density (Proportion Burned)')
+        ax.set_ylabel('Probability Density')
         ax.legend()
         return ax
 
@@ -170,8 +169,8 @@ class ClusterSizePlot:
             self.plot_power_law(bin_centers, normalized_hist, ax, label_power_law)
         # ax.set_xlabel(r'Density $d$')
         # ax.set_ylabel(r'$P_N$')
-        ax.set_xlabel(r'Cluster Size $s$')
-        ax.set_ylabel(r'Cluster Size Probability $P_N(s)$')
+        ax.set_xlabel('Cluster Density (Proportion Burned)')
+        ax.set_ylabel('Probability Density')
         ax.set_xscale('log')
         ax.set_yscale('log')
         ax.legend()
