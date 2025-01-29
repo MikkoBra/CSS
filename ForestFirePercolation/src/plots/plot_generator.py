@@ -9,6 +9,7 @@ from ForestFirePercolation.src.plots.cluster_size_plot import ClusterSizePlot
 from ForestFirePercolation.src.plots.percolation_plot import PercolationPlot
 from ForestFirePercolation.src.plots.multi_setting_plot import MultiSettingPlot
 from ForestFirePercolation.src.results.result_filter import ResultFilter
+from ForestFirePercolation.src.critical_values import read_critical_values_json
 
 
 class PlotGenerator:
@@ -19,7 +20,12 @@ class PlotGenerator:
         self.cluster_size_plot = ClusterSizePlot()
         self.result_filter = ResultFilter()
         self.results_per_system_size = csv_reader.read_percolation_csv(self.file_name)
-        self.critical_points = {'base': 0.596, 'wind': 0.549, 'env_index':  0.736, 'env_wind': 0.883, 'plant': 0.661}
+        self.critical_points = {'base': 0.596,
+                                'wind': 0.549,
+                                'env_index':  0.7375,
+                                'env_wind': 0.883,
+                                'plant': 0.661}
+        self.critical_points_dens = read_critical_values_json()
 
     def generate_single_percolation_plot_per_size(self, results_per_system_size, title, file_name):
         """
@@ -28,6 +34,7 @@ class PlotGenerator:
         :param results_per_system_size: Dictionary containing arrays of Result objects as values and system sizes as
          keys.
         :param title: Title of the plot.
+        :param file_name: Name of the file the plot is saved in.
         """
         for system_size in results_per_system_size:
             new_file_name = file_name + '_' + system_size
@@ -42,6 +49,7 @@ class PlotGenerator:
          keys.
         :param system_size: System size to create a percolation plot for.
         :param title: Title of the plot.
+        :param file_name: Name of the file the plot is saved in.
         :param critical_point: Critical point to add a vertical line for.
         """
         self.percolation_plot.plot_percolation({system_size: results_per_system_size[system_size]}, title, file_name +
@@ -57,6 +65,7 @@ class PlotGenerator:
          keys.
         :param system_size: System size to create a percolation plot for.
         :param title: Title of the plot.
+        :param file_name: Name of the file the plot is saved in.
         :param critical_point: Critical point to add a vertical line for.
         """
         self.percolation_plot.plot_percolation({system_size: results_per_system_size[system_size]}, title, file_name +
@@ -70,6 +79,7 @@ class PlotGenerator:
         :param results_per_system_size: Dictionary containing arrays of Result objects as values and system sizes as
          keys.
         :param title: Title of the plot.
+        :param file_name: Name of the file the plot is saved in.
         :param critical_point: Critical point to add a vertical line for.
         """
         self.percolation_plot.plot_percolation(results_per_system_size, title, file_name, critical_point)
@@ -82,6 +92,7 @@ class PlotGenerator:
         :param results_per_system_size: Dictionary containing arrays of Result objects as values and system sizes as
          keys.
         :param title: Title of the plot.
+        :param file_name: Name of the file the plot is saved in.
         :param critical_point: Critical point to add a vertical line for.
         """
         self.percolation_plot.plot_percolation(results_per_system_size, title, file_name,
@@ -100,6 +111,7 @@ class PlotGenerator:
              }
         :param title: Title of the figure.
         :param system_size: String representation of the system size to plot for.
+        :param file_name: Name of the file the plot is saved in.
         """
         self.multi_setting_plot.plot_multiple_settings(results_dict, title, file_name + '_' + system_size,
                                                        single_size=system_size)
@@ -118,14 +130,14 @@ class PlotGenerator:
              }
         :param title: Title of the figure.
         :param system_size: String representation of the system size to plot for.
+        :param file_name: Name of the file the plot is saved in.
         """
         self.multi_setting_plot.plot_multiple_settings(results_dict, title, file_name + '_' + system_size,
                                                        single_size=system_size, plot_critical=True)
 
     def generate_multiple_settings_multi_plot(self, results_dict, title, file_name):
         """
-        Generates a percolation probability vs density plot for a specified system size zoomed in around the critical
-        points of the systems.
+        Generates a percolation probability vs density plot for multiple systems and all system sizes.
 
         :param results_dict: Dictionary of the following structure:
              {
@@ -135,11 +147,19 @@ class PlotGenerator:
                 colors: [strings]
              }
         :param title: Title of the figure.
-        :param system_size: String representation of the system size to plot for.
+        :param file_name: Name of the file the plot is saved in.
         """
         self.multi_setting_plot.plot_multiple_settings(results_dict, title, file_name)
 
     def generate_base_experiment_plots(self):
+        """
+        Generates all percolation plots needed to visualize the data from the base model experiment.
+        Includes:
+        - percolation plot for a single size
+        - percolation plot for a single size, zoomed in around the critical point
+        - percolation plot for all sizes
+        - percolation plot for all sizes, zoomed in around the critical point
+        """
         filtered_results = self.result_filter.no_wind_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density\n(base)"
         title2 = "Percolation probability vs forest density around the critical point\n(base)"
@@ -153,6 +173,14 @@ class PlotGenerator:
                                                 self.critical_points['base'])
 
     def generate_wind_experiment_plots(self):
+        """
+        Generates all percolation plots needed to visualize the data from the wind model experiment.
+        Includes:
+        - percolation plot for a single size (wind vs no wind)
+        - percolation plot for a single size, zoomed in around the critical point (wind vs no wind)
+        - percolation plot for all sizes (wind only)
+        - percolation plot for all sizes, zoomed in around the critical point (wind only)
+        """
         wind_dict = self.result_filter.init_wind_vs_no_wind_dict(self.results_per_system_size, self.critical_points)
         wind_results = self.result_filter.wind_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density\n(wind vs no wind)"
@@ -165,6 +193,13 @@ class PlotGenerator:
                                                 self.critical_points['wind'])
 
     def generate_env_index_experiment_plots(self):
+        """
+        Generates all percolation plots needed to visualize the data from the env_index model experiment.
+        Includes:
+        - percolation plot for a single size (all env_indices)
+        - percolation plot for all sizes (env_index 0.75)
+        - percolation plot for all sizes, zoomed in around the critical point (env_index 0.75)
+        """
         env_index_dict = self.result_filter.init_env_index_dict(self.results_per_system_size, self.critical_points)
         env_index_results = self.result_filter.env_075_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density\n(environmental influences)"
@@ -177,6 +212,13 @@ class PlotGenerator:
                                                 self.critical_points['env_index'])
 
     def generate_env_index_050_and_wind_experiment_plots(self):
+        """
+        Generates all percolation plots needed to visualize the data from the env_index + wind model experiment.
+        Includes:
+        - percolation plot for a single size (env_index 0.50, env_index 0.50 with wind, base model)
+        - percolation plot for all sizes (env_index 0.50 with wind)
+        - percolation plot for all sizes, zoomed in around the critical point (env_index 0.50 with wind)
+        """
         env_wind_dict = self.result_filter.init_env_wind_dict(self.results_per_system_size, self.critical_points)
         env_wind_results = self.result_filter.env_wind_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density\n(env_index 0.5 + wind)"
@@ -188,6 +230,14 @@ class PlotGenerator:
                                                 self.critical_points['env_wind'])
 
     def generate_plant_experiment_plots(self):
+        """
+        Generates all percolation plots needed to visualize the data from the plant experiment.
+        Includes:
+        - percolation plot for a single size (plant_tree_proportion 0.50 burn_time 3 env_index 0.75, env_index 0.75)
+        - percolation plot for all sizes (plant_tree_proportion 0.50 burn_time 3 env_index 0.75)
+        - percolation plot for all sizes, zoomed in around the critical point (plant_tree_proportion 0.50 burn_time 3
+          env_index 0.75)
+        """
         plant_dict = self.result_filter.init_plant_075_dict(self.results_per_system_size, self.critical_points)
         plant_results = self.result_filter.plant_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density\n(env_index 0.75 + 50% plant)"
@@ -197,37 +247,41 @@ class PlotGenerator:
         self.generate_critical_point_multi_plot(plant_results, title2, 'multi_percolation_plant_critical',
                                                 self.critical_points['plant'])
 
-    def generate_SOC_plots(self, filtered_results):
-        title = "Cluster size probability vs cluster size"
-        # self.cluster_size_plot.plot_single_cluster_size(filtered_results, '1000', title)
+    def generate_SOC_plots(self, filtered_results, title):
+        # self.cluster_size_plot.plot_single_cluster_size(filtered_results, '100', title)
         self.cluster_size_plot.plot_multiple_cluster_size(filtered_results, title)
-        self.cluster_size_plot.plot_multiple_cluster_size_with_power_law(filtered_results, title)
-        self.cluster_size_plot.plot_multiple_power_law(filtered_results, title)
+        # self.cluster_size_plot.plot_multiple_cluster_size_with_power_law(filtered_results, title)
+        # self.cluster_size_plot.plot_multiple_power_law(filtered_results, title)
 
     def generate_base_SOC_plots(self):
-        filtered_results = self.result_filter.no_wind_at_critical_filter(self.results_per_system_size,
-                                                                         self.critical_points['base'])
-        self.generate_SOC_plots(filtered_results)
+        filtered_results = self.result_filter.no_wind_at_size_specific_critical_filter(self.results_per_system_size,
+                                                                         self.critical_points_dens['base'])
+        title = "Cluster density probability vs cluster density\n(base)"
+        self.generate_SOC_plots(filtered_results, title)
 
     def generate_wind_SOC_plots(self):
-        filtered_results = self.result_filter.wind_at_critical_filter(self.results_per_system_size,
-                                                                      self.critical_points['wind'])
-        self.generate_SOC_plots(filtered_results)
+        filtered_results = self.result_filter.wind_at_size_specific_critical_filter(self.results_per_system_size,
+                                                                      self.critical_points_dens['wind'])
+        title = "Cluster density probability vs cluster density\n(wind)"
+        self.generate_SOC_plots(filtered_results, title)
 
     def generate_env_index_SOC_plots(self):
-        filtered_results = self.result_filter.env_075_at_critical_filter(self.results_per_system_size,
-                                                                         self.critical_points['env_index'])
-        self.generate_SOC_plots(filtered_results)
+        filtered_results = self.result_filter.env_075_at_size_specific_critical_filter(self.results_per_system_size,
+                                                                         self.critical_points_dens['env_index'])
+        title = "Cluster density probability vs cluster density\n(env_index)"
+        self.generate_SOC_plots(filtered_results, title)
 
     def generate_plant_SOC_plots(self):
-        filtered_results = self.result_filter.plant_at_critical_filter(self.results_per_system_size,
-                                                                       self.critical_points['plant'])
-        self.generate_SOC_plots(filtered_results)
+        filtered_results = self.result_filter.plant_at_size_specific_critical_filter(self.results_per_system_size,
+                                                                       self.critical_points_dens['plant'])
+        title = "Cluster density probability vs cluster density\n(plant)"
+        self.generate_SOC_plots(filtered_results, title)
 
     def generate_env_wind_SOC_plots(self):
-        filtered_results = self.result_filter.env_wind_at_critical_filter(self.results_per_system_size,
-                                                                          self.critical_points['env_wind'])
-        self.generate_SOC_plots(filtered_results)
+        filtered_results = self.result_filter.env_wind_at_size_specific_critical_filter(self.results_per_system_size,
+                                                                          self.critical_points_dens['env_wind'])
+        title = "Cluster density probability vs cluster density\n(env_index + wind)"
+        self.generate_SOC_plots(filtered_results, title)
 
 
 # generator = PlotGenerator("Snellius/totaldensity_extended_extra.csv")
