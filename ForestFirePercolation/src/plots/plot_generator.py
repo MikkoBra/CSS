@@ -241,9 +241,9 @@ class PlotGenerator:
         self.generate_critical_point_multi_plot(plant_results, title2, 'multi_percolation_plant_critical',
                                                 self.critical_points['plant'])
 
-    def generate_SOC_plots(self, filtered_results, title):
+    def generate_SOC_plots(self, filtered_results, title, file_name):
         # self.cluster_size_plot.plot_single_cluster_size(filtered_results, '100', title)
-        self.cluster_size_plot.plot_multiple_cluster_size(filtered_results, title)
+        self.cluster_size_plot.plot_multiple_cluster_size(filtered_results, title, file_name + '_multiple')
         # self.cluster_size_plot.plot_multiple_cluster_size_with_power_law(filtered_results, title)
         # self.cluster_size_plot.plot_multiple_power_law(filtered_results, title)
 
@@ -251,31 +251,31 @@ class PlotGenerator:
         filtered_results = self.result_filter.no_wind_at_size_specific_critical_filter(self.results_per_system_size,
                                                                          self.critical_points_dens['base'])
         title = "Cluster density probability vs cluster density\n(base)"
-        self.generate_SOC_plots(filtered_results, title)
+        self.generate_SOC_plots(filtered_results, title, 'base')
 
     def generate_wind_SOC_plots(self):
         filtered_results = self.result_filter.wind_at_size_specific_critical_filter(self.results_per_system_size,
                                                                       self.critical_points_dens['wind'])
         title = "Cluster density probability vs cluster density\n(wind)"
-        self.generate_SOC_plots(filtered_results, title)
+        self.generate_SOC_plots(filtered_results, title, 'wind')
 
     def generate_env_index_SOC_plots(self):
         filtered_results = self.result_filter.env_075_at_size_specific_critical_filter(self.results_per_system_size,
                                                                          self.critical_points_dens['env_index'])
         title = "Cluster density probability vs cluster density\n(env_index)"
-        self.generate_SOC_plots(filtered_results, title)
+        self.generate_SOC_plots(filtered_results, title, 'env')
 
     def generate_plant_SOC_plots(self):
         filtered_results = self.result_filter.plant_at_size_specific_critical_filter(self.results_per_system_size,
                                                                        self.critical_points_dens['plant'])
         title = "Cluster density probability vs cluster density\n(plant)"
-        self.generate_SOC_plots(filtered_results, title)
+        self.generate_SOC_plots(filtered_results, title, 'plant')
 
     def generate_env_wind_SOC_plots(self):
         filtered_results = self.result_filter.env_wind_at_size_specific_critical_filter(self.results_per_system_size,
                                                                           self.critical_points_dens['env_wind'])
         title = "Cluster density probability vs cluster density\n(env_index + wind)"
-        self.generate_SOC_plots(filtered_results, title)
+        self.generate_SOC_plots(filtered_results, title, 'env_wind')
 
 
 # generator = PlotGenerator("Snellius/totaldensity_extended_extra.csv")

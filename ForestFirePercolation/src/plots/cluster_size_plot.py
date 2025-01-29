@@ -135,7 +135,7 @@ class ClusterSizePlot:
         for result in results:
             self.cluster_sizes.append(result.percentage_burnt_down)
 
-    def plot_single_cluster_size(self, results_per_system_size, system_size, title):
+    def plot_single_cluster_size(self, results_per_system_size, system_size, title, file_name, show_plot=False):
         fig, ax = plt.subplots()
         self.save_cluster_sizes(results_per_system_size[system_size])
         self.system_size = system_size
@@ -145,9 +145,11 @@ class ClusterSizePlot:
         ax.legend()
         ax.set_title(title)
         ax.grid()
-        plt.show()
+        fig.savefig('../Data/Plots/Density/' + file_name)
+        if show_plot:
+            plt.show()
 
-    def plot_multiple_cluster_size(self, results_per_system_size, title):
+    def plot_multiple_cluster_size(self, results_per_system_size, title, file_name, show_plot=False):
         fig, ax = plt.subplots()
         for system_size in results_per_system_size:
             self.save_cluster_sizes(results_per_system_size[system_size])
@@ -158,9 +160,11 @@ class ClusterSizePlot:
         ax.legend()
         ax.set_title(title)
         ax.grid()
-        plt.show()
+        fig.savefig('../Data/Plots/Density/' + file_name)
+        if show_plot:
+            plt.show()
 
-    def plot_multiple_cluster_size_with_power_law(self, results_per_system_size, title):
+    def plot_multiple_cluster_size_with_power_law(self, results_per_system_size, title, file_name, show_plot=False):
         fig, ax = plt.subplots()
         label_power_law = False
         total_items = len(results_per_system_size)
@@ -175,9 +179,11 @@ class ClusterSizePlot:
         ax.legend()
         ax.set_title(title)
         ax.grid()
-        plt.show()
+        fig.savefig('../Data/Plots/Density/' + file_name)
+        if show_plot:
+            plt.show()
 
-    def plot_multiple_power_law(self, results_per_system_size, title):
+    def plot_multiple_power_law(self, results_per_system_size, title, file_name, show_plot=False):
         fig, ax = plt.subplots()
         total_items = len(results_per_system_size)
         label_power_law = False
@@ -197,4 +203,6 @@ class ClusterSizePlot:
         ax.legend()
         ax.set_title(title)
         ax.grid()
-        plt.show()
+        fig.savefig('../Data/Plots/Density/' + file_name)
+        if show_plot:
+            plt.show()
