@@ -67,7 +67,8 @@ class PercolationPlot:
             probability = sorted_probabilities[density][1]/sorted_probabilities[density][0]
             self.probabilities.append(probability)
 
-    def plot_percolation(self, results_per_system_size, title, critical_point=0.0, plot_critical=False):
+    def plot_percolation(self, results_per_system_size, title, file_name, critical_point=0.0, plot_critical=False,
+                         show_plot=False):
         """
         Generates percolation plots for every passed system size. If the critical point is given and non-zero, it
         generates a vertical line for the critical point. If plot_critical is given and True, the combined plot will
@@ -94,5 +95,6 @@ class PercolationPlot:
         ax.set_ylabel(r'$P_N$')
         ax.legend()
         ax.set_title(title)
-        plt.show()
-
+        fig.savefig('../Data/Plots/Percolation/' + file_name)
+        if show_plot:
+            plt.show()
