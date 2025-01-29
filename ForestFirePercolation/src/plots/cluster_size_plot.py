@@ -48,9 +48,10 @@ class ClusterSizePlot:
         ax.set_ylabel('Probability Density')
         return bin_centers, normalized_hist, ax
 
-    def plot_power_law(self, bin_centers, normalized_hist, ax, power_law_plotted):
+    def plot_power_law(self, bin_centers, normalized_hist, ax, label_power_law=False):
         try:
             # Log-transform the data for fitting
+            normalized_hist[normalized_hist == 0] = np.finfo(float).eps
             log_bin_centers = np.log10(bin_centers)
             log_normalized_hist = np.log10(normalized_hist)
 
@@ -69,10 +70,10 @@ class ClusterSizePlot:
             fitted_curve = a * bin_centers ** b
 
             # Plot the fitted curve
-            if power_law_plotted:
+            if not label_power_law:
                 label = ''
             else:
-                label = 'Power law'
+                label = 'power law'
             ax.plot(bin_centers, fitted_curve, 'r--', alpha = 0.6, lw=1, label=label)
         except RuntimeError:
             print("Curve fitting failed.")
@@ -90,7 +91,7 @@ class ClusterSizePlot:
         ax.legend()
         return ax
 
-    def plot_single_cluster_size_probability_vs_cluster_size_with_power_law(self, ax, power_law_plotted):
+    def plot_single_cluster_size_probability_vs_cluster_size_with_power_law(self, ax, label_power_law):
         """
             Function that creates a plot of percolation probability vs forest density for one set of results.
 
@@ -98,7 +99,7 @@ class ClusterSizePlot:
         """
         label = r'$N =$ ' + str(self.system_size)
         bin_centers, normalized_hist, ax = self.plot_cluster_size_probability_vs_cluster_size(self.cluster_sizes, ax, label)
-        self.plot_power_law(bin_centers, normalized_hist, ax, power_law_plotted)
+        self.plot_power_law(bin_centers, normalized_hist, ax, label_power_law)
         ax.set_xlabel(r'Cluster Size $s$')
         ax.set_ylabel(r'Cluster Size Probability $P_N(s)$')
         ax.legend()
@@ -113,6 +114,18 @@ class ClusterSizePlot:
         self.cluster_sizes = []
         for result in results:
             self.cluster_sizes.append(result.percentage_burnt_down)
+
+    def plot_single_cluster_size(self, results_per_system_size, system_size, title):
+        fig, ax = plt.subplots()
+        self.save_cluster_sizes(results_per_system_size[system_size])
+        self.system_size = system_size
+        self.plot_single_cluster_size_probability_vs_cluster_size(ax)
+        # ax.set_xlabel(r'Density $d$')
+        # ax.set_ylabel(r'$P_N$')
+        ax.legend()
+        ax.set_title(title)
+        ax.grid()
+        plt.show()
 
     def plot_multiple_cluster_size(self, results_per_system_size, title):
         fig, ax = plt.subplots()
@@ -129,12 +142,14 @@ class ClusterSizePlot:
 
     def plot_multiple_cluster_size_with_power_law(self, results_per_system_size, title):
         fig, ax = plt.subplots()
-        power_law_plotted = False
-        for system_size in results_per_system_size:
+        label_power_law = False
+        total_items = len(results_per_system_size)
+        for index, system_size in enumerate(results_per_system_size):
+            if index == total_items - 1:
+                label_power_law = True
             self.save_cluster_sizes(results_per_system_size[system_size])
             self.system_size = system_size
-            self.plot_single_cluster_size_probability_vs_cluster_size_with_power_law(ax, power_law_plotted)
-            power_law_plotted = True
+            self.plot_single_cluster_size_probability_vs_cluster_size_with_power_law(ax, label_power_law)
         # ax.set_xlabel(r'Density $d$')
         # ax.set_ylabel(r'$P_N$')
         ax.legend()
@@ -144,11 +159,15 @@ class ClusterSizePlot:
 
     def plot_multiple_power_law(self, results_per_system_size, title):
         fig, ax = plt.subplots()
-        for system_size in results_per_system_size:
+        total_items = len(results_per_system_size)
+        label_power_law = False
+        for index, system_size in enumerate(results_per_system_size):
+            if index == total_items - 1:
+                label_power_law = True
             self.save_cluster_sizes(results_per_system_size[system_size])
             self.system_size = system_size
             bin_centers, normalized_hist = self.calculate_bin_centers_and_histogram(self.cluster_sizes)
-            self.plot_power_law(bin_centers, normalized_hist, ax, False)
+            self.plot_power_law(bin_centers, normalized_hist, ax, label_power_law)
         # ax.set_xlabel(r'Density $d$')
         # ax.set_ylabel(r'$P_N$')
         ax.set_xlabel(r'Cluster Size $s$')
