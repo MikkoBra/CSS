@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add the root directory of the project to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+
 from ForestFirePercolation.src.csvs import csv_reader
 from ForestFirePercolation.src.plots.cluster_size_plot import ClusterSizePlot
 from ForestFirePercolation.src.plots.percolation_plot import PercolationPlot
