@@ -2,34 +2,46 @@
 #### Mikko Brandon, Victoria Peterson, Yoad van Praag, Rinske Oskamp
 
 ## Background and Motivation
-The critical point denotes a divide between low and high probability of a forest fire percolating through the forest while many environmental factors may influence the probability of forest fire percolation. However, the frequency at which forest fires of great magnitude occur may also be inherent to forests as a system. This would imply that forests exhibit self-organized criticality (SOC), and we want to examine whether this emergent property truly exists in forests, and how/what environmental factors influence the SOC if it does.
+When abstracted to plots of land that either have a tree or do not have a tree, a forest can be represented on a 2D grid with tree cells and non-tree cells. Using such abstractions, forests have widely been modeled to simulate forest fire spread as a form of percolation. Due to the nature of the 2D grid, percolation theory applies to such forest fire spread, entailing that there is a critical point of tree density in an infinite-size forest at which forest fires go from never percolating to always percolating. Knowing whether this critical point applies to finite-size forests, and whether it can be influenced by external factors, could prove useful for forest fire prevention and intervention.
+
+The frequency at which forest fires of each relative magnitude occur may also be inherent to forests as a system, not varying with system size. This would imply that forests exhibit self-organized criticality (SOC). Knowing whether this is the case, and how external factors affect the SOC property of forests, could be informative in knowing whether the same findings hold for all forest sizes.
 
 ## Short description
-Our research investigates emergent behaviors in forest fires and their dependence on various environmental conditions. We model forest fires using a 2D grid with clusters of trees, simulating fire spread and measuring the frequency and size of individual fire events. We analyze the statistical distribution of fire sizes for baseline parameter settings and assess whether it follows a power law when system size is extrapolated to infinity to estimate a critical point for forest fire percolation, which would indicate the presence of SOC. Using the resulting exponent, we conduct experiments under different wind conditions, implemented as a directional increase in fire spread, and environmental influences, implemented as a global probability of fire spread, to evaluate their influence on the emergent properties.
+Our research investigates SOC and percolation in forest fires and their dependence on various environmental conditions. We model forest fires using a 2D grid with clusters of trees, simulating fire spread and measuring the frequency and size of individual fire events. The control experiment is conducted by varying the forest density to find a baseline critical point when no environmental conditions influence the spread of fire. The critical point is defined as the first density at which at least 50% of all simulations percolate. Then, we experiment with wind, implemented as a directional increase in fire spread, environmental influences, implemented as a global probability of fire spread, and variety of burnable vegetation, implemented as a proportion of burnable cells that burn longer than the remaining proportion. For these environmental factors, we assess their effect on the critical point.
+
+Using the found critical points as baseline densities, we analyze the statistical distribution of fire sizes and assess whether it follows the same (power law) distribution when system size is extrapolated to infinity, which would indicate the presence of SOC.
 
 ### Disciplines
 Environmental science, data science, physics, percolation theory
 
 ### Emergent Phenomena
-Self-Organized Criticality
+Self-Organized Criticality, Percolation
 
 ## Research questions and hypotheses
 ### Questions:
-Do forest fires exhibit self-organized criticality?
+Do forest fires exhibit SOC?
 
 
-How does introducing wind into the system affect the self-organized criticality and percolation of forest fires?
+How does introducing wind into the system affect the SOC and percolation of forest fires?
 
 
-How do environmental influences affect the self-organized criticality and percolation of forest fires?
+How do environmental influences affect the SOC and percolation of forest fires?
+
+
+How does a combination of a variety of burnable vegetation and environmental influences affect the SOC and percolation of forest fires?
+
 ### Hypotheses:
-We expect to find a critical point at which the probability distribution of forest fire percolation increases with a power law distribution
+We expect to find a critical point at which the probability of forest fire percolation follows a power law distribution, which would indicate the presence of SOC.
 
 
 We expect the SOC to disappear with the introduction of wind directions, due to the sensitivity of SOC to the system’s conditions. We expect percolation to depend on wind direction, with tailwind increasing percolation, and headwind decreasing it.
 
 
 We expect the SOC to be exhibited by a small range of environmental influence values, due to the sensitivity of SOC to the system’s conditions. We expect percolation to have a sudden increase around a specific environmental influence value, as the value simply influences the percolation probability as a scalar.
+
+
+We expect the SOC to … We expect the percolation probabilities to be closer to the base model than when only varying the environmental influences. Plants burn for longer, so vegetation around the plants have longer to catch fire. This effectively counteracts the lower chance of burning due to environmental influences.
+
 
 ## Implementation
 Base model:
