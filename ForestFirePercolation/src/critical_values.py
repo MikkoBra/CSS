@@ -1,6 +1,7 @@
 from ForestFirePercolation.src.csvs.csv_reader import read_percolation_csv
 from ForestFirePercolation.src.results.result_filter import ResultFilter
 import numpy as np
+import json
 
 
 def output_critical_densities(file_name):
@@ -11,20 +12,23 @@ def output_critical_densities(file_name):
     env_results = result_filter.env_075_filter(results)
     env_wind_results = result_filter.env_wind_filter(results)
     plant_results = result_filter.plant_filter(results)
-    return {
+    dictionary = {
         'base': output_critical_densities_per_experiment(base_results),
         'wind': output_critical_densities_per_experiment(wind_results),
         'env_index': output_critical_densities_per_experiment(env_results),
         'env_wind': output_critical_densities_per_experiment(env_wind_results),
         'plant': output_critical_densities_per_experiment(plant_results)
     }
+    with open("../Data/critical_values_per_experiment.txt", "w") as f:
+        json.dump(dictionary, f, indent=4)
 
 
 def output_critical_densities_per_experiment(results):
     critical_values = []
     for system_size in results:
-        critical_value = find_critical(results[system_size])
-        critical_values.append(critical_value)
+        if system_size in ['100', '250', '500', '750', '1000']:
+            critical_value = find_critical(results[system_size])
+            critical_values.append(critical_value)
     return critical_values
 
 
@@ -52,8 +56,10 @@ def find_critical(results):
         probability = sorted_probabilities[density][1]/sorted_probabilities[density][0]
         probabilities.append(probability)
     critical_index = np.searchsorted(probabilities, 0.5)
-    print(densities)
+
     return densities[critical_index]
 
 
-output_critical_densities('../Data/Simulation_data_critpoints.csv')
+def read_critical_values_json():
+    with open("../Data/critical_values_per_experiment.txt", "r") as f:
+        return json.load(f)

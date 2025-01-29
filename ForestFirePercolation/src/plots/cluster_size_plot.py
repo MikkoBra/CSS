@@ -79,27 +79,22 @@ class ClusterSizePlot:
 
     def plot_power_law(self, bin_centers, normalized_hist, ax, label_power_law):
         try:
-            # Log-transform the data for fitting
-            log_bin_centers = np.log10(bin_centers)
-            log_normalized_hist = np.log10(normalized_hist)
-
-            # Fit the power law using the powerlaw package
-            fit = powerlaw.Fit(log_bin_centers, discrete=False)
+            fit = powerlaw.Fit(self.cluster_sizes, discrete=False)
             alpha = fit.power_law.alpha
             xmin = fit.power_law.xmin
+            xmax = fit.power_law.xmax
 
-            # Generate the power-law fit curve
-            fitted_curve = (bin_centers / xmin) ** (-alpha + 1)
+            # Generate x values for the curve
+            x_values = np.linspace(xmin, xmax, 100)
 
-            # Normalize to match histogram scale
-            fitted_curve *= normalized_hist[bin_centers >= xmin][0] / fitted_curve[bin_centers >= xmin][0]
+            # Compute the power-law function (unnormalized)
+            y_values = x_values ** (-alpha)
 
-            # Plot the fitted curve
-            if not label_power_law:
-                label = ''
-            else:
-                label = 'power law'
-            ax.plot(bin_centers, fitted_curve, 'r--', alpha = 0.6, lw=1, label=label)
+            # Normalize to match empirical distribution
+            y_values /= y_values[0]
+
+            label = 'power law' if label_power_law else ''
+            ax.plot(x_values, y_values, 'r--', alpha=0.6, lw=1, label=label)
         except RuntimeError:
             print("Curve fitting failed.")
 
