@@ -7,7 +7,7 @@ class MultiSettingPlot(PercolationPlot):
     Class for plots that take multiple system settings in one percolation plot (aside from system size).
     """
 
-    def plot_multiple_settings(self, results_dict, title, single_size=None, plot_critical=False):
+    def plot_multiple_settings(self, results_dict, title, file_name, single_size=None, plot_critical=False):
         """
         Function that creates a plot of percolation probability vs forest density for all sets of saved results in
         the same figure.
@@ -52,4 +52,4 @@ class MultiSettingPlot(PercolationPlot):
         ax.set_ylabel(r'$P_N$')
         ax.legend()
         ax.set_title(title)
-        plt.show()
+        plt.savefig('../Data/Plots/Percolation/' + file_name)

@@ -13,6 +13,13 @@ class ResultFilter:
             if any(self.no_wind_conditions(result) for result in value)
         }
 
+    def no_wind_at_critical_filter(self, results_per_system_size, critical_value):
+        return {
+            key: [result for result in value if self.no_wind_conditions(result) and result.density == critical_value]
+            for key, value in results_per_system_size.items()
+            if any(self.no_wind_conditions(result) and result.density == critical_value for result in value)
+        }
+
     def wind_conditions(self, result):
         value = result.wind and result.env_index == 1.0 and result.plant_tree_proportion == 0.0
         return value
@@ -22,6 +29,13 @@ class ResultFilter:
             key: [result for result in value if self.wind_conditions(result)]
             for key, value in results_per_system_size.items()
             if any(self.wind_conditions(result) for result in value)
+        }
+
+    def wind_at_critical_filter(self, results_per_system_size, critical_value):
+        return {
+            key: [result for result in value if self.wind_conditions(result) and result.density == critical_value]
+            for key, value in results_per_system_size.items()
+            if any(self.wind_conditions(result) and result.density == critical_value for result in value)
         }
 
     def env_025_conditions(self, result):
@@ -57,6 +71,13 @@ class ResultFilter:
             if any(self.env_075_conditions(result) for result in value)
         }
 
+    def env_075_at_critical_filter(self, results_per_system_size, critical_value):
+        return {
+            key: [result for result in value if self.env_075_conditions(result) and result.density == critical_value]
+            for key, value in results_per_system_size.items()
+            if any(self.env_075_conditions(result) and result.density == critical_value for result in value)
+        }
+
     def env_wind_conditions(self, result):
         value = result.wind and result.plant_tree_proportion == 0.0 and result.env_index == 0.50
         return value
@@ -68,6 +89,13 @@ class ResultFilter:
             if any(self.env_wind_conditions(result) for result in value)
         }
 
+    def env_wind_at_critical_filter(self, results_per_system_size, critical_value):
+        return {
+            key: [result for result in value if self.env_wind_conditions(result) and result.density == critical_value]
+            for key, value in results_per_system_size.items()
+            if any(self.env_wind_conditions(result) and result.density == critical_value for result in value)
+        }
+
     def plant_conditions(self, result):
         value = not result.wind and result.env_index == 0.75 and result.plant_tree_proportion == 0.5
         return value
@@ -77,6 +105,13 @@ class ResultFilter:
             key: [result for result in value if self.plant_conditions(result)]
             for key, value in results_per_system_size.items()
             if any(self.plant_conditions(result) for result in value)
+        }
+
+    def plant_at_critical_filter(self, results_per_system_size, critical_value):
+        return {
+            key: [result for result in value if self.plant_conditions(result) and result.density == critical_value]
+            for key, value in results_per_system_size.items()
+            if any(self.plant_conditions(result) and result.density == critical_value for result in value)
         }
 
     def init_wind_vs_no_wind_dict(self, results_per_system_size, critical_point_dict):
