@@ -8,3 +8,5 @@ tkinter
 pandas
 tqdm
 scipy
+powerlaw
+json

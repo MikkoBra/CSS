@@ -1,10 +1,10 @@
 import matplotlib
 import numpy as np
+import powerlaw
 from scipy.optimize import curve_fit
 
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-
 
 
 class ClusterSizePlot:
@@ -48,10 +48,9 @@ class ClusterSizePlot:
         ax.set_ylabel('Probability Density')
         return bin_centers, normalized_hist, ax
 
-    def plot_power_law(self, bin_centers, normalized_hist, ax, label_power_law=False):
+    def old_plot_power_law(self, bin_centers, normalized_hist, ax, power_law_plotted):
         try:
             # Log-transform the data for fitting
-            normalized_hist[normalized_hist == 0] = np.finfo(float).eps
             log_bin_centers = np.log10(bin_centers)
             log_normalized_hist = np.log10(normalized_hist)
 
@@ -70,11 +69,32 @@ class ClusterSizePlot:
             fitted_curve = a * bin_centers ** b
 
             # Plot the fitted curve
-            if not label_power_law:
+            if power_law_plotted:
                 label = ''
             else:
-                label = 'power law'
+                label = 'Power law'
             ax.plot(bin_centers, fitted_curve, 'r--', alpha = 0.6, lw=1, label=label)
+        except RuntimeError:
+            print("Curve fitting failed.")
+
+    def plot_power_law(self, bin_centers, normalized_hist, ax, label_power_law):
+        try:
+            fit = powerlaw.Fit(self.cluster_sizes, discrete=False)
+            alpha = fit.power_law.alpha
+            xmin = fit.power_law.xmin
+            xmax = fit.power_law.xmax
+
+            # Generate x values for the curve
+            x_values = np.linspace(xmin, xmax, 100)
+
+            # Compute the power-law function (unnormalized)
+            y_values = x_values ** (-alpha)
+
+            # Normalize to match empirical distribution
+            y_values /= y_values[0]
+
+            label = 'power law' if label_power_law else ''
+            ax.plot(x_values, y_values, 'r--', alpha=0.6, lw=1, label=label)
         except RuntimeError:
             print("Curve fitting failed.")
 
@@ -86,8 +106,8 @@ class ClusterSizePlot:
         """
         label = r'$N =$ ' + str(self.system_size)
         self.plot_cluster_size_probability_vs_cluster_size(self.cluster_sizes, ax, label)
-        ax.set_xlabel(r'Cluster Size $s$')
-        ax.set_ylabel(r'Cluster Size Probability $P_N(s)$')
+        ax.set_xlabel('Cluster Density (Proportion Burned)')
+        ax.set_ylabel('Probability Density')
         ax.legend()
         return ax
 
@@ -100,8 +120,8 @@ class ClusterSizePlot:
         label = r'$N =$ ' + str(self.system_size)
         bin_centers, normalized_hist, ax = self.plot_cluster_size_probability_vs_cluster_size(self.cluster_sizes, ax, label)
         self.plot_power_law(bin_centers, normalized_hist, ax, label_power_law)
-        ax.set_xlabel(r'Cluster Size $s$')
-        ax.set_ylabel(r'Cluster Size Probability $P_N(s)$')
+        ax.set_xlabel('Cluster Density (Proportion Burned)')
+        ax.set_ylabel('Probability Density')
         ax.legend()
         return ax
 
@@ -170,8 +190,8 @@ class ClusterSizePlot:
             self.plot_power_law(bin_centers, normalized_hist, ax, label_power_law)
         # ax.set_xlabel(r'Density $d$')
         # ax.set_ylabel(r'$P_N$')
-        ax.set_xlabel(r'Cluster Size $s$')
-        ax.set_ylabel(r'Cluster Size Probability $P_N(s)$')
+        ax.set_xlabel('Cluster Density (Proportion Burned)')
+        ax.set_ylabel('Probability Density')
         ax.set_xscale('log')
         ax.set_yscale('log')
         ax.legend()
