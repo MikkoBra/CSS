@@ -1,4 +1,4 @@
-from ForestFirePercolation.src.plots.plot_generator import PlotGenerator
+from plots.plot_generator import PlotGenerator
 
 if __name__ == "__main__":
     generator = PlotGenerator("Snellius/Snellius_Data_Full.csv")
