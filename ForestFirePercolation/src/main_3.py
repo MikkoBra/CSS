@@ -56,7 +56,7 @@ def main():
                                tree_burn_times, 
                                file_name, 
                                num_simulations_per_setting)
-
+    '''
     size = [100,250,500,750,1000]
     density = [0.73, 0.731,0.732, 0.733, 0.734, 0.735, 0.736, 0.737, 0.7375, 0.738, 0.739, 0.740, 0.741, 0.742,0.743,0.744,0.745]
     test_wind = "No Wind"
@@ -597,6 +597,7 @@ def main():
                                file_name, 
                                num_simulations_per_setting)
                                """
+                               '''
 
 if __name__ == "__main__":
     main()
