@@ -27,7 +27,6 @@ class MultiSettingPlot(PercolationPlot):
         results_per_setting = results_dict['results']
         critical_points = results_dict['critical_points']
         label_suffixes = results_dict['label_suffixes']
-        colors = results_dict['colors']
         results_index = 0
         for results_per_system_size in results_per_setting:
             if single_size:
@@ -42,8 +41,7 @@ class MultiSettingPlot(PercolationPlot):
             # Add critical point and/or zoom in on critical point
             critical_point = critical_points[results_index]
             if critical_point != 0.0:
-                ax.axvline(x=critical_point, color=colors[results_index], ls='--', label=r'$d_c$ = '
-                                                                                         + str(critical_point))
+                ax.axhline(y=0.5, ls='--', label=r'$P_N = 0.50$', color='black')
             results_index += 1
         if plot_critical:
             ax.set_xlim(critical_points[0] - 0.05, critical_points[-1] + 0.05)

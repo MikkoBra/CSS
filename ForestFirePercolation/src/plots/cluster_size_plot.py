@@ -79,8 +79,9 @@ class ClusterSizePlot:
 
     def plot_power_law(self, bin_centers, normalized_hist, ax, label_power_law):
         try:
-            fit = powerlaw.Fit(self.cluster_sizes, discrete=False)
+            fit = powerlaw.Fit(self.cluster_sizes, discrete=True, estimate_discrete=False)
             alpha = fit.power_law.alpha
+            fit.power_law.estimate_discrete
             xmin = fit.power_law.xmin
             xmax = fit.power_law.xmax
 
