@@ -248,10 +248,8 @@ class PlotGenerator:
                                                 self.critical_points['plant'])
 
     def generate_SOC_plots(self, filtered_results, title, file_name):
-        # self.cluster_size_plot.plot_single_cluster_size(filtered_results, '100', title)
+        self.cluster_size_plot.plot_single_cluster_size(filtered_results, '1000', title, file_name + '_single_1000')
         self.cluster_size_plot.plot_multiple_cluster_size(filtered_results, title, file_name + '_multiple')
-        # self.cluster_size_plot.plot_multiple_cluster_size_with_power_law(filtered_results, title)
-        # self.cluster_size_plot.plot_multiple_power_law(filtered_results, title)
 
     def generate_base_SOC_plots(self):
         filtered_results = self.result_filter.no_wind_at_size_specific_critical_filter(self.results_per_system_size,
