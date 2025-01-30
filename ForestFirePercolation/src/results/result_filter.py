@@ -219,7 +219,7 @@ class ResultFilter:
         results = [base_results, wind_results, env_075_results, env_050_results, plant_results]
         critical_points = [critical_point_dict['base'], critical_point_dict['wind'], critical_point_dict['env_index'],
                            critical_point_dict['env_050'], critical_point_dict['plant']]
-        label_suffixes = [' (base)', ' (wind)', ' (env 0.75)', '(env 0.5)', ' (plants)']
+        label_suffixes = [' (base)', ' (wind)', ' (env 0.75)', ' (env 0.5)', ' (plants)']
         results_dict = {
             'results': results,
             'critical_points': critical_points,

@@ -208,12 +208,15 @@ class PlotGenerator:
         title2 = "Percolation probability vs forest density\n(env_index 0.75)"
         title3 = "Percolation probability vs forest density\n(env_index 0.50)"
         title4 = "Percolation probability vs forest density around the critical point\n(env_index 0.75)"
+        title5 = "Percolation probability vs forest density around the critical point\n(env_index 0.50)"
         self.generate_single_size_multiple_settings_plot(env_index_dict, title, '300', 'single_percolation_env_index')
         self.generate_percolation_multi_plot(env_index_results, title2, 'multi_percolation_env_index_075',
                                              self.critical_points['env_index'])
         self.generate_percolation_multi_plot(env_index_050_results, title3, 'multi_percolation_env_index_050')
         self.generate_critical_point_multi_plot(env_index_results, title4, 'multi_percolation_critical_env_index',
                                                 self.critical_points['env_index'])
+        self.generate_critical_point_multi_plot(env_index_050_results, title5, 'multi_percolation_critical_env_050',
+                                                self.critical_points['env_050'])
 
     def generate_env_index_050_and_wind_experiment_plots(self):
         """

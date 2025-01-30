@@ -40,7 +40,8 @@ class PercolationPlot:
             interpolator = interp1d(probabilities, densities, kind='linear', bounds_error=False,
                                     fill_value="extrapolate")
             interpolated_density = interpolator(0.5)
-            ax.scatter(interpolated_density, 0.5, color=line.get_color(), s=50, zorder=5)
+            if 0.0 <= interpolated_density <= 1.0:
+                ax.scatter(interpolated_density, 0.5, color=line.get_color(), s=50, zorder=5)
         return ax
 
     def save_amount_percolated_per_density(self, results):
