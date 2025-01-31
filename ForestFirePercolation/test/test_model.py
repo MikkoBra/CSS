@@ -1,13 +1,10 @@
-import sys
-import os
 import unittest
 import numpy as np
 import noise
+import logging
 
-# Add the src directory to the sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
-
-from model import ForestFireModel, TreeStatus
+from ForestFirePercolation.src.model import ForestFireModel
+from ForestFirePercolation.src.model import TreeStatus
 
 class TestForestFireModel(unittest.TestCase):
     def setUp(self):
@@ -56,9 +53,11 @@ class TestForestFireModel(unittest.TestCase):
                 if np.random.uniform(0,1) < forest_density:
                     forest[i][j] = 1
                 noise_map[i][j] = noise.pnoise2(i / 10, j / 10)
-        print(model.forest)
-        print(forest)
 
+        logging.info(model.forest)
+        logging.info(forest)
+        print(noise_map)
+        print(model.noise_map)
         self.assertTrue(np.array_equal(model.forest, forest))
         self.assertTrue(np.array_equal(model.noise_map, noise_map))
         self.assertEqual(len(model.burning_trees_queue), 0)
@@ -102,8 +101,8 @@ class TestForestFireModel(unittest.TestCase):
         
         model.ignite_fire_random()
 
-        print(model.burning_trees_queue)
-
+        logging.info(model.burning_trees_queue)
+        logging.info(model.burning_trees_queue)
         # Test initial burn count
         burning_count = np.sum(model.forest == TreeStatus.BURNING)
         self.assertEqual(burning_count, ignition_num)
@@ -174,7 +173,7 @@ class TestForestFireModel(unittest.TestCase):
                 expected_burn_time = model.plant_burn_time
                 self.assertEqual(burn_time, expected_burn_time)
     
-    def test_ignite_fire_center(self):
+    def test_ignite_fire_corner(self):
         size = 10
         forest_density = 1.0
         env_index = 1.0
@@ -223,16 +222,15 @@ class TestForestFireModel(unittest.TestCase):
                 expected_burn_time = model.plant_burn_time
                 self.assertEqual(burn_time, expected_burn_time)
 
-
-    def test_spread_fire(self):
-        size = 10
+    def test_spread_fire_no_wind(self):
+        size = 5
         forest_density = 1.0
         env_index = 1.0
         wind = False
         plant_tree_proportion = 0.0
         tree_burn_time = 1
         plant_burn_time = 1
-        ignition_num = 10
+        ignition_num = 1
         random_seed = 42
 
         np.random.seed(random_seed)
@@ -241,16 +239,137 @@ class TestForestFireModel(unittest.TestCase):
                                 plant_tree_proportion, tree_burn_time, 
                                 plant_burn_time, ignition_num, random_seed=random_seed)
         
-        model.ignite_fire_random()
+        model.ignite_fire_center()
         initial_burning_count = np.sum(model.forest == TreeStatus.BURNING)
         model.spread_fire()
         new_burning_count = np.sum(model.forest == TreeStatus.BURNING)
 
         self.assertGreater(new_burning_count, initial_burning_count)
+        self.assertEqual(np.sum(model.forest == TreeStatus.BURNT), 1)
 
+    def test_spread_fire_with_wind(self):
+        size = 5
+        forest_density = 1.0
+        env_index = 1.0
+        wind = True
+        plant_tree_proportion = 0.0
+        tree_burn_time = 1
+        plant_burn_time = 1
+        ignition_num = 1
+        random_seed = 42
+
+        np.random.seed(random_seed)
+
+        model = ForestFireModel(size, forest_density, env_index, wind, 
+                                plant_tree_proportion, tree_burn_time, 
+                                plant_burn_time, ignition_num, random_seed=random_seed)
         
+        model.ignite_fire_center()
+        initial_burning_count = np.sum(model.forest == TreeStatus.BURNING)
+        model.spread_fire()
+        new_burning_count = np.sum(model.forest == TreeStatus.BURNING)
 
+        self.assertGreater(new_burning_count, initial_burning_count)
+        self.assertEqual(np.sum(model.forest == TreeStatus.BURNT), 1)
 
-                
+    def test_spread_fire_with_plants(self):
+        size = 5
+        forest_density = 1.0
+        env_index = 1.0
+        wind = False
+        plant_tree_proportion = 0.5
+        tree_burn_time = 1
+        plant_burn_time = 1
+        ignition_num = 1
+        random_seed = 42
+
+        np.random.seed(random_seed)
+
+        model = ForestFireModel(size, forest_density, env_index, wind, 
+                                plant_tree_proportion, tree_burn_time, 
+                                plant_burn_time, ignition_num, random_seed=random_seed)
+        
+        model.ignite_fire_center()
+        initial_burning_count = np.sum(model.forest == TreeStatus.BURNING)
+        model.spread_fire()
+        new_burning_count = np.sum(model.forest == TreeStatus.BURNING)
+
+        self.assertGreater(new_burning_count, initial_burning_count)
+        self.assertEqual(np.sum(model.forest == TreeStatus.BURNT), 1)
+    
+    def test_no_display_single_simulation(self):
+        size = 5
+        forest_density = 1.0
+        env_index = 1.0
+        wind = False
+        plant_tree_proportion = 0.0
+        tree_burn_time = 1
+        plant_burn_time = 1
+        ignition_num = 1
+        random_seed = 42
+
+        np.random.seed(random_seed)
+
+        model = ForestFireModel(size, forest_density, env_index, wind, 
+                                plant_tree_proportion, tree_burn_time, 
+                                plant_burn_time, ignition_num, random_seed=random_seed)
+        
+        model.ignite_fire_center()
+        model.no_display_single_simulation()
+
+        self.assertEqual(model.get_num_burning(), 0)
+        self.assertGreater(model.get_num_burnt(), 0)
+
+    def test_burns_left_to_right(self):
+        size = 5
+        forest_density = 1.0
+        env_index = 1.0
+        wind = False
+        plant_tree_proportion = 0.0
+        tree_burn_time = 1
+        plant_burn_time = 1
+        ignition_num = 1
+        random_seed = 42
+
+        np.random.seed(random_seed)
+
+        model = ForestFireModel(size, forest_density, env_index, wind, 
+                                plant_tree_proportion, tree_burn_time, 
+                                plant_burn_time, ignition_num, random_seed=random_seed)
+        
+        model.ignite_fire_center()
+        model.no_display_single_simulation()
+
+        self.assertTrue(model.burns_left_to_right())
+
+    def test_getters(self):
+        size = 5
+        forest_density = 1.0
+        env_index = 1.0
+        wind = False
+        plant_tree_proportion = 0.0
+        tree_burn_time = 1
+        plant_burn_time = 1
+        ignition_num = 1
+        random_seed = 42
+
+        np.random.seed(random_seed)
+
+        model = ForestFireModel(size, forest_density, env_index, wind, 
+                                plant_tree_proportion, tree_burn_time, 
+                                plant_burn_time, ignition_num, random_seed=random_seed)
+        
+        self.assertEqual(model.get_size(), size)
+        self.assertEqual(model.get_forest_density(), forest_density)
+        self.assertEqual(model.get_ignition_num(), ignition_num)
+        self.assertEqual(model.get_num_trees(), np.sum(model.forest == TreeStatus.TREE))
+        self.assertEqual(model.get_num_burning(), np.sum(model.forest == TreeStatus.BURNING))
+        self.assertEqual(model.get_num_burnt(), np.sum(model.forest == TreeStatus.BURNT))
+        self.assertEqual(model.get_burning_trees_queue(), model.burning_trees_queue)
+        self.assertAlmostEqual(model.percentage_burnt(), model.get_num_burnt() / size**2)
+        self.assertAlmostEqual(model.percentage_burning(), model.get_num_burning() / size**2)
+        self.assertAlmostEqual(model.percentage_trees(), model.get_num_trees() / size**2)
+
 if __name__ == '__main__':
-    unittest.main()
+    if __name__ == '__main__':
+        unittest.main()
