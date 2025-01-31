@@ -1,7 +1,7 @@
+import os
 import csv
-from ForestFirePercolation.src.results.result import Result
-from ForestFirePercolation.src.plots.percolation_plot import PercolationPlot
 
+from ForestFirePercolation.src.results.result import Result
 
 def read_percolation_csv(file_name):
     """
@@ -10,7 +10,8 @@ def read_percolation_csv(file_name):
 
     :return:
     """
-    with open(f'../Data/{file_name}', mode='r') as file:
+    file_path = os.path.join('ForestFirePercolation', 'data', file_name)
+    with open(file_path, mode='r') as file:
         csv_reader = csv.DictReader(file)
         data = [row for row in csv_reader]
         result_dict = {}
@@ -22,5 +23,4 @@ def read_percolation_csv(file_name):
                 result_dict[size].append(result_obj)
             else:
                 result_dict[size] = [result_obj]
-        sorted_result_dict = {k: result_dict[k] for k in sorted(result_dict, key=lambda x: int(x))}
-        return sorted_result_dict
+    return result_dict

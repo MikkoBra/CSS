@@ -1,26 +1,28 @@
-import os
-import csv
 import gc
-from model import ForestFireModel
-from tqdm import tqdm
-"""
-Function to run simulations and write the results to a CSV file.
 
-Parameters:
-    sizes (List[int]): List of sizes to simulate.
-    densities (List[float]): List of densities to simulate.
-    test_wind (str): The wind condition to simulate.
-    env_indixes (List[float]): List of environmental indexes to simulate.
-    plant_tree_proportions (List[float]): List of plant tree proportions to simulate.
-    tree_burn_times (List[int]): List of tree burn times to simulate.
-    file_name (str): The name of the output CSV file.
-    num_simulations_per_setting (int): The number of simulations to run for each parameter setting.
-    batch_size (int): The number of simulations to write to the CSV file at a time.
-"""
-def simulation_to_csv(sizes, densities, test_wind, env_indixes, 
+from ForestFirePercolation.src.model import ForestFireModel
+from tqdm import tqdm
+from ForestFirePercolation.src.csv_access.csv_writer import write_to_csv
+
+def multi_param_multi_sim(sizes, densities, test_wind, env_indixes, 
                       plant_tree_proportions,  tree_burn_times, 
                       file_name, num_simulations_per_setting=1,
                       batch_size=1000):
+    """
+    Function to run simulations and write the results to a CSV file.
+
+    Parameters:
+        sizes (List[int]): List of sizes to simulate.
+        densities (List[float]): List of densities to simulate.
+        test_wind (str): The wind condition to simulate.
+        env_indixes (List[float]): List of environmental indexes to simulate.
+        plant_tree_proportions (List[float]): List of plant tree proportions to simulate.
+        tree_burn_times (List[int]): List of tree burn times to simulate.
+        file_name (str): The name of the output CSV file.
+        num_simulations_per_setting (int): The number of simulations to run for each parameter setting.
+        batch_size (int): The number of simulations to write to the CSV file at a time.
+    """
+    
     # Field names for the CSV file
     fields = ['size', 'density', 'wind', 'env_index', 'plant_tree_proportion', 'tree_burn_time', 'plant_burn_time', 'percolation', 'percentage burnt down']
     
@@ -95,25 +97,3 @@ def simulation_to_csv(sizes, densities, test_wind, env_indixes,
 
         # Final garbage collection
         gc.collect()
-
-"""
-Helper function to write rows to a CSV file.
-
-Parameters:
-    file_name: Name of the CSV file.
-    fields: List of field names.
-    rows: List of rows to write.
-    write_header: Boolean indicating whether to write the header.
-"""
-def write_to_csv(file_name, fields, rows, write_header):
-    # Create the Data directory if it does not exist
-    data_dir = os.path.join(os.path.dirname(__file__), '../Data')
-    os.makedirs(data_dir, exist_ok=True)
-    
-    # Write to CSV file in the Data directory
-    file_path = os.path.join(data_dir, file_name)
-    with open(file_path, mode='a', newline='') as csvfile:
-        csvwriter = csv.writer(csvfile)
-        if write_header:
-            csvwriter.writerow(fields)  # Write header only once
-        csvwriter.writerows(rows)

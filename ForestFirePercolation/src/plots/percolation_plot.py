@@ -1,7 +1,7 @@
-import matplotlib
-matplotlib.use('TkAgg')
+import os
 import matplotlib.pyplot as plt
 import numpy as np
+
 from scipy.interpolate import interp1d
 
 
@@ -23,13 +23,17 @@ class PercolationPlot:
         :param label: Label to attach to the plot, to be used in the legend of the figure.
         """
         line, = ax.plot(densities, probabilities, label=label)
-        if critical_point != 0.0:
-            densities = np.array(densities)
-            probabilities = np.array(probabilities)
-            interpolator = interp1d(densities, probabilities, kind='linear', bounds_error=False,
-                                    fill_value="extrapolate")
-            interpolated_probability = interpolator(critical_point)
-            ax.scatter(critical_point, interpolated_probability, color=line.get_color(), s=50, zorder=5)
+        horizontal_line = 0.5
+        densities = np.array(densities)
+        probabilities = np.array(probabilities)
+        interpolator = interp1d(densities, probabilities, kind='linear', bounds_error=False, fill_value="extrapolate")
+        interpolated_densities = np.linspace(densities.min(), densities.max(), 1000)
+        interpolated_probabilities = interpolator(interpolated_densities)
+        
+        # Find intersections with the horizontal line at 0.5
+        intersections = np.where(np.diff(np.sign(interpolated_probabilities - horizontal_line)))[0]
+        for intersection in intersections:
+            ax.scatter(interpolated_densities[intersection], horizontal_line, color=line.get_color(), s=50, zorder=5)
         return ax
 
 
@@ -86,15 +90,15 @@ class PercolationPlot:
             self.system_size = system_size
             self.plot_single_percolation_vs_density(ax, critical_point)
         # Add critical point and/or zoom in on critical point
-        if critical_point != 0.0:
-            ax.axvline(x=critical_point, ls='--', label=r'$d_c$ = ' + str(critical_point))
-            if plot_critical:
-                ax.set_xlim(critical_point - 0.05, critical_point + 0.05)
+        if critical_point != 0.0 and plot_critical:
+            ax.set_xlim(critical_point - 0.05, critical_point + 0.05)
+        ax.axhline(y=0.5, ls='--', color='gray', label='P = 0.5')
         ax.grid()
         ax.set_xlabel(r'Density $d$')
         ax.set_ylabel(r'$P_N$')
         ax.legend()
         ax.set_title(title)
-        fig.savefig('../Data/Plots/Percolation/' + file_name)
+        file_path = os.path.join('ForestFirePercolation', 'data', 'plots', 'percolation', file_name)
+        fig.savefig(file_path)
         if show_plot:
             plt.show()

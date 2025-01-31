@@ -1,14 +1,10 @@
-import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 import powerlaw
+
 from scipy.optimize import curve_fit
 
-matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
-
-
 class ClusterSizePlot:
-
     def __init__(self):
         self.cluster_sizes = []
         self.system_size = 0

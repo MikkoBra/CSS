@@ -1,9 +1,10 @@
-import numpy as np
+import os
 import matplotlib.pyplot as plt
 import pandas as pd
 
 # Read the data
-df = pd.read_csv('ForestFirePercolation\data\Snellius_Data_Full.csv')
+file_path = os.path.join('ForestFirePercolation', 'data', 'Snellius_Data_Full.csv')
+df = pd.read_csv(file_path)
 
 conditions = (
         (df['wind'] == False) &

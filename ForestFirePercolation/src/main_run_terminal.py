@@ -1,5 +1,5 @@
-from model import ForestFireModel
-from single_param_multi_sim import SingleParamMultiSim
+from ForestFirePercolation.src.model import ForestFireModel
+from ForestFirePercolation.src.single_param_multi_sim import SingleParamMultiSim
 
 """
 Being DEPRECATED, this function may not work in the current version of the project.

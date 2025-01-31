@@ -1,5 +1,6 @@
 import tkinter as tk
-from gui.initial_sim_select_gui import InitialSimSelectionGUI
+
+from ForestFirePercolation.src.gui.initial_sim_select_gui import InitialSimSelectionGUI
 
 def main():
     root = tk.Tk()

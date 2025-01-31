@@ -4,12 +4,12 @@ import os
 # Add the root directory of the project to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
 
-from ForestFirePercolation.src.csvs import csv_reader
+from ForestFirePercolation.src.csv_access import csv_reader
 from ForestFirePercolation.src.plots.cluster_size_plot import ClusterSizePlot
 from ForestFirePercolation.src.plots.percolation_plot import PercolationPlot
 from ForestFirePercolation.src.plots.multi_setting_plot import MultiSettingPlot
 from ForestFirePercolation.src.results.result_filter import ResultFilter
-from ForestFirePercolation.src.critical_values import read_critical_values_json
+from ForestFirePercolation.src.analysis_helpers.critical_values import read_critical_values_json
 
 
 class PlotGenerator:
@@ -163,9 +163,9 @@ class PlotGenerator:
         filtered_results = self.result_filter.no_wind_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density\n(base)"
         title2 = "Percolation probability vs forest density around the critical point\n(base)"
-        self.generate_single_percolation_plot(filtered_results, '300', title, 'single_percolation_base',
+        self.generate_single_percolation_plot(filtered_results, '1000', title, 'single_percolation_base',
                                               self.critical_points['base'])
-        self.generate_single_critical_point_plot(filtered_results, '300', title2, 'single_percolation_critical_base',
+        self.generate_single_critical_point_plot(filtered_results, '1000', title2, 'single_percolation_critical_base',
                                                  self.critical_points['base'])
         self.generate_percolation_multi_plot(filtered_results, title, 'multi_percolation_base',
                                              self.critical_points['base'])
@@ -185,8 +185,8 @@ class PlotGenerator:
         wind_results = self.result_filter.wind_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density\n(wind vs no wind)"
         title2 = "Percolation probability vs forest density around the critical point\n(wind vs no wind)"
-        self.generate_single_size_multiple_settings_plot(wind_dict, title, '300', 'single_percolation_wind')
-        self.generate_single_size_multiple_settings_critical_plot(wind_dict, title2, '300',
+        self.generate_single_size_multiple_settings_plot(wind_dict, title, '1000', 'single_percolation_wind')
+        self.generate_single_size_multiple_settings_critical_plot(wind_dict, title2, '1000',
                                                                   'single_percolation_critical_wind')
         self.generate_percolation_multi_plot(wind_results, title, 'multi_percolation_wind', self.critical_points['wind'])
         self.generate_critical_point_multi_plot(wind_results, title2, 'multi_percolation_critical_wind',
@@ -205,7 +205,7 @@ class PlotGenerator:
         title = "Percolation probability vs forest density\n(environmental influences)"
         title2 = "Percolation probability vs forest density\n(env_index 0.75)"
         title3 = "Percolation probability vs forest density around the critical point\n(env_index 0.75)"
-        self.generate_single_size_multiple_settings_plot(env_index_dict, title, '300', 'single_percolation_env_index')
+        self.generate_single_size_multiple_settings_plot(env_index_dict, title, '1000', 'single_percolation_env_index')
         self.generate_percolation_multi_plot(env_index_results, title2, 'multi_percolation_env_index',
                                              self.critical_points['env_index'])
         self.generate_critical_point_multi_plot(env_index_results, title3, 'multi_percolation_critical_env_index',
@@ -223,7 +223,7 @@ class PlotGenerator:
         env_wind_results = self.result_filter.env_wind_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density\n(env_index 0.5 + wind)"
         title2 = "Percolation probability vs forest density around the critical point\n(env_index 0.5 + wind)"
-        self.generate_single_size_multiple_settings_plot(env_wind_dict, title, '300', 'single_percolation_env_wind')
+        self.generate_single_size_multiple_settings_plot(env_wind_dict, title, '1000', 'single_percolation_env_wind')
         self.generate_percolation_multi_plot(env_wind_results, title, 'multi_percolation_env_wind',
                                              self.critical_points['env_wind'])
         self.generate_critical_point_multi_plot(env_wind_results, title2, 'multi_percolation_critical_env_wind',
@@ -242,7 +242,7 @@ class PlotGenerator:
         plant_results = self.result_filter.plant_filter(self.results_per_system_size)
         title = "Percolation probability vs forest density\n(env_index 0.75 + 50% plant)"
         title2 = "Percolation probability vs forest density around the critical point\n(env_index 0.75 + 50% plant)"
-        self.generate_single_size_multiple_settings_plot(plant_dict, title, '300', 'single_percolation_plant')
+        self.generate_single_size_multiple_settings_plot(plant_dict, title, '1000', 'single_percolation_plant')
         self.generate_percolation_multi_plot(plant_results, title, 'multi_percolation_plant', self.critical_points['plant'])
         self.generate_critical_point_multi_plot(plant_results, title2, 'multi_percolation_plant_critical',
                                                 self.critical_points['plant'])

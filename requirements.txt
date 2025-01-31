@@ -1,0 +1,12 @@
+numpy
+matplotlib
+noise
+tk
+pandas
+tqdm
+scipy
+powerlaw
+pytest
+IPython
+flit
+logging

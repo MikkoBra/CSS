@@ -1,5 +1,5 @@
 from tkinter import Tk, Label, Entry, DoubleVar, Scale, StringVar, OptionMenu, BooleanVar, Checkbutton, Button, Toplevel, HORIZONTAL
-from gui.input_conditionals_gui import InputConditionalsGUI
+from ForestFirePercolation.src.gui.input_conditionals_gui import InputConditionalsGUI
 
 """
 Class to input a single set of parameters.

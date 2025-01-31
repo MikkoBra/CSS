@@ -1,4 +1,8 @@
-from ForestFirePercolation.src.csvs.csv_reader import read_percolation_csv
+import os
+import numpy as np
+import json
+
+from ForestFirePercolation.src.csv_access.csv_reader import read_percolation_csv
 from ForestFirePercolation.src.results.result_filter import ResultFilter
 import numpy as np
 import json
@@ -61,5 +65,6 @@ def find_critical(results):
 
 
 def read_critical_values_json():
-    with open("../Data/critical_values_per_experiment.txt", "r") as f:
+    file_path = os.path.join('ForestFirePercolation', 'data', 'critical_values_per_experiment.txt')
+    with open(file_path, "r") as f:
         return json.load(f)

@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import BooleanVar, Toplevel, Label, messagebox
 
-from gui.run_range_sims_gui import RunRangeOfSimsGUI
+from ForestFirePercolation.src.gui.run_range_sims_gui import RunRangeOfSimsGUI
 
 """
 Class to input a range of parameters.

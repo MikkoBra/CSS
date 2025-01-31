@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 from ForestFirePercolation.src.plots.percolation_plot import PercolationPlot
 
@@ -42,8 +43,7 @@ class MultiSettingPlot(PercolationPlot):
             # Add critical point and/or zoom in on critical point
             critical_point = critical_points[results_index]
             if critical_point != 0.0:
-                ax.axvline(x=critical_point, color=colors[results_index], ls='--', label=r'$d_c$ = '
-                                                                                         + str(critical_point))
+                ax.axhline(y=0.5, color=colors[results_index], ls='--', label=r'$P_N$ = 0.5')
             results_index += 1
         if plot_critical:
             ax.set_xlim(critical_points[0] - 0.05, critical_points[-1] + 0.05)
@@ -52,4 +52,5 @@ class MultiSettingPlot(PercolationPlot):
         ax.set_ylabel(r'$P_N$')
         ax.legend()
         ax.set_title(title)
-        plt.savefig('../Data/Plots/Percolation/' + file_name)
+        file_path = os.path.join('ForestFirePercolation', 'data', 'Plots', 'Percolation', file_name)
+        plt.savefig(file_path)

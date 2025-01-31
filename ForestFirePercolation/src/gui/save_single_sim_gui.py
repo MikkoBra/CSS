@@ -1,6 +1,6 @@
 from tkinter import Tk, Label, BooleanVar, Radiobutton, Entry, Button, Toplevel
 
-from gui.run_single_sim_gui import RunSingleSimGUI
+from ForestFirePercolation.src.gui.run_single_sim_gui import RunSingleSimGUI
 
 """
 Class to save a single simulation.

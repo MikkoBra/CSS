@@ -1,6 +1,6 @@
 from tkinter import *
-from model import ForestFireModel
-from single_param_multi_sim import SingleParamMultiSim
+from ForestFirePercolation.src.model import ForestFireModel
+from ForestFirePercolation.src.single_param_multi_sim import SingleParamMultiSim
 
 """
 Class to run a single simulation with the specified parameters.

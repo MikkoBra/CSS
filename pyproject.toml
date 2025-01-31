@@ -1,0 +1,32 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "ForestFirePercolation"
+version = "1.1.0"
+description = "Fores Fire Simulation to model Percolation in a 2D grid"
+authors = [
+    { name="Victoria Peterson" },
+    { name="Mikko Brandon" },
+    { name="Yoad van Praag" },
+    { name="Rinske Oskamp" }
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "noise",
+    "tk",
+    "pandas",
+    "tqdm",
+    "scipy",
+    "powerlaw",
+    "pytest",
+    "IPython"
+]
+
+[project.urls]
+Home = "https://github.com/MikkoBra/CSS"

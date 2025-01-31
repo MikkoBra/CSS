@@ -1,10 +1,12 @@
-import numpy as np 
+import os
 import matplotlib.pyplot as plt
 import pandas as pd
+
 from IPython.display import display
 
 # Read the data
-df = pd.read_csv('ForestFirePercolation/data/Snellius_Data_Full.csv')
+file_path = os.path.join('ForestFirePercolation', 'data', 'Snellius_Data_Full.csv')
+df = pd.read_csv(file_path)
 
 # Define the sizes to analyze
 sizes = [100, 250, 500, 750, 1000]

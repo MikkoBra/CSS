@@ -1,7 +1,7 @@
 from tkinter import *
 
-from csv_writer import simulation_to_csv
-from csv_writer_parallel import simulation_to_csv_parallel
+from ForestFirePercolation.src.multi_param_multi_sim import multi_param_multi_sim
+from ForestFirePercolation.src.multi_param_multi_sim_parallel import multi_param_multi_sim_parallel
 
 """
 Class to run many simulations with a range of parameters 
@@ -83,9 +83,9 @@ class RunRangeOfSimsGUI:
         row += 1
 
         if run_parallel:
-            simulation_to_csv_parallel(sizes, densities, test_wind, env_indexes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting)
+            multi_param_multi_sim_parallel(sizes, densities, test_wind, env_indexes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting)
         else:
-            simulation_to_csv(sizes, densities, test_wind, env_indexes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting)
+            multi_param_multi_sim(sizes, densities, test_wind, env_indexes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting)
 
         self.finish_button = Button(master, text="Finish", command=self.finish)
         self.finish_button.grid(row=row, column=0)
