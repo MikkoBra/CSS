@@ -1,7 +1,7 @@
 # Team 10:  Forest Fire Percolation Model (Fire Fire Fire/Hot To Go)
 #### Mikko Brandon, Victoria Peterson, Yoad van Praag, Rinske Oskamp
 
-![Forest Fire with two types of vegetation](readme\Forest_fire_ptprop.gif)
+![Forest Fire with two types of vegetation](https://github.com/MikkoBra/CSS/blob/main/readme/Forest_fire_ptprop.gif)
 
 ## Table of Contents
 
@@ -70,52 +70,59 @@ python ForestFirePercolation/src/main_run_gui.py
 ```
 
 2. **Select Simulation Type**: Select the type of simulation you want to complete
-![Simulation Select](readme\sim_select.png)
-    - **Single Density, Single Simulation**: Run a single parameter set in a single simulation with the option to view the 2D Forest Fire Percolation grid.
-    - **Single Density, Multiple Simulations**: Run a single parameter set over a number of simulations to output a burnt forest percentage distribution for the parameter set.
-    - **Simulate Parameter Range**: Run a range of parameters over a number of simulations, outputing the resulting burnt forest percentage and whether the fire percolated from the left-most side of the grid to the right-most side of the grid.
 
-3. **Select Input Parameters**: Each simulation type shares parameters, but also have their own unique options to specify simulation options.
-    - **Single Density, Single Simulation**
-    ![Single Density, Single Sim 1](readme\single_single_1.png)
-        - Size: Size of the Forest grid used for simulation (Size x Size grid)
-        - Forest Density Percentage: The percentage of the grid cells that contain trees.
-        - Probability for Fire Ignition: The likelihood that a tree will catch fire when exposed to a burning tree.
-        - Proportion of Plants to Trees: The ratio of plants to trees in the forest grid.
-        - Tree Burn Time: The duration for which a tree cell remains on fire.
-        - Plant Burn Time: The duration for which a plant cell remains on fire.
-        - Ignition Location: The starting point of the fire within the grid.
-        - Enable Eastward Wind: A boolean option to enable or disable wind blowing from the west to the east, affecting fire spread.
-        - Use Random Seed: A boolean option to enable or disable the use of a random seed for reproducibility of simulations.
-    ![Single Density, Single Sim 2](readme\single_single_2.png)
-        - Random Ignition Points: Enter the number of cells to randomly ignite initially. Conditional on using the random ignition location option.
-        - Enter the Seed: Enter the seed value for random number generation in the simulation. Conditional on the random seed usee option.
-        - Display Simulation: Determine if the simulation is displayed. If the simulation is not displayed, only the simulation data will be output.
-    ![Single Density, Single Sim 3](readme\single_single_3.png)
-        - Save Single Simulation: Select this option if you wish to save the simulation `.gif`. It will be saved in the `\data` directory. The animation can only be saved if the simulation is displayed.
-        - Name of the Output File: Enter the name of the `.gif` file to be saved if you select yes in the previous option.
-    
-    - **Single Density, Multiple Simulations**: 
-    ![Single Density, Multi Sim 1](readme\single_multi_1.png)
-        - Options are the same for the first *Single Density, Multiple Simulations* window, but the random seed option is removed
-    ![Single Density, Multi Sim 2](readme\single_multi_2.png)
-        - Random Ignition Points: Enter the number of cells to randomly ignite initially. Conditional on using the random ignition location option.
-        - Number of Simulations: Enter the number of simulations to run for the single set of parameters defined previously
-    
-    - **Simulate Parameter Range**
-    ![Simulate Parameter Range](readme\multi_multi.png)
-        - **Size Range**: Specify the range of grid sizes for the forest simulation separated by commas. This determines the dimensions of the forest grid.
-        - **Forest Density Range**: Define the range of forest densities to simulate separated by commas. This is the percentage of the grid cells that contain trees.
-        - **Environmental Index Range**: Set the range for the environmental influence index separated by commas. This index affects the probability of fire spread.
-        - **Plant/Tree Proportion Range**: Specify the range for the proportion of plants to trees in the forest separated by commas. This ratio influences the fire dynamics.
-        - **Tree Burn Time Range**: Define the range for the burn time of tree cells separated by commas. This is the duration a tree cell remains on fire.
-        - **Plant Burn Time Range**: Set the range for the burn time of plant cells separated by commas. This is the duration a plant cell remains on fire.
-        - **Eastward Wind Options**: Choose whether to test wind, no wind, or both. Wind adds an additional cell neighbor to the right of the cell so that firest may ignite two cells to their right instead of one.
-        - **Number of Simulations per Parameter Set**: Enter the number of simulations to run for each parameter set (e.g., 100). This helps in obtaining statistically significant results.
-        - **Run the Simulations in Parallel**: Select whether to run simulations in parallel (true/false). Parallel execution can speed up the simulation process.
-        - **Name of the Output File**: Provide the name for the output file (e.g., results.csv). This file will store the simulation results.
+![Simulation Select](https://github.com/MikkoBra/CSS/blob/main/readme/sim_select.png)
+- **Single Density, Single Simulation**: Run a single parameter set in a single simulation with the option to view the 2D Forest Fire Percolation grid.
+- **Single Density, Multiple Simulations**: Run a single parameter set over a number of simulations to output a burnt forest percentage distribution for the parameter set.
+- **Simulate Parameter Range**: Run a range of parameters over a number of simulations, outputing the resulting burnt forest percentage and whether the fire percolated from the left-most side of the grid to the right-most side of the grid.
 
-4. **Generate Plots**: Use the provided scripts to plot the `.csv` data collected when simulating a parameter range
+4. **Select Input Parameters**: Each simulation type shares parameters, but also have their own unique options to specify simulation options.
+**Single Density, Single Simulation**
+
+![Single Density, Single Sim 1](https://github.com/MikkoBra/CSS/blob/main/readme/single_single_1.png)
+- Size: Size of the Forest grid used for simulation (Size x Size grid)
+- Forest Density Percentage: The percentage of the grid cells that contain trees.
+- Probability for Fire Ignition: The likelihood that a tree will catch fire when exposed to a burning tree.
+- Proportion of Plants to Trees: The ratio of plants to trees in the forest grid.
+- Tree Burn Time: The duration for which a tree cell remains on fire.
+- Plant Burn Time: The duration for which a plant cell remains on fire.
+- Ignition Location: The starting point of the fire within the grid.
+- Enable Eastward Wind: A boolean option to enable or disable wind blowing from the west to the east, affecting fire spread.
+- Use Random Seed: A boolean option to enable or disable the use of a random seed for reproducibility of simulations.
+  
+![Single Density, Single Sim 2](https://github.com/MikkoBra/CSS/blob/main/readme/single_single_2.png)
+- Random Ignition Points: Enter the number of cells to randomly ignite initially. Conditional on using the random ignition location option.
+- Enter the Seed: Enter the seed value for random number generation in the simulation. Conditional on the random seed usee option.
+- Display Simulation: Determine if the simulation is displayed. If the simulation is not displayed, only the simulation data will be output.
+  
+![Single Density, Single Sim 3](https://github.com/MikkoBra/CSS/blob/main/readme/single_single_3.png)
+- Save Single Simulation: Select this option if you wish to save the simulation `.gif`. It will be saved in the `\data` directory. The animation can only be saved if the simulation is displayed.
+- Name of the Output File: Enter the name of the `.gif` file to be saved if you select yes in the previous option.
+    
+**Single Density, Multiple Simulations**: 
+
+![Single Density, Multi Sim 1](https://github.com/MikkoBra/CSS/blob/main/readme/Single_multi_1.png)
+- Options are the same for the first *Single Density, Multiple Simulations* window, but the random seed option is removed
+        
+![Single Density, Multi Sim 2](https://github.com/MikkoBra/CSS/blob/main/readme/Single_multi_2.png)
+- Random Ignition Points: Enter the number of cells to randomly ignite initially. Conditional on using the random ignition location option.
+- Number of Simulations: Enter the number of simulations to run for the single set of parameters defined previously
+    
+**Simulate Parameter Range**
+
+![Simulate Parameter Range](https://github.com/MikkoBra/CSS/blob/main/readme/multi_multi.png)
+- *Size Range*: Specify the range of grid sizes for the forest simulation separated by commas. This determines the dimensions of the forest grid.
+- *Forest Density Range*: Define the range of forest densities to simulate separated by commas. This is the percentage of the grid cells that contain trees.
+- *Environmental Index Range*: Set the range for the environmental influence index separated by commas. This index affects the probability of fire spread.
+- *Plant/Tree Proportion Range*: Specify the range for the proportion of plants to trees in the forest separated by commas. This ratio influences the fire dynamics.
+- *Tree Burn Time Range*: Define the range for the burn time of tree cells separated by commas. This is the duration a tree cell remains on fire.
+- *Plant Burn Time Range*: Set the range for the burn time of plant cells separated by commas. This is the duration a plant cell remains on fire.
+- *Eastward Wind Options*: Choose whether to test wind, no wind, or both. Wind adds an additional cell neighbor to the right of the cell so that firest may ignite two cells to their right instead of one.
+- *Number of Simulations per Parameter Set*: Enter the number of simulations to run for each parameter set (e.g., 100). This helps in obtaining statistically significant results.
+- *Run the Simulations in Parallel*: Select whether to run simulations in parallel (true/false). Parallel execution can speed up the simulation process.
+- *Name of the Output File*: Provide the name for the output file (e.g., results.csv). This file will store the simulation results.
+
+5. **Generate Plots**: Use the provided scripts to plot the `.csv` data collected when simulating a parameter range
     - Make sure your `.csv` file is contained within the `ForestFirePercolation\data` directory
     - Adjust the `PlotGenerator` input to be the name of your `.csv`
     ``` python
