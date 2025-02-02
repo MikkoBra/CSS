@@ -27,11 +27,24 @@ Attributes:
     save_name (str): The name to save the single simulation as.
 """
 class RunSingleSimGUI:
-    def __init__(self, master, size, env_index, plant_tree_proportion, 
-                 tree_burn_time, plant_burn_time, ignition_location, sim_type, 
-                 wind, use_seed, ignition_num=None, num_simulations=None, 
-                 density=None, random_seed=None, display_single=None, 
-                 save_single=None, save_name=None):
+    def __init__(self, 
+                 master, 
+                 size, 
+                 env_index, 
+                 plant_tree_proportion, 
+                 tree_burn_time, 
+                 plant_burn_time, 
+                 ignition_location, 
+                 sim_type, 
+                 wind, 
+                 use_seed, 
+                 ignition_num=None, 
+                 num_simulations=None, 
+                 density=None, 
+                 random_seed=None, 
+                 display_single=None, 
+                 save_single=None, 
+                 save_name=None):
         self.master = master
         master.title("Output")
 

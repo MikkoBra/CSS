@@ -31,6 +31,7 @@ class RunRangeOfSimsGUI:
                  env_indexes,
                  plant_tree_proportions,
                  tree_burn_times,
+                plant_burn_times,
                  run_parallel,
                  file_name,
                  num_simulations_per_setting):
@@ -43,12 +44,11 @@ class RunRangeOfSimsGUI:
         self.env_indexes = env_indexes
         self.plant_tree_proportions = plant_tree_proportions
         self.tree_burn_times = tree_burn_times
+        self.plant_burn_times = plant_burn_times
         self.file_name = file_name
         self.num_simulations_per_setting = num_simulations_per_setting
 
         row = 0
-
-        print(sizes, densities, test_wind, env_indexes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting)
 
         self.size_range_label = Label(master, text=f"Sizes: {sizes}")
         self.size_range_label.grid(row=row, column=0)
@@ -70,6 +70,10 @@ class RunRangeOfSimsGUI:
         self.tree_burn_time_range_label.grid(row=row, column=0)
         row += 1
 
+        self.plant_burn_time_label = Label(master, text=f"Plant Burn Time: {plant_burn_times}")
+        self.plant_burn_time_label.grid(row=row, column=0)
+        row += 1
+
         self.test_wind_label = Label(master, text=f"Test Wind: {test_wind}")
         self.test_wind_label.grid(row=row, column=0)
         row += 1
@@ -83,9 +87,25 @@ class RunRangeOfSimsGUI:
         row += 1
 
         if run_parallel:
-            multi_param_multi_sim_parallel(sizes, densities, test_wind, env_indexes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting)
+            multi_param_multi_sim_parallel(sizes, 
+                                           densities, 
+                                           test_wind, 
+                                           env_indexes, 
+                                           plant_tree_proportions, 
+                                           tree_burn_times, 
+                                           plant_burn_times,
+                                           file_name, 
+                                           num_simulations_per_setting)
         else:
-            multi_param_multi_sim(sizes, densities, test_wind, env_indexes, plant_tree_proportions, tree_burn_times, file_name, num_simulations_per_setting)
+            multi_param_multi_sim(sizes, 
+                                  densities, 
+                                  test_wind, 
+                                  env_indexes, 
+                                  plant_tree_proportions, 
+                                  tree_burn_times, 
+                                  plant_burn_times,
+                                  file_name, 
+                                  num_simulations_per_setting)
 
         self.finish_button = Button(master, text="Finish", command=self.finish)
         self.finish_button.grid(row=row, column=0)

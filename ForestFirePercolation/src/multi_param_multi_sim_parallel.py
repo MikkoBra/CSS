@@ -6,8 +6,12 @@ from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from ForestFirePercolation.src.csv_access.csv_writer import write_to_csv
 
-def run_simulation(size, density, wind, env_index, 
-                   plant_tree_proportion, tree_burn_time, 
+def run_simulation(size, 
+                   density, 
+                   wind, 
+                   env_index, 
+                   plant_tree_proportion, 
+                   tree_burn_time, 
                    plant_burn_time):
     """
     Helper function to run a single simulation.
@@ -25,7 +29,13 @@ def run_simulation(size, density, wind, env_index,
         List: A list of simulation results.
     """
     # Create a forest fire model
-    model = ForestFireModel(size, density, env_index, wind, plant_tree_proportion, tree_burn_time, plant_burn_time)
+    model = ForestFireModel(size, 
+                            density, 
+                            env_index, 
+                            wind, 
+                            plant_tree_proportion, 
+                            tree_burn_time, 
+                            plant_burn_time)
     
     # Get the initial total number of trees
     num_trees_total = model.get_num_vegetation()
@@ -41,14 +51,26 @@ def run_simulation(size, density, wind, env_index,
     num_burnt = model.get_num_burnt()
     burnt_perc = num_burnt / num_trees_total if num_trees_total > 0 else 0
 
-    return [size, density, wind, env_index, 
-            plant_tree_proportion, tree_burn_time, 
-            plant_burn_time, percolation, burnt_perc]
+    return [size, 
+            density, 
+            wind, 
+            env_index, 
+            plant_tree_proportion, 
+            tree_burn_time, 
+            plant_burn_time, 
+            percolation, 
+            burnt_perc]
 
-def multi_param_multi_sim_parallel(sizes, densities, test_wind, env_indixes, 
-                               plant_tree_proportions,  tree_burn_times, 
-                               file_name, num_simulations_per_setting=1,
-                               batch_size=1000):
+def multi_param_multi_sim_parallel(sizes, 
+                                   densities, 
+                                   test_wind, 
+                                   env_indixes, 
+                                   plant_tree_proportions,  
+                                   tree_burn_times, 
+                                   plant_burn_times,
+                                   file_name, 
+                                   num_simulations_per_setting=1,
+                                   batch_size=1000):
     """
     Function to run many simulations in parallel with a range of parameters
     and save the results to a CSV file.
@@ -73,9 +95,6 @@ def multi_param_multi_sim_parallel(sizes, densities, test_wind, env_indixes,
     # Simulation count
     simulation_count = 0
 
-    # Default plant burn time
-    plant_burn_time = 1
-
     # Set wind conditions
     if test_wind == "Wind":
         winds = [True]
@@ -91,6 +110,7 @@ def multi_param_multi_sim_parallel(sizes, densities, test_wind, env_indixes,
                          len(env_indixes) * 
                          len(plant_tree_proportions) * 
                          len(tree_burn_times) * 
+                         len(plant_burn_times) *
                          num_simulations_per_setting)
 
     with ProcessPoolExecutor(max_workers=os.cpu_count()) as executor: # Uses ThreadPoolExecutor to run simulations in parallel
@@ -103,20 +123,21 @@ def multi_param_multi_sim_parallel(sizes, densities, test_wind, env_indixes,
                         for env_index in env_indixes:
                             for plant_tree_proportion in plant_tree_proportions:
                                 for tree_burn_time in tree_burn_times:
-                                    for _ in range(num_simulations_per_setting):
-                                        # Submit a new simulation to the executor and store the future
-                                        futures.append(
-                                            executor.submit(
-                                                run_simulation, 
-                                                size, 
-                                                density, 
-                                                wind, 
-                                                env_index, 
-                                                plant_tree_proportion, 
-                                                tree_burn_time, 
-                                                plant_burn_time
+                                    for plant_burn_time in plant_burn_times:
+                                        for _ in range(num_simulations_per_setting):
+                                            # Submit a new simulation to the executor and store the future
+                                            futures.append(
+                                                executor.submit(
+                                                    run_simulation, 
+                                                    size, 
+                                                    density, 
+                                                    wind, 
+                                                    env_index, 
+                                                    plant_tree_proportion, 
+                                                    tree_burn_time, 
+                                                    plant_burn_time
+                                                )
                                             )
-                                        )
 
             # Iterate over the futures as they are completed
             for future in as_completed(futures):
@@ -135,6 +156,9 @@ def multi_param_multi_sim_parallel(sizes, densities, test_wind, env_indixes,
 
         # Write remaining rows to CSV file
         if rows:
-            write_to_csv(file_name, fields, rows, simulation_count <= batch_size)
+            write_to_csv(file_name, 
+                         fields, 
+                         rows, 
+                         simulation_count <= batch_size)
 
         gc.collect()

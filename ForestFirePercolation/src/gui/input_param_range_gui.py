@@ -44,12 +44,18 @@ class InputParameterRangeGUI:
         self.plant_tree_proportions_entry = tk.Entry(master)
         self.plant_tree_proportions_entry.insert(0, "0.0,0.5,1.0")
         self.plant_tree_proportions_entry.pack()
-        self.tree_burn_times_label = Label(master, text="Enter tree burn times (comma-separated)\nPlants will burn for 1 time step:")
-        self.tree_burn_times_label = tk.Label(master, text="Enter tree burn times (comma-separated) Plants will burn for 1 time step:")
+
+        self.tree_burn_times_label = tk.Label(master, text="Enter tree burn times (comma-separated):")
         self.tree_burn_times_label.pack()
         self.tree_burn_times_entry = tk.Entry(master)
         self.tree_burn_times_entry.insert(0, "1,3,5,10")
         self.tree_burn_times_entry.pack()
+
+        self.plant_burn_times_label = tk.Label(master, text="Enter plant burn times (comma-separated):")
+        self.plant_burn_times_label.pack()
+        self.plant_burn_times_entry = tk.Entry(master)
+        self.plant_burn_times_entry.insert(0, "1,3,5,10")
+        self.plant_burn_times_entry.pack()
 
         self.wind_options_label = tk.Label(master, text="Eastward wind options:")
         self.wind_options_label.pack()
@@ -88,6 +94,7 @@ class InputParameterRangeGUI:
             env_indexes = [float(env_index) for env_index in self.env_indexes_entry.get().split(",")]
             plant_tree_proportions = [float(plant_tree_proportion) for plant_tree_proportion in self.plant_tree_proportions_entry.get().split(",")]
             tree_burn_times = [int(tree_burn_time) for tree_burn_time in self.tree_burn_times_entry.get().split(",")]
+            plant_burn_times = [int(plant_burn_time) for plant_burn_time in self.plant_burn_times_entry.get().split(",")]
             file_name = self.file_name_entry.get()
             test_wind = self.wind_var.get()
             num_simulations_per_setting = int(self.num_simulations_entry.get())
@@ -110,6 +117,9 @@ class InputParameterRangeGUI:
             if any(tree_burn_time <= 0 for tree_burn_time in tree_burn_times):
                 error = True
                 raise ValueError("Tree burn times must be positive integers.")
+            if any(plant_burn_time <= 0 for plant_burn_time in plant_burn_times):
+                error = True
+                raise ValueError("Plant burn times must be positive integers.")
             if num_simulations_per_setting <= 0:
                 error = True
                 raise ValueError("Number of simulations per setting must be a positive integer.")
@@ -129,6 +139,7 @@ class InputParameterRangeGUI:
                     env_indexes,
                     plant_tree_proportions,
                     tree_burn_times,
+                    plant_burn_times,
                     run_parallel,
                     file_name,
                     num_simulations_per_setting

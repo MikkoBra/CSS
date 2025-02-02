@@ -12,7 +12,7 @@ Parameters:
 """
 def write_to_csv(file_name, fields, rows, write_header):
     # Create the Data directory if it does not exist
-    data_dir = os.path.join(os.path.dirname(__file__), '../Data')
+    data_dir = os.path.join(os.path.dirname(__file__), '../../data')
     os.makedirs(data_dir, exist_ok=True)
     
     # Write to CSV file in the Data directory

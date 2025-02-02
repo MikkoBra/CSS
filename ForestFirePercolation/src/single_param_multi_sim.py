@@ -5,9 +5,18 @@ from ForestFirePercolation.src.model import ForestFireModel
 from typing import Optional
 
 class SingleParamMultiSim:
-    def __init__(self, size: int, forest_density: float, num_simulations: int, ignition_location: str, 
-                 env_index: float, wind: bool, plant_tree_proportion: float, tree_burn_time: int, 
-                 plant_burn_time: int, ignition_num: int = 0, random_seed: Optional[int] = None):
+    def __init__(self, 
+                 size: int, 
+                 forest_density: float, 
+                 num_simulations: int, 
+                 ignition_location: str, 
+                 env_index: float, 
+                 wind: bool, 
+                 plant_tree_proportion: float, 
+                 tree_burn_time: int, 
+                 plant_burn_time: int, 
+                 ignition_num: int = 0, 
+                 random_seed: Optional[int] = None):
         """
         Class to run multiple simulations of the forest fire model with a specified set of parameters.
 
