@@ -56,8 +56,7 @@ class TestForestFireModel(unittest.TestCase):
 
         logging.info(model.forest)
         logging.info(forest)
-        print(noise_map)
-        print(model.noise_map)
+
         self.assertTrue(np.array_equal(model.forest, forest))
         self.assertTrue(np.array_equal(model.noise_map, noise_map))
         self.assertEqual(len(model.burning_trees_queue), 0)
@@ -146,8 +145,6 @@ class TestForestFireModel(unittest.TestCase):
                                 plant_burn_time, random_seed=random_seed)
         
         model.ignite_fire_center()
-
-        print(model.burning_trees_queue)
 
         # Test initial burn count
         burning_count = np.sum(model.forest == TreeStatus.BURNING)
@@ -371,5 +368,4 @@ class TestForestFireModel(unittest.TestCase):
         self.assertAlmostEqual(model.percentage_trees(), model.get_num_trees() / size**2)
 
 if __name__ == '__main__':
-    if __name__ == '__main__':
-        unittest.main()
+    unittest.main()
