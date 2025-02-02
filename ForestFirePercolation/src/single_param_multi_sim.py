@@ -1,38 +1,46 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from model import ForestFireModel
+
+from ForestFirePercolation.src.model import ForestFireModel
 from typing import Optional
 
-"""
-Class to run multiple simulations of the forest fire model with a specified set of parameters.
-
-Attributes:
-    size (int): The size of the forest.
-    forest_density (float): The density of the forest.
-    num_simulations (int): The number of simulations to run.
-    ignition_location (str): The location of the ignition point ('random', 'corner', 'center').
-    env_index (float): The environmental index.
-    wind (bool): Whether wind is present.
-    plant_tree_proportion (float): The proportion of trees to plants.
-    tree_burn_time (int): The time taken for a tree to burn.
-    plant_burn_time (int): The time taken for a plant to burn.
-    ignition_num (int): The number of ignition points.
-    random_seed (Optional[int]): The random seed to use for the simulations.
-
-    results (List[Dict[str, Any]]): A list of dictionaries containing the results of each simulation.
-
-Methods:
-    run_simulations: Run the specified number of simulations with the specified parameters.
-    plot_burnt_distribution: Plot a histogram of the distribution of burnt trees.
-    plot_burnt_distribution_log_log: Plot a log-log histogram of the distribution of burnt trees.
-    get_average_results: Get the average percentage of burnt trees, burning trees, and trees remaining.
-    proportion_burns_left_to_right: Get the proportion of simulations that burn from left to right.
-    get_results: Get the results of the simulations.
-"""
 class SingleParamMultiSim:
-    def __init__(self, size: int, forest_density: float, num_simulations: int, ignition_location: str, 
-                 env_index: float, wind: bool, plant_tree_proportion: float, tree_burn_time: int, 
-                 plant_burn_time: int, ignition_num: int = 0, random_seed: Optional[int] = None):
+    def __init__(self, 
+                 size: int, 
+                 forest_density: float, 
+                 num_simulations: int, 
+                 ignition_location: str, 
+                 env_index: float, 
+                 wind: bool, 
+                 plant_tree_proportion: float, 
+                 tree_burn_time: int, 
+                 plant_burn_time: int, 
+                 ignition_num: int = 0, 
+                 random_seed: Optional[int] = None):
+        """
+        Class to run multiple simulations of the forest fire model with a specified set of parameters.
+
+        Parameters:
+            size (int): The size of the forest.
+            forest_density (float): The density of the forest.
+            num_simulations (int): The number of simulations to run.
+            ignition_location (str): The location of the ignition point ('random', 'corner', 'center').
+            env_index (float): The environmental index.
+            wind (bool): Whether wind is present.
+            plant_tree_proportion (float): The proportion of trees to plants.
+            tree_burn_time (int): The time taken for a tree to burn.
+            plant_burn_time (int): The time taken for a plant to burn.
+            ignition_num (int): The number of ignition points.
+            random_seed (Optional[int]): The random seed to use for the simulations.
+
+        Methods:
+            run_simulations: Run the specified number of simulations with the specified parameters.
+            plot_burnt_distribution: Plot a histogram of the distribution of burnt trees.
+            plot_burnt_distribution_log_log: Plot a log-log histogram of the distribution of burnt trees.
+            get_average_results: Get the average percentage of burnt trees, burning trees, and trees remaining.
+            proportion_burns_left_to_right: Get the proportion of simulations that burn from left to right.
+            get_results: Get the results of the simulations.
+        """
         self.tree_burn_time = tree_burn_time
         self.plant_burn_time = plant_burn_time
         self.plant_tree_proportion = plant_tree_proportion
@@ -47,6 +55,10 @@ class SingleParamMultiSim:
         self.results = []
 
     def run_simulations(self):
+        """
+        Run the specified number of simulations with the specified parameters.
+        This method runs the specified number of simulations with the specified parameters and stores the results.
+        """
         for _ in range(self.num_simulations):
             model = ForestFireModel(self.size, self.forest_density, self.env_index, self.wind, 
                                     self.plant_tree_proportion, self.tree_burn_time, 
@@ -69,26 +81,47 @@ class SingleParamMultiSim:
             })
 
     def plot_burnt_distribution(self):
+        """
+        Plot a histogram of the distribution of burnt trees.
+
+        This method creates a histogram showing the frequency distribution of the percentage of burnt trees
+        across all simulations.
+        """
         burnt_percentages = [result['percentage_burnt'] for result in self.results]
         plt.hist(burnt_percentages, bins=10, edgecolor='black')
+        plt.hist(burnt_percentages, bins=10, edgecolor='black')
+
         plt.title('Distribution of Burnt Trees')
         plt.xlabel('Percentage of Burnt Trees')
         plt.ylabel('Frequency')
         plt.show()
 
     def plot_burnt_distribution_log_log(self):
+        """
+        Plot a log-log histogram of the distribution of burnt trees.
+
+        This method plots the distribution of the percentage of burnt trees
+        on a log-log scale using a histogram.
+        """
         burnt_percentages = [result['percentage_burnt'] for result in self.results]
         bins = np.logspace(np.log10(min(burnt_percentages)), np.log10(max(burnt_percentages)), 10)
+        
         plt.hist(burnt_percentages, bins=bins, edgecolor='black')
-        plt.yscale('log')
         plt.xscale('log')
         plt.yscale('log')
-        plt.title('Log-Log Distribution of Burnt Trees')
-        plt.xlabel('Percentage of Burnt Trees (log scale)')
-        plt.ylabel('Frequency (log scale)')
+
+        plt.title('Distribution of Burnt Trees (Log-Log Scale)')
+        plt.xlabel('Percentage of Burnt Trees (Log Scale)')
+        plt.ylabel('Frequency (Log Scale)')
         plt.show()
 
     def get_average_results(self):
+        """
+        Calculate and return the average percentage of burnt trees, burning trees, and trees remaining.
+
+        Returns:
+            dict: A dictionary containing the average percentage of burnt trees, burning trees, and trees remaining.
+        """
         avg_burnt = np.mean([result['percentage_burnt'] for result in self.results])
         avg_burning = np.mean([result['percentage_burning'] for result in self.results])
         avg_trees = np.mean([result['percentage_trees'] for result in self.results])
@@ -98,9 +131,13 @@ class SingleParamMultiSim:
             'average_percentage_trees': avg_trees
         }
     
-    
-    
     def proportion_burns_left_to_right(self):
+        """
+        Calculate the proportion of simulations that burn from left to right.
+
+        Returns:
+            float: The proportion of simulations that burn from left to right.
+        """
         count = 0
         for result in self.results:
             if result['burns_left_to_right'] == True:
@@ -109,4 +146,7 @@ class SingleParamMultiSim:
         return count / self.num_simulations
 
     def get_results(self):
+        """
+        Get the results of the simulations.
+        """
         return self.results

@@ -1,5 +1,5 @@
 from tkinter import Tk, Label, Entry, DoubleVar, Scale, StringVar, OptionMenu, BooleanVar, Checkbutton, Button, Toplevel, HORIZONTAL
-from gui.input_conditionals_gui import InputConditionalsGUI
+from ForestFirePercolation.src.gui.input_conditionals_gui import InputConditionalsGUI
 
 """
 Class to input a single set of parameters.
@@ -18,7 +18,9 @@ Connects to:
     InputConditionals
 """
 class InputParameterSingleGUI:
-    def __init__(self, master, sim_type):
+    def __init__(self, 
+                 master, 
+                 sim_type):
         self.master = master
         master.title("Forest Fire Simulation - Input")
 
@@ -31,7 +33,9 @@ class InputParameterSingleGUI:
         self.create_burn_time_inputs(master)
         self.create_ignition_location_input(master)
         self.create_wind_option_input(master)
+        print(self.simulation_type)
         self.create_random_seed_input(master)
+            
         self.create_next_button(master)
 
     def create_size_input(self, master):
@@ -91,11 +95,15 @@ class InputParameterSingleGUI:
         self.wind_option_checkbutton.pack()
 
     def create_random_seed_input(self, master):
-        self.use_random_seed_label = Label(master, text="Use a seed for random number generation:")
-        self.use_random_seed_label.pack()
-        self.use_random_seed = BooleanVar()
-        self.use_random_seed_checkbutton = Checkbutton(master, text="Seed", variable=self.use_random_seed)
-        self.use_random_seed_checkbutton.pack()
+        if self.simulation_type == "single density, single sim":
+            self.use_random_seed_label = Label(master, text="Use a seed for random number generation:")
+            self.use_random_seed_label.pack()
+            self.use_random_seed = BooleanVar()
+            self.use_random_seed_checkbutton = Checkbutton(master, text="Seed", variable=self.use_random_seed)
+            self.use_random_seed_checkbutton.pack()
+        else:
+            self.use_random_seed = BooleanVar()
+            self.use_random_seed.set(False)
 
     def create_next_button(self, master):
         self.next_button = Button(master, text="Next", command=self.open_next_window)

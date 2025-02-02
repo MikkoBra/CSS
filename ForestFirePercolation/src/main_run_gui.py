@@ -1,6 +1,10 @@
 import tkinter as tk
-from gui.initial_sim_select_gui import InitialSimSelectionGUI
 
+from ForestFirePercolation.src.gui.initial_sim_select_gui import InitialSimSelectionGUI
+
+"""
+Main function to run the GUI for the Forest Fire Percolation model.
+"""
 def main():
     root = tk.Tk()
     

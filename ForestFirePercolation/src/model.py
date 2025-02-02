@@ -1,9 +1,9 @@
 import os
 import numpy as np
 import matplotlib
-matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import noise
+
 from matplotlib.colors import ListedColormap
 from matplotlib.colors import BoundaryNorm
 from enum import IntEnum
@@ -11,60 +11,67 @@ from collections import deque
 from typing import Optional, Dict, Any
 from matplotlib.animation import PillowWriter
 
-"""
-Enum to represent the status of a tree in the forest.
-"""
 class TreeStatus(IntEnum):
+    """
+    Enum to represent the status of a tree in the forest.
+    """
     EMPTY = 0
     TREE = 1
     PLANT = 2
     BURNING = 3
     BURNT = 4
 
-"""
-Class to model a forest fire percolation simulation.
-Attributes:
-    size: size of the forest grid
-    forest_density: density of trees in the forest
-    env_index: probability of tree catching fire
-    wind: boolean indicating if wind is present
-    plant_tree_proportion: proportion of trees that are plants
-    tree_burn_time: time taken for a tree to burn
-    plant_burn_time: time taken for a plant to burn
-    ignition_num: number of trees to ignite
-    random_seed: random seed for reproducibility
-
-    forest: 2D numpy array representing the forest
-    noise_map: 2D numpy array representing a Perlin noise map used for vegetation generation
-    burning_trees_queue: queue of burning trees
-Methods:
-    initialize_forest: initializes the forest grid
-    ignite_fire_random: ignites fire at random locations
-    ignite_fire_corner: ignites fire at the corner of the forest
-    ignite_fire_center: ignites fire at the center of the forest
-    spread_fire: spreads the fire to neighboring trees
-    no_display_single_simulation: runs a single simulation without displaying the forest
-    display_current_forest_state: displays the current state of the forest
-    display_single_simulation: displays a single simulation
-    burns_left_to_right: checks if the fire burns from left to right
-
-Get Methods:
-    get_num_trees: returns the number of trees in the forest
-    get_num_burning: returns the number of burning trees in the forest
-    get_num_burnt: returns the number of burnt trees in the forest
-    get_forest_density: returns the forest density
-    get_ignition_num: returns the number of trees ignited
-    get_size: returns the size of the forest
-    get_forest: returns the forest grid
-    get_burning_trees_queue: returns the queue of burning trees
-    percentage_burnt: returns the percentage of burnt trees
-    percentage_burning: returns the percentage of burning trees
-    percentage_trees: returns the percentage of trees
-"""
 class ForestFireModel:
-    def __init__(self, size: int, forest_density: float, env_index: float, 
-                 wind: bool, plant_tree_proportion: float, tree_burn_time: int, 
-                 plant_burn_time: int, ignition_num: int = 0, random_seed: Optional[int] = None):
+    def __init__(self, 
+                 size: int, 
+                 forest_density: float, 
+                 env_index: float, 
+                 wind: bool, 
+                 plant_tree_proportion: float, 
+                 tree_burn_time: int, 
+                 plant_burn_time: int, 
+                 ignition_num: int = 0, 
+                 random_seed: Optional[int] = None):
+        """
+        Class to model a forest fire percolation simulation.
+        Attributes:
+            size: size of the forest grid
+            forest_density: density of trees in the forest
+            env_index: probability of tree catching fire
+            wind: boolean indicating if wind is present
+            plant_tree_proportion: proportion of trees that are plants
+            tree_burn_time: time taken for a tree to burn
+            plant_burn_time: time taken for a plant to burn
+            ignition_num: number of trees to ignite
+            random_seed: random seed for reproducibility
+
+            forest: 2D numpy array representing the forest
+            noise_map: 2D numpy array representing a Perlin noise map used for vegetation generation
+            burning_trees_queue: queue of burning trees
+        Methods:
+            initialize_forest: initializes the forest grid
+            ignite_fire_random: ignites fire at random locations
+            ignite_fire_corner: ignites fire at the corner of the forest
+            ignite_fire_center: ignites fire at the center of the forest
+            spread_fire: spreads the fire to neighboring trees
+            no_display_single_simulation: runs a single simulation without displaying the forest
+            display_current_forest_state: displays the current state of the forest
+            display_single_simulation: displays a single simulation
+            burns_left_to_right: checks if the fire burns from left to right
+
+        Get Methods:
+            get_num_trees: returns the number of trees in the forest
+            get_num_burning: returns the number of burning trees in the forest
+            get_num_burnt: returns the number of burnt trees in the forest
+            get_forest_density: returns the forest density
+            get_ignition_num: returns the number of trees ignited
+            get_size: returns the size of the forest
+            get_forest: returns the forest grid
+            get_burning_trees_queue: returns the queue of burning trees
+            percentage_burnt: returns the percentage of burnt trees
+            percentage_burning: returns the percentage of burning trees
+            percentage_trees: returns the percentage of trees
+        """
         self.tree_burn_time = tree_burn_time
         self.plant_burn_time = plant_burn_time
         self.plant_tree_proportion = plant_tree_proportion
@@ -210,7 +217,7 @@ class ForestFireModel:
         save: boolean indicating if the simulation should be saved
         filename: name of the output file
     """
-    def display_single_simulation(self, interval=300, save=True, filename="forest_fire_simulation.gif"):
+    def display_single_simulation(self, interval=300, save=False, filename="forest_fire_simulation.gif"):
         # Create a figure and axis
         fig, ax = plt.subplots()
         ax.axis('off')

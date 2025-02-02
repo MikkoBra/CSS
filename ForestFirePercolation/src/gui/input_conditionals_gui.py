@@ -1,6 +1,6 @@
 from tkinter import Tk, Label, Entry, IntVar, StringVar, OptionMenu, Button, Toplevel
-from gui.run_single_sim_gui import RunSingleSimGUI
-from gui.save_single_sim_gui import SaveSingleSimGUI
+from ForestFirePercolation.src.gui.run_single_sim_gui import RunSingleSimGUI
+from ForestFirePercolation.src.gui.save_single_sim_gui import SaveSingleSimGUI
 
 """
 Class to input additional conditional parameters for the simulation.
@@ -30,9 +30,18 @@ Connects to:
     SaveSingleSim
 """
 class InputConditionalsGUI:
-    def __init__(self, master, size, density, env_index, plant_tree_proportion, 
-                 tree_burn_time, plant_burn_time, ignition_location, sim_type, 
-                 wind, use_seed):
+    def __init__(self, 
+                 master, 
+                 size, 
+                 density, 
+                 env_index, 
+                 plant_tree_proportion, 
+                 tree_burn_time, 
+                 plant_burn_time, 
+                 ignition_location, 
+                 sim_type, 
+                 wind, 
+                 use_seed):
         self.master = master
         master.title("Additional Settings")
 

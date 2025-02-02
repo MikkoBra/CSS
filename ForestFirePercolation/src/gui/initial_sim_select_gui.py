@@ -1,6 +1,6 @@
 from tkinter import Tk, Button, Toplevel
-from gui.input_param_single_gui import InputParameterSingleGUI
-from gui.input_param_range_gui import InputParameterRangeGUI
+from ForestFirePercolation.src.gui.input_param_single_gui import InputParameterSingleGUI
+from ForestFirePercolation.src.gui.input_param_range_gui import InputParameterRangeGUI
 
 """
 Class to select the type of simulation to run.

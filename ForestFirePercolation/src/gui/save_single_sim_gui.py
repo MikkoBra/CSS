@@ -1,6 +1,6 @@
 from tkinter import Tk, Label, BooleanVar, Radiobutton, Entry, Button, Toplevel
 
-from gui.run_single_sim_gui import RunSingleSimGUI
+from ForestFirePercolation.src.gui.run_single_sim_gui import RunSingleSimGUI
 
 """
 Class to save a single simulation.
@@ -30,10 +30,22 @@ Connects to:
     RunSingleSim
 """
 class SaveSingleSimGUI:
-    def __init__(self, master, size, env_index, plant_tree_proportion, 
-                 tree_burn_time, plant_burn_time, ignition_location, sim_type, 
-                 wind, use_seed, ignition_num=None, num_simulations=None, 
-                 density=None, random_seed=None, display_single=None):
+    def __init__(self, 
+                 master, 
+                 size, 
+                 env_index, 
+                 plant_tree_proportion, 
+                 tree_burn_time, 
+                 plant_burn_time, 
+                 ignition_location, 
+                 sim_type, 
+                 wind, 
+                 use_seed, 
+                 ignition_num=None, 
+                 num_simulations=None, 
+                 density=None, 
+                 random_seed=None, 
+                 display_single=None):
         
         self.master = master
         master.title("Save Single Simulation")
