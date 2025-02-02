@@ -1,5 +1,119 @@
-# Team 10:  Fire Fire Fire/Hot To Go
+# Team 10:  Forest Fire Percolation Model (Fire Fire Fire/Hot To Go)
 #### Mikko Brandon, Victoria Peterson, Yoad van Praag, Rinske Oskamp
+
+![Forest Fire with two types of vegetation](readme\Forest_fire_ptprop.gif)
+
+## Table of Contents
+
+1. [Usage and Installation](#usage-and-installation)
+2. [Implementation](#implementation)
+- [Main Functions](#main-functions)
+- [ForestFireModel](#forestfiremodel)
+- [Simulations](#simulations)
+- [PlotGenerator](#plotgenerator)
+- [GUI Components](#gui-components)
+- [Data Access](#data-access)
+3. [Contributing](#contributing)
+4. [License](#license)
+5. [Project Plan](#project-plan)
+- [Background and Motivation](#background-and-motivation)
+- [Short Description](#short-description)
+- [Disciplines](#disciplines)
+- [Emergence Phenomena](#emergent-phenomena)
+- [Research Questions](#research-questions)
+- [Hypotheses](#hypotheses)
+- [Planned Implementation](#planned-implementation)
+- [References](#references)
+
+
+## Usage and Installation
+To run the simulations and generate plots, follow these steps:
+
+1. Clone the repository:
+```sh
+gh repo clone MikkoBra/CSS
+```
+
+2. Create and activate a virtual environment
+``` sh
+python -m venv venv
+venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. **Install Dependencies**: Ensure you have all the required dependencies installed. You can install them using the `requirements.txt` file:
+```sh
+pip install -r requirements.txt
+```
+
+4. **Run Simulations**: Use the provided scripts to run the simulations. For example, to run a simulation using the GUI:
+```sh
+python src/main_run_gui.py
+```
+
+5. **Generate Plots**: Use the [PlotGenerator](http://_vscodecontentref_/1) class to generate plots from the simulation results. For example:
+```python
+from ForestFirePercolation.src.plots.plot_generator import PlotGenerator
+
+generator = PlotGenerator("path/to/your/data.csv")
+generator.generate_base_experiment_plots()
+```
+
+
+## Implementation
+The forest fire percolation model is implemented using Python and consists of several modules to handle different aspects of the simulation and analysis. Below is an overview of the main components:
+
+### Main Functions
+Multiple main functions are used to initialize the simulation functionality
+
+- `main_run_gui`: Located in `src/gui/main_run_gui.py`, running this file will initialize the GUI for inputing simulation parameters and selecting options
+- `main_run_terminal`: Located in `src/gui/main_run_terminal.py`, running this file will allow for simulation parameters and options in the terminal
+- `main_generate_plots`: Located in `src/gui/main_generate_plots.py`, running this file will generate a number of percolation and criticality plots based on an input file located in the data/ file
+
+### `ForestFireModel`
+This modular class, located in `src/model.py`, simulates the forest fire spread on a 2D grid. It includes methods to initialize the forest, ignite fires, spread fires, and display the simulation.
+
+### Simulations
+The project includes functions and classes to simulate numerous forest fire percolation simulations over many simulations and over a range of parameters
+
+- `SingleParamMultiSim`: Located in `src/single_param_multi_sim.py`, used to simulate a single parameter set over many simulations and plot both the linear and log/log distribution for the parameter set
+- `multi_param_multi_sim`: Located in `src/multi_param_multi_sim.py`, used to simulate a an input range of parameters over many simulations, outputing a .csv file
+- `multi_param_multi_sim_parallel`: Located in `src/multi_param_multi_sim_parallel.py`, used to simulate a an input range of parameters over many simulations in parallel, using all CPU cores and outputing a .csv file
+
+### `PlotGenerator`
+This class, located in src/plots/plot_generator.py, generates various plots from the simulation results. It includes methods to generate single and multiple percolation plots, critical point plots, and more.
+
+### GUI Components
+The project includes several GUI components to interact with the simulation:
+
+- `InitialSimSelectionGUI`: Located in `src/gui/initial_sim_select_gui.py`, this class provides a GUI to select the type of simulation to run.
+- `InputParameterSingleGUI`: Located in `src/gui/input_param_single_gui.py`, this class provides a GUI to input parameters for the single parameter set simulation option
+- `InputParameterRangeGUI`: Located in `src/gui/input_param_range_gui.py`, this class provides a GUI to input parameters for the multiple parameter set, multiple simulation option
+- `InputConditionalsGUI`: Located in `src/gui/input_conditionals_gui.py`, this class provides a GUI to input conditional parameters for the single parameter set simulation option.
+- `RunSingleSimGUI`: Located in `src/gui/run_single_sim_gui.py`, this class provides a GUI to run a single simulation with specified parameters.
+- `SaveSingleSimGUI`: Located in `src/gui/save_single_sim_gui.py`, this class provides a GUI to save the results of the single simulation option
+- `RunRangeOfSimsGUI`: Located in `src/gui/run_range_sims_gui.py`, this class provides a GUI to run a range of parameters over a range of simulations.
+
+### Data Access
+The project includes modules to access and manipulate data:
+
+- `csv_reader`: Located in `src/csv_access/csv_reader.py`, this module provides functions to read CSV files.
+- `csv_writer`: Located in `src/csv_access/csv_writer.py`, this module provides functions to write CSV files.
+
+
+
+## Contributing
+If you would like to contribute to this project, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Make your changes and commit them with clear and concise messages.
+4. Push your changes to your forked repository.
+5. Create a pull request to the main repository.
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
+# Project Plan
 
 ## Background and Motivation
 When abstracted to plots of land that either have a tree or do not have a tree, a forest can be represented on a 2D grid with tree cells and non-tree cells. Using such abstractions, forests have widely been modeled to simulate forest fire spread as a form of percolation. Due to the nature of the 2D grid, percolation theory applies to such forest fire spread, entailing that there is a critical point of tree density in an infinite-size forest at which forest fires go from never percolating to always percolating. Knowing whether this critical point applies to finite-size forests, and whether it can be influenced by external factors, could prove useful for forest fire prevention and intervention.
@@ -17,8 +131,7 @@ Environmental science, data science, physics, percolation theory
 ### Emergent Phenomena
 Self-Organized Criticality, Percolation
 
-## Research questions and hypotheses
-### Questions:
+### Research Questions:
 Do forest fires exhibit SOC?
 
 
@@ -43,7 +156,7 @@ We expect the SOC to be exhibited by a small range of environmental influence va
 We expect the SOC to … We expect the percolation probabilities to be closer to the base model than when only varying the environmental influences. Plants burn for longer, so vegetation around the plants have longer to catch fire. This effectively counteracts the lower chance of burning due to environmental influences.
 
 
-## Implementation
+## Planned Implementation
 Base model:
 - 2D grid
 - Tree cells
@@ -62,6 +175,7 @@ Nice to have:
 - Types of vegetation
 - Preventative measures
 
+
 ## References
 #### Percolation
 Beer, Tom, and I. G. Enting. "Fire spread and percolation modelling." Mathematical and Computer Modelling 13.11 (1990): 77-96.
@@ -77,59 +191,3 @@ Perestrelo, Sara Aleixo, et al. "A multi-scale network with percolation model to
 
 #### Percolation in real fires
 Caldarelli, Guido, et al. "Percolation in real wildfires." Europhysics Letters 56.4 (2001): 510.
-
-
-
-
-
-#### Brainstorming
-Forestfires - Percolation
-- Map of LA area and tree density mapsExample forest fire
-- Weather
-- Prevention
-- Intervention
-Image denoising (CA)
-Mycology Percolation/Cellular Automota
-
-
-#### Instructor Questions
-
-Ask about emergent behaviour and what in our research could be considered this.
-What is the critical point we want to measure? Significant damage in area percentage)or connectivity of one side to the other side of the grid. 
-How feasible is it to do this in 2 weeks? (Gather data, use it to simulate to effectively model what happened in LA, or keep it more generalised). Will incorporating the windy condition comparison be manageable?
-Exact analytical solutions for percolation thresholds only exist in some low-dimensional cases (like 1D), while for higher dimensions (2D, 3D, etc.), we rely on numerical simulations. How will this affect our research and is there a way ofr us to generate some hypothesis / computation to measure risk or will this all be data oriented.
-
-Look at SOC property  and whether it is still holds in different scenarios.
-The emergent behavior is considered the SOC and percolation.
-
-How does the exponent depend on parameter like vegetation growth windy conditions, 
-
-
-So check for different sizes of the system whether the same pattern holds (regarding emergent properties affected by environmental behaviour). See what happens if system size were to approach infinity and whether we observe unique convergent behaviour (e.g. bifurcation diagram showing critical points diverging by changing variable).
-
-
-
-Measurement
-Criticality (critical point, p_c)
-Spreading one corner to the other → percentage of simulations, probability distribution
-Distribution of Fire percolation
-
-
-### References
-Forest Density Data
-https://oehha.ca.gov/climate-change/epic-2022/impacts-vegetation-and-wildlife/subalpine-forest-density
-Forest Fire Data
-https://www.fire.ca.gov/incidents
-
-
-Weather conditions
-https://www.sciencedirect.com/science/article/pii/S1574954124000736
-https://pubs.cif-ifc.org/doi/pdf/10.5558/tfc65450-6
-https://www.pnas.org/doi/10.1073/pnas.2111875118#executive-summary-abstract
-https://fireecology.springeropen.com/articles/10.1186/s42408-024-00254-2#:~:text=Temperature%20fluctuations%20influence%20the%20duration,in%20turn%2C%20influence%20fire%20spread.
-
-
-Implementation
-https://codingandmore.home.blog/2020/01/06/forest-fires-and-percolation/
-https://gitlab.com/stunderline/forestfire/tree/master
-
