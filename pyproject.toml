@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "ForestFirePercolation"
 version = "1.1.0"
-description = "Fores Fire Simulation to model Percolation in a 2D grid"
+description = "Fores Fire Simulation to model Percolation in a 2D grid. This package is currently not entirely modular and contains hardcoded functionality, but has reached its initial stage of completion"
 authors = [
     { name="Victoria Peterson" },
     { name="Mikko Brandon" },
@@ -30,3 +30,8 @@ dependencies = [
 
 [project.urls]
 Home = "https://github.com/MikkoBra/CSS"
+
+[project.scripts]
+run_gui = "ForestFirePercolation.src.main_run_gui:main"
+run_plots = "ForestFirePercolation.src.main_generate_plots:main"
+run_terminal = "ForestFirePercolation.src.main_run_terminal:main"
